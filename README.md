@@ -50,20 +50,20 @@ composer require imagewize/simple-cookie-consent
 
 ## Usage
 
-After activation, the cookie consent banner will automatically appear on your website. The default settings provide a good starting point, but you can customize the appearance and behavior to match your website's design and requirements.
+After activation, the cookie consent banner will automatically appear on your website. Configure the settings from the WordPress admin panel at Settings > Cookie Consent.
 
 ## Configuration
 
-You can customize the plugin by modifying the configuration in `src/index.js`. The main options include:
+You can customize the plugin through the admin interface:
 
-```javascript
-{
-    current_lang: 'en',              // Default language
-    autoclear_cookies: true,         // Clear non-essential cookies on rejection
-    page_scripts: true,              // Control script execution based on consent
-    // Additional configuration options...
-}
-```
+1. Navigate to Settings > Cookie Consent in your WordPress dashboard
+2. Configure the following settings:
+   - Language and general behavior
+   - Banner title and description
+   - Button text and actions
+   - Privacy policy link
+
+For advanced customization, you can modify the configuration in `src/index.js` and rebuild the plugin.
 
 ### Cookie Categories
 
