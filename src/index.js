@@ -1,5 +1,5 @@
 import 'vanilla-cookieconsent/dist/cookieconsent.css';
-import { run } from 'vanilla-cookieconsent';
+import * as cookieConsent from 'vanilla-cookieconsent';
 
 // Default configuration
 const defaultConfig = {
@@ -91,6 +91,10 @@ if (typeof window.sccSettings !== 'undefined') {
 
 // Wait for DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
-    // Run cookie consent with our configuration
-    run(config);
+    try {
+        cookieConsent.run(config);
+        console.log('Cookie consent initialized successfully');
+    } catch (error) {
+        console.error('Error initializing cookie consent:', error);
+    }
 });
