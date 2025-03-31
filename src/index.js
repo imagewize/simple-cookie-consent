@@ -1,88 +1,124 @@
-import 'vanilla-cookieconsent/dist/cookieconsent.css';
+import "vanilla-cookieconsent/dist/cookieconsent.css";
+import * as CookieConsent from "vanilla-cookieconsent";
 
-// Import cookie consent library differently - this is crucial
-// Import individual functions instead of the whole module
-import { 
-    run,
-    acceptCategory, 
-    acceptService,
-    hide,
-    show,
-    showPreferences
-} from 'vanilla-cookieconsent';
-
-// Super minimal configuration 
+// Configuration based on official documentation
 const config = {
-    current_lang: 'en',
-    autoclear_cookies: true,
-    page_scripts: true,
-    
+    cookie: {
+        name: 'cc_cookie',
+        expiresAfterDays: 182,
+    },
+
+    // Use the correct property names from documentation
+    guiOptions: {
+        consentModal: {
+            layout: 'cloud inline',
+            position: 'bottom center',
+            equalWeightButtons: true,
+            flipButtons: false
+        },
+        preferencesModal: {
+            layout: 'box',
+            equalWeightButtons: true,
+            flipButtons: false
+        }
+    },
+
+    // Required event handlers
+    onFirstConsent: ({cookie}) => {
+        console.log('onFirstConsent fired', cookie);
+    },
+
+    onConsent: ({cookie}) => {
+        console.log('onConsent fired!', cookie);
+    },
+
+    onChange: ({changedCategories, changedServices}) => {
+        console.log('onChange fired!', changedCategories, changedServices);
+    },
+
+    onModalReady: ({modalName}) => {
+        console.log('ready:', modalName);
+    },
+
+    onModalShow: ({modalName}) => {
+        console.log('visible:', modalName);
+    },
+
+    onModalHide: ({modalName}) => {
+        console.log('hidden:', modalName);
+    },
+
+    categories: {
+        necessary: {
+            enabled: true,
+            readOnly: true
+        },
+        analytics: {
+            enabled: false,
+            readOnly: false,
+            autoClear: {
+                cookies: [
+                    {
+                        name: /^_ga/,
+                    },
+                    {
+                        name: '_gid',
+                    }
+                ]
+            }
+        }
+    },
+
     language: {
         default: 'en',
         translations: {
             en: {
-                consent_modal: {
-                    title: 'We use cookies!',
-                    description: 'This website uses cookies to ensure basic functionality.',
-                    primary_btn: {
-                        text: 'Accept all',
-                        role: 'accept_all'
-                    },
-                    secondary_btn: {
-                        text: 'Reject all',
-                        role: 'accept_necessary'
-                    }
+                consentModal: {
+                    title: 'We use cookies',
+                    description: 'This website uses cookies to ensure its proper operation and to understand how you interact with it.',
+                    acceptAllBtn: 'Accept all',
+                    acceptNecessaryBtn: 'Reject all',
+                    showPreferencesBtn: 'Manage preferences',
                 },
-                settings_modal: {
-                    title: 'Cookie preferences',
-                    save_settings_btn: 'Save settings',
-                    accept_all_btn: 'Accept all',
-                    reject_all_btn: 'Reject all',
-                    close_btn_label: 'Close',
-                    cookie_table_headers: [
-                        {col1: 'Name'},
-                        {col2: 'Domain'},
-                        {col3: 'Expiration'},
-                        {col4: 'Description'}
-                    ],
-                    blocks: [
+                preferencesModal: {
+                    title: 'Manage cookie preferences',
+                    acceptAllBtn: 'Accept all',
+                    acceptNecessaryBtn: 'Reject all',
+                    savePreferencesBtn: 'Accept current selection',
+                    closeIconLabel: 'Close modal',
+                    sections: [
                         {
-                            title: 'Cookie usage',
-                            description: 'We use cookies to ensure the basic functionalities of the website.'
-                        }, 
+                            title: 'Your Privacy Choices',
+                            description: 'This panel allows you to customize your cookie preferences.'
+                        },
                         {
-                            title: 'Strictly necessary cookies',
-                            description: 'These cookies are essential for the proper functioning of the website.',
-                            toggle: {
-                                value: 'necessary',
-                                enabled: true,
-                                readonly: true
-                            }
+                            title: 'Strictly Necessary',
+                            description: 'These cookies are essential for the proper functioning of the website and cannot be disabled.',
+                            linkedCategory: 'necessary'
+                        },
+                        {
+                            title: 'Performance and Analytics',
+                            description: 'These cookies collect information about how you use our website. All of the data is anonymized and cannot be used to identify you.',
+                            linkedCategory: 'analytics'
                         }
                     ]
                 }
             }
         }
-    },
-    
-    categories: {
-        necessary: {
-            enabled: true,
-            readonly: true
-        }
     }
 };
 
-// Simplified initialization with direct function call 
-window.addEventListener('DOMContentLoaded', function() {
+// Initialize when DOM is fully loaded
+document.addEventListener('DOMContentLoaded', function() {
     try {
-        console.log('Initializing cookie consent with minimal config');
+        console.log('Initializing cookie consent...');
         
-        // Fix by calling directly without setTimeout
-        run(config);
+        // Use the namespace as shown in the documentation
+        CookieConsent.run(config);
         
         console.log('Cookie consent initialized');
     } catch (error) {
         console.error('Error initializing cookie consent:', error);
+        console.error('Error details:', error.message);
     }
 });
