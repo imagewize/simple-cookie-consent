@@ -7,7 +7,6 @@ const defaultConfig = {
     autoclear_cookies: true,
     page_scripts: true,
     
-    // FIXED: Changed from "languages" to "language" with nested "translations"
     language: {
         default: 'en',
         translations: {
@@ -88,24 +87,37 @@ const defaultConfig = {
         }
     },
     
-    // FIXED: Added onAccept and onChange events to ensure proper handling
+    // Event handlers
     onAccept: function() {
-        // Placeholder for accept handler
+        console.log('Cookies accepted');
     },
     onChange: function() {
-        // Placeholder for change handler
+        console.log('Cookie preferences changed');
     },
-    
-    // FIXED: Added onFirstAction to handle initial user interaction
     onFirstAction: function() {
-        // Placeholder for first action handler
+        console.log('First user action recorded');
     }
 };
 
-// FIXED: Ensure the DOM is fully loaded and ready
+// Create a container for the cookie consent
+function createConsentContainer() {
+    // Check if container already exists
+    if (document.getElementById('cc-container')) {
+        return;
+    }
+
+    const container = document.createElement('div');
+    container.id = 'cc-container';
+    document.body.appendChild(container);
+}
+
+// Modified initialization function
 function initCookieConsent() {
     try {
         console.log('Cookie Consent Debug: Starting initialization');
+        
+        // Create container for cookie consent
+        createConsentContainer();
         
         let config = {...defaultConfig};
         
@@ -113,9 +125,10 @@ function initCookieConsent() {
             console.log('Cookie Consent Debug: WordPress settings loaded', window.sccSettings);
             const wpSettings = window.sccSettings.settings;
             
+            // Apply WordPress settings
             config.current_lang = wpSettings.current_lang || config.current_lang;
-            config.autoclear_cookies = typeof wpSettings.autoclear_cookies !== 'undefined' ? wpSettings.autoclear_cookies : config.autoclear_cookies;
-            config.page_scripts = typeof wpSettings.page_scripts !== 'undefined' ? wpSettings.page_scripts : config.page_scripts;
+            config.autoclear_cookies = wpSettings.autoclear_cookies === true;
+            config.page_scripts = wpSettings.page_scripts === true;
             
             if (config.language.translations[config.current_lang]) {
                 config.language.translations[config.current_lang].consent_modal.title = wpSettings.title || config.language.translations[config.current_lang].consent_modal.title;
@@ -125,32 +138,29 @@ function initCookieConsent() {
                 config.language.translations[config.current_lang].consent_modal.secondary_btn.text = wpSettings.secondary_btn_text || config.language.translations[config.current_lang].consent_modal.secondary_btn.text;
                 config.language.translations[config.current_lang].consent_modal.secondary_btn.role = wpSettings.secondary_btn_role || config.language.translations[config.current_lang].consent_modal.secondary_btn.role;
             }
-        } else {
-            console.warn('Cookie Consent Debug: WordPress settings not found, using defaults');
         }
         
         console.log('Cookie Consent Debug: Final config', config);
         
-        // FIXED: Try-catch around the actual run call to catch any immediate errors
-        try {
-            cookieConsent.run(config);
-            console.log('Cookie Consent Debug: Successfully initialized');
-        } catch (runError) {
-            console.error('Cookie Consent Run Error:', runError);
-        }
+        // Add container selector
+        config.container = '#cc-container';
+        
+        // Initialize with delay
+        setTimeout(() => {
+            try {
+                cookieConsent.run(config);
+                console.log('Cookie Consent Debug: Successfully initialized');
+            } catch (runError) {
+                console.error('Cookie Consent Run Error:', runError);
+            }
+        }, 1000);
     } catch (error) {
-        console.error('Cookie Consent Error:', error);
-        console.error('Error details:', error.message, error.stack);
+        console.error('Cookie Consent Error:', error.message);
     }
 }
 
-// FIXED: Use a more robust approach to initialization with multiple fallbacks
-if (document.readyState === 'complete') {
-    // If document is already complete, initialize after a short delay
+// Ensure initialization after complete page load
+window.addEventListener('load', function() {
+    // Give extra time for all DOM manipulations to complete
     setTimeout(initCookieConsent, 500);
-} else {
-    // Wait for the load event, then initialize after a delay
-    window.addEventListener('load', function() {
-        setTimeout(initCookieConsent, 500);
-    });
-}
+});
