@@ -1,8 +1,6 @@
 import 'vanilla-cookieconsent/dist/cookieconsent.css';
-import * as CookieConsent from 'vanilla-cookieconsent';
-
-// Create a cookie consent instance
-const cc = CookieConsent.initCookieConsent();
+// Import the library without assignment
+import 'vanilla-cookieconsent';
 
 // Default configuration
 const defaultConfig = {
@@ -92,5 +90,15 @@ if (typeof window.sccSettings !== 'undefined') {
     }
 }
 
-// Initialize with the merged configuration
-cc.run(config);
+// Wait for DOM to be fully loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Access the global function that the library provides
+    if (typeof window.initCookieConsent === 'function') {
+        const cc = window.initCookieConsent();
+        
+        // Initialize with the merged configuration
+        cc.run(config);
+    } else {
+        console.error('Cookie consent library not loaded properly');
+    }
+});
