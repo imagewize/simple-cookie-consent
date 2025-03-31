@@ -1,8 +1,5 @@
 import 'vanilla-cookieconsent/dist/cookieconsent.css';
-import * as CookieConsent from 'vanilla-cookieconsent';
-
-// Create a cookie consent instance
-const cc = CookieConsent.initCookieConsent();
+import { run } from 'vanilla-cookieconsent';
 
 // Default configuration
 const defaultConfig = {
@@ -92,5 +89,8 @@ if (typeof window.sccSettings !== 'undefined') {
     }
 }
 
-// Initialize with the merged configuration
-cc.run(config);
+// Wait for DOM to be fully loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Run cookie consent with our configuration
+    run(config);
+});
