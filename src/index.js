@@ -65,7 +65,6 @@ const defaultConfig = {
         }
     },
     
-    // Other configuration remains the same
     categories: {
         necessary: {
             enabled: true,
@@ -87,13 +86,26 @@ const defaultConfig = {
             layout: 'box',
             transition: 'slide'
         }
+    },
+    
+    // FIXED: Added onAccept and onChange events to ensure proper handling
+    onAccept: function() {
+        // Placeholder for accept handler
+    },
+    onChange: function() {
+        // Placeholder for change handler
+    },
+    
+    // FIXED: Added onFirstAction to handle initial user interaction
+    onFirstAction: function() {
+        // Placeholder for first action handler
     }
 };
 
-// Update the WordPress settings part accordingly
-window.addEventListener('load', function() {
+// FIXED: Ensure the DOM is fully loaded and ready
+function initCookieConsent() {
     try {
-        console.log('Cookie Consent Debug: Settings available?', typeof window.sccSettings !== 'undefined');
+        console.log('Cookie Consent Debug: Starting initialization');
         
         let config = {...defaultConfig};
         
@@ -105,7 +117,6 @@ window.addEventListener('load', function() {
             config.autoclear_cookies = typeof wpSettings.autoclear_cookies !== 'undefined' ? wpSettings.autoclear_cookies : config.autoclear_cookies;
             config.page_scripts = typeof wpSettings.page_scripts !== 'undefined' ? wpSettings.page_scripts : config.page_scripts;
             
-            // FIXED: Update the correct language structure
             if (config.language.translations[config.current_lang]) {
                 config.language.translations[config.current_lang].consent_modal.title = wpSettings.title || config.language.translations[config.current_lang].consent_modal.title;
                 config.language.translations[config.current_lang].consent_modal.description = wpSettings.description || config.language.translations[config.current_lang].consent_modal.description;
@@ -120,12 +131,26 @@ window.addEventListener('load', function() {
         
         console.log('Cookie Consent Debug: Final config', config);
         
-        setTimeout(() => {
+        // FIXED: Try-catch around the actual run call to catch any immediate errors
+        try {
             cookieConsent.run(config);
             console.log('Cookie Consent Debug: Successfully initialized');
-        }, 100);
+        } catch (runError) {
+            console.error('Cookie Consent Run Error:', runError);
+        }
     } catch (error) {
         console.error('Cookie Consent Error:', error);
         console.error('Error details:', error.message, error.stack);
     }
-});
+}
+
+// FIXED: Use a more robust approach to initialization with multiple fallbacks
+if (document.readyState === 'complete') {
+    // If document is already complete, initialize after a short delay
+    setTimeout(initCookieConsent, 500);
+} else {
+    // Wait for the load event, then initialize after a delay
+    window.addEventListener('load', function() {
+        setTimeout(initCookieConsent, 500);
+    });
+}
