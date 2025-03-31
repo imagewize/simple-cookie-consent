@@ -92,13 +92,12 @@ if (typeof window.sccSettings !== 'undefined') {
 
 // Wait for DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
-    // Access the global function that the library provides
-    if (typeof window.initCookieConsent === 'function') {
-        const cc = window.initCookieConsent();
-        
-        // Initialize with the merged configuration
+    // Create cookie consent instance and run
+    try {
+        const cc = initCookieConsent();
         cc.run(config);
-    } else {
-        console.error('Cookie consent library not loaded properly');
+        console.log('Cookie consent initialized successfully');
+    } catch (error) {
+        console.error('Error initializing cookie consent:', error);
     }
 });

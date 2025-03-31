@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
     entry: './src/index.js',
@@ -15,4 +16,10 @@ module.exports = {
             },
         ],
     },
+    plugins: [
+        // Provide global access to the initCookieConsent function
+        new webpack.ProvidePlugin({
+            initCookieConsent: ['vanilla-cookieconsent', 'initCookieConsent']
+        })
+    ]
 };
