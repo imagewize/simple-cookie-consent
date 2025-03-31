@@ -163,10 +163,15 @@ function scc_enqueue_scripts() {
     // Get options from database or use defaults
     $options = get_option('scc_options', scc_get_default_options());
     
-    // Localize script with settings
+    // FIXED: Added version number to avoid caching issues
     wp_localize_script('scc-cookieconsent', 'sccSettings', array(
-        'settings' => $options
+        'settings' => $options,
+        // Add debug timestamp to detect if script is properly loaded
+        'version' => time() 
     ));
+    
+    // FIXED: Added console debug to check if script is loaded
+    echo "<!-- Simple Cookie Consent plugin loaded -->\n";
 }
 add_action('wp_enqueue_scripts', 'scc_enqueue_scripts');
 
@@ -196,3 +201,12 @@ function scc_admin_notices() {
     echo '</div>';
 }
 add_action('admin_notices', 'scc_admin_notices');
+
+// FIXED: Add activation hook to ensure default options are set
+register_activation_hook(__FILE__, 'scc_plugin_activate');
+function scc_plugin_activate() {
+    // Ensure default options are set on plugin activation
+    if (false === get_option('scc_options')) {
+        add_option('scc_options', scc_get_default_options());
+    }
+}
