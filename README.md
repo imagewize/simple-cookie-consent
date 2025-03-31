@@ -41,6 +41,13 @@ A lightweight plugin that implements GDPR-compliant cookie consent functionality
    ```
 4. Upload the plugin folder to your WordPress plugins directory
 
+### Method 4: Using Composer
+
+You can also install the plugin using Composer:
+```bash
+composer require imagewize/simple-cookie-consent
+```
+
 ## Usage
 
 After activation, the cookie consent banner will automatically appear on your website. The default settings provide a good starting point, but you can customize the appearance and behavior to match your website's design and requirements.
