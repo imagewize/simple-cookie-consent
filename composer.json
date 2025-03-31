@@ -1,0 +1,35 @@
+{
+    "name": "imagewize/simple-cookie-consent",
+    "description": "Implements GDPR-compliant cookie consent functionality.",
+    "type": "wordpress-plugin",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jasper Frumau",
+            "email": "jasper@imagewize.com",
+            "homepage": "https://imagewize.com"
+        }
+    ],
+    "keywords": [
+        "wordpress",
+        "plugin",
+        "cookie bar",
+        "cookie consent",
+        "GDPR",
+        "cookie",
+        "consent"
+    ],
+    "support": {
+        "issues": "https://github.com/imagewize/carousel-block/issues",
+        "source": "https://github.com/imagewize/carousel-block"
+    },
+    "require": {
+        "php": ">=8.0",
+        "composer/installers": "^2.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true
+        }
+    }
+}
