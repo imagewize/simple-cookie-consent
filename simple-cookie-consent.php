@@ -157,7 +157,7 @@ function scc_render_options_page() {
 
 // Enqueue scripts and styles
 function scc_enqueue_scripts() {
-    // Enqueue the bundled JavaScript file
+    // Enqueue our bundled script
     wp_enqueue_script('scc-cookieconsent', plugin_dir_url(__FILE__) . 'dist/cookieconsent.bundle.js', array(), '1.0.0', true);
     
     // Get options from database or use defaults

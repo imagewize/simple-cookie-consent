@@ -16,10 +16,9 @@ module.exports = {
             },
         ],
     },
-    plugins: [
-        // Provide global access to the initCookieConsent function
-        new webpack.ProvidePlugin({
-            initCookieConsent: ['vanilla-cookieconsent', 'initCookieConsent']
-        })
-    ]
+    resolve: {
+        fallback: {
+            "path": false
+        }
+    }
 };
