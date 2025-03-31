@@ -1,6 +1,9 @@
 import 'vanilla-cookieconsent/dist/cookieconsent.css';
 import * as CookieConsent from 'vanilla-cookieconsent';
 
+// Create a cookie consent instance
+const cc = CookieConsent.initCookieConsent();
+
 // Default configuration
 const defaultConfig = {
     current_lang: 'en',
@@ -90,4 +93,4 @@ if (typeof window.sccSettings !== 'undefined') {
 }
 
 // Initialize with the merged configuration
-CookieConsent.run(config);
+cc.run(config);
