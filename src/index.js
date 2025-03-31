@@ -21,9 +21,53 @@ const defaultConfig = {
                 }
             },
             settings_modal: {
-                // Keep the settings modal configuration as is
-                // ...
+                title: 'Cookie preferences',
+                save_settings_btn: 'Save settings',
+                accept_all_btn: 'Accept all',
+                reject_all_btn: 'Reject all',
+                close_btn_label: 'Close',
+                cookie_table_headers: [
+                    {col1: 'Name'},
+                    {col2: 'Domain'},
+                    {col3: 'Expiration'},
+                    {col4: 'Description'}
+                ],
+                blocks: [
+                    {
+                        title: 'Cookie usage',
+                        description: 'We use cookies to ensure the basic functionalities of the website and to enhance your online experience.'
+                    }, 
+                    {
+                        title: 'Strictly necessary cookies',
+                        description: 'These cookies are essential for the proper functioning of the website. Without these cookies, the website would not work properly.',
+                        toggle: {
+                            value: 'necessary',
+                            enabled: true,
+                            readonly: true
+                        }
+                    },
+                    {
+                        title: 'Analytics cookies',
+                        description: 'These cookies collect information about how you use the website, which pages you visited and which links you clicked on. All of the data is anonymized and cannot be used to identify you.',
+                        toggle: {
+                            value: 'analytics',
+                            enabled: false,
+                            readonly: false
+                        }
+                    }
+                ]
             }
+        }
+    },
+    // Required cookie categories
+    categories: {
+        necessary: {
+            enabled: true,
+            readonly: true
+        },
+        analytics: {
+            enabled: false,
+            readonly: false
         }
     }
 };
