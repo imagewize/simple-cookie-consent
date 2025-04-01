@@ -105,7 +105,7 @@ For detailed implementation guides, see the `dev.md` documentation file.
 
 ## Dependencies
 
-- [vanilla-cookieconsent](https://github.com/orestbida/cookieconsent) - Core cookie consent functionality
+- [CookieConsent v3](https://github.com/orestbida/cookieconsent) - Core cookie consent functionality
 - [webpack](https://webpack.js.org/) - For bundling assets
 - [style-loader](https://webpack.js.org/loaders/style-loader/) - For loading CSS
 - [css-loader](https://webpack.js.org/loaders/css-loader/) - For processing CSS
