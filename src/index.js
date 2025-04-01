@@ -62,6 +62,9 @@ const defaultConfig = {
                     },
                     {
                         name: '_gid',
+                    },
+                    {
+                        name: '_gat',
                     }
                 ]
             }
@@ -109,76 +112,107 @@ const defaultConfig = {
 
 // Create configuration with WordPress settings
 function createConfigFromSettings(defaultConfig, wpSettings) {
-    if (!wpSettings || !wpSettings.settings || !wpSettings.settings.cookie_categories) {
-        return defaultConfig;
+    // Debug the incoming data
+    console.log('Creating config from settings:', wpSettings);
+    
+    // Start with a deep clone of the default config to avoid mutations
+    const config = JSON.parse(JSON.stringify(defaultConfig));
+    
+    if (!wpSettings || !wpSettings.settings) {
+        console.warn('WordPress settings not available, using defaults');
+        return config;
     }
     
-    const config = { ...defaultConfig };
     const settings = wpSettings.settings;
     
-    // Set language default
-    if (settings.current_lang) {
-        config.language.default = settings.current_lang;
-    }
-    
-    // Update modal text based on settings
-    if (config.language.translations[config.language.default]) {
-        const lang = config.language.translations[config.language.default];
-        
-        if (settings.title) {
-            lang.consentModal.title = settings.title;
+    try {
+        // Set language default
+        if (settings.current_lang) {
+            config.language.default = settings.current_lang;
         }
         
-        if (settings.description) {
-            lang.consentModal.description = settings.description;
+        // Update modal text based on settings
+        if (config.language.translations[config.language.default]) {
+            const lang = config.language.translations[config.language.default];
+            
+            // Update consent modal settings
+            lang.consentModal.title = settings.title || lang.consentModal.title;
+            lang.consentModal.description = settings.description || lang.consentModal.description;
+            lang.consentModal.acceptAllBtn = settings.primary_btn_text || lang.consentModal.acceptAllBtn;
+            lang.consentModal.acceptNecessaryBtn = settings.secondary_btn_text || lang.consentModal.acceptNecessaryBtn;
+            
+            // Important: Don't clear existing sections
+            const existingIntroSection = lang.preferencesModal.sections[0];
+            
+            // Reset sections array but keep the intro
+            lang.preferencesModal.sections = [existingIntroSection];
         }
         
-        if (settings.primary_btn_text) {
-            lang.consentModal.acceptAllBtn = settings.primary_btn_text;
-        }
-        
-        if (settings.secondary_btn_text) {
-            lang.consentModal.acceptNecessaryBtn = settings.secondary_btn_text;
-        }
-    }
-    
-    // Initialize or reset categories and sections
-    config.categories = {};
-    config.language.translations[config.language.default].preferencesModal.sections = [
-        {
-            title: 'Your Privacy Choices',
-            description: 'This panel allows you to customize your cookie preferences.'
-        }
-    ];
-    
-    // Process each cookie category from WordPress settings
-    Object.entries(settings.cookie_categories).forEach(([categoryId, category]) => {
-        // Add category to config
-        config.categories[categoryId] = {
-            enabled: category.enabled,
-            readOnly: category.readonly
-        };
-        
-        // Add auto-clearing for cookies if any are defined
-        if (category.cookies && category.cookies.length > 0) {
-            config.categories[categoryId].autoClear = {
-                cookies: category.cookies.map(cookie => {
-                    return {
-                        name: cookie.is_regex ? new RegExp(cookie.name.replace(/^\/|\/$/g, '')) : cookie.name
+        // Set up categories (but don't completely overwrite the defaults)
+        if (settings.cookie_categories && typeof settings.cookie_categories === 'object') {
+            // Log the categories coming from WordPress
+            console.log('Cookie categories from WordPress:', settings.cookie_categories);
+            
+            // Map WordPress categories to the config
+            Object.entries(settings.cookie_categories).forEach(([categoryId, category]) => {
+                // Create category if it doesn't exist, or update existing
+                config.categories[categoryId] = config.categories[categoryId] || {};
+                config.categories[categoryId].enabled = category.enabled || false;
+                config.categories[categoryId].readOnly = category.readonly || false;
+                
+                // Set up cookie auto-clearing
+                if (category.cookies && category.cookies.length > 0) {
+                    config.categories[categoryId].autoClear = {
+                        cookies: category.cookies.map(cookie => {
+                            // Handle regex patterns for cookie names
+                            if (cookie.is_regex && cookie.name.startsWith('/') && cookie.name.includes('/')) {
+                                try {
+                                    // Extract pattern from /pattern/
+                                    const pattern = cookie.name.slice(1, cookie.name.lastIndexOf('/'));
+                                    return { name: new RegExp(pattern) };
+                                } catch (e) {
+                                    console.error('Invalid regex pattern:', cookie.name);
+                                    return { name: cookie.name };
+                                }
+                            } else {
+                                return { name: cookie.name };
+                            }
+                        })
                     };
-                })
-            };
+                }
+                
+                // Add section to preferences modal if it doesn't exist
+                if (config.language.translations[config.language.default]) {
+                    const lang = config.language.translations[config.language.default];
+                    
+                    // Check if there's already a section for this category
+                    const existingSection = lang.preferencesModal.sections.find(
+                        section => section.linkedCategory === categoryId
+                    );
+                    
+                    if (!existingSection) {
+                        lang.preferencesModal.sections.push({
+                            title: category.title || categoryId.charAt(0).toUpperCase() + categoryId.slice(1),
+                            description: category.description || '',
+                            linkedCategory: categoryId
+                        });
+                    } else {
+                        // Update existing section
+                        existingSection.title = category.title || existingSection.title;
+                        existingSection.description = category.description || existingSection.description;
+                    }
+                }
+            });
         }
         
-        // Add section to preferences modal
-        config.language.translations[config.language.default].preferencesModal.sections.push({
-            title: category.title || categoryId.charAt(0).toUpperCase() + categoryId.slice(1),
-            description: category.description || '',
-            linkedCategory: categoryId
-        });
-    });
-    
-    return config;
+        // Log the final config for debugging
+        console.log('Final cookie consent configuration:', config);
+        
+        return config;
+    } catch (error) {
+        console.error('Error building cookie consent config:', error);
+        return defaultConfig; // Fall back to defaults on error
+    }
 }
 
 // Initialize when DOM is fully loaded
@@ -191,12 +225,15 @@ document.addEventListener('DOMContentLoaded', function() {
             ? createConfigFromSettings(defaultConfig, window.sccSettings)
             : defaultConfig;
         
+        // Debug the final configuration
+        console.log('Running cookie consent with config:', config);
+        
         // Initialize cookie consent
         CookieConsent.run(config);
         
-        console.log('Cookie consent initialized');
+        console.log('Cookie consent initialized successfully');
     } catch (error) {
         console.error('Error initializing cookie consent:', error);
-        console.error('Error details:', error.message);
+        console.error('Error details:', error.message, error.stack);
     }
 });
