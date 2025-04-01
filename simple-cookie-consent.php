@@ -488,6 +488,8 @@ function scc_enqueue_scripts() {
     // Debug comment
     echo "<!-- Simple Cookie Consent plugin loaded (v{$version}) -->\n";
 }
+// Add the missing action hook
+add_action('wp_enqueue_scripts', 'scc_enqueue_scripts');
 
 // Add a hook to update the timestamp when options are saved
 add_action('update_option_scc_options', 'scc_update_options_timestamp', 10, 2);
