@@ -150,11 +150,7 @@ function scc_render_options_page() {
         $options['cookie_categories'] = $default_options['cookie_categories'];
     }
     
-    // Process cookie category and cookie actions with a separate form submission
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        // Handle category & cookie additions separately from the main settings form
-        // ...existing code for handling POST requests...
-    }
+    // Process category & cookie actions handled elsewhere
     
     ?>
     <div class="wrap">
@@ -168,28 +164,98 @@ function scc_render_options_page() {
         
         <!-- MAIN SETTINGS FORM -->
         <form method="post" action="options.php" id="scc-main-settings-form">
-            <?php 
-            // This is critical - it adds the proper nonce fields
-            settings_fields('scc_options_group');
-            ?>
+            <?php settings_fields('scc_options_group'); ?>
             
             <!-- General Settings Section -->
             <h2>General Settings</h2>
             <table class="form-table">
-                <!-- ...existing general settings fields... -->
+                <tr>
+                    <th scope="row">Language</th>
+                    <td>
+                        <select name="scc_options[current_lang]">
+                            <option value="en" <?php selected($options['current_lang'], 'en'); ?>>English</option>
+                            <option value="fr" <?php selected($options['current_lang'], 'fr'); ?>>French</option>
+                            <option value="de" <?php selected($options['current_lang'], 'de'); ?>>German</option>
+                            <option value="es" <?php selected($options['current_lang'], 'es'); ?>>Spanish</option>
+                            <option value="it" <?php selected($options['current_lang'], 'it'); ?>>Italian</option>
+                            <option value="nl" <?php selected($options['current_lang'], 'nl'); ?>>Dutch</option>
+                        </select>
+                        <p class="description">Default language for the cookie consent banner. For more languages, you'll need to modify the src/index.js file.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Auto-clear Cookies</th>
+                    <td>
+                        <label>
+                            <input type="checkbox" name="scc_options[autoclear_cookies]" <?php checked($options['autoclear_cookies'], true); ?> />
+                            Automatically clear cookies when user rejects them
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Page Scripts</th>
+                    <td>
+                        <label>
+                            <input type="checkbox" name="scc_options[page_scripts]" <?php checked($options['page_scripts'], true); ?> />
+                            Control script execution based on user consent
+                        </label>
+                    </td>
+                </tr>
             </table>
             
             <!-- Consent Modal Section -->
             <h2>Consent Modal</h2>
             <table class="form-table">
-                <!-- ...existing consent modal fields... -->
+                <tr>
+                    <th scope="row">Title</th>
+                    <td>
+                        <input type="text" name="scc_options[title]" value="<?php echo esc_attr($options['title']); ?>" class="regular-text" />
+                        <p class="description">Title displayed in the cookie consent banner.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Description</th>
+                    <td>
+                        <textarea name="scc_options[description]" rows="4" class="large-text"><?php echo esc_textarea($options['description']); ?></textarea>
+                        <p class="description">Main description explaining cookie usage on your site.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Primary Button</th>
+                    <td>
+                        <input type="text" name="scc_options[primary_btn_text]" value="<?php echo esc_attr($options['primary_btn_text']); ?>" class="regular-text" />
+                        <select name="scc_options[primary_btn_role]">
+                            <option value="accept_all" <?php selected($options['primary_btn_role'], 'accept_all'); ?>>Accept All</option>
+                            <option value="accept_selected" <?php selected($options['primary_btn_role'], 'accept_selected'); ?>>Accept Selected</option>
+                        </select>
+                        <p class="description">Primary action button for the consent banner.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Secondary Button</th>
+                    <td>
+                        <input type="text" name="scc_options[secondary_btn_text]" value="<?php echo esc_attr($options['secondary_btn_text']); ?>" class="regular-text" />
+                        <select name="scc_options[secondary_btn_role]">
+                            <option value="accept_necessary" <?php selected($options['secondary_btn_role'], 'accept_necessary'); ?>>Accept Necessary</option>
+                            <option value="settings" <?php selected($options['secondary_btn_role'], 'settings'); ?>>Settings</option>
+                        </select>
+                        <p class="description">Secondary action button for the consent banner.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Privacy Policy URL</th>
+                    <td>
+                        <input type="text" name="scc_options[privacy_policy_url]" value="<?php echo esc_attr($options['privacy_policy_url']); ?>" class="regular-text" />
+                        <p class="description">Link to your privacy policy page. Default: #privacy-policy</p>
+                    </td>
+                </tr>
             </table>
             
             <!-- Cookie Categories Section -->
             <h2>Cookie Categories</h2>
             <p>Configure cookie categories and specific cookies to be blocked until consent is given.</p>
             
-            <?php
+            <?php 
             // Display cookie categories
             if (isset($options['cookie_categories']) && is_array($options['cookie_categories'])) {
                 foreach ($options['cookie_categories'] as $category_id => $category) : 
@@ -209,17 +275,90 @@ function scc_render_options_page() {
                                 <p class="description">The name displayed to users in the consent preferences panel.</p>
                             </td>
                         </tr>
-                        <!-- ...other category fields... -->
+                        <tr>
+                            <th scope="row">Description</th>
+                            <td>
+                                <textarea name="scc_options[cookie_categories][<?php echo esc_attr($category_id); ?>][description]" 
+                                    rows="2" class="large-text"><?php echo esc_textarea($category['description']); ?></textarea>
+                                <p class="description">Explanation of what these cookies do and why they're used.</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Settings</th>
+                            <td>
+                                <label>
+                                    <input type="checkbox" name="scc_options[cookie_categories][<?php echo esc_attr($category_id); ?>][enabled]" 
+                                        <?php checked($category['enabled'], true); ?> />
+                                    Enabled by default
+                                </label>
+                                <p class="description">If checked, this category will be pre-selected when the user sees the banner.</p>
+                                <br>
+                                <label>
+                                    <input type="checkbox" name="scc_options[cookie_categories][<?php echo esc_attr($category_id); ?>][readonly]" 
+                                        <?php checked($category['readonly'], true); ?> 
+                                        <?php if ($category_id === 'necessary') echo 'disabled'; ?> />
+                                    Read-only (user cannot change)
+                                </label>
+                                <p class="description">If checked, users won't be able to toggle this category off. The "necessary" category is always read-only.</p>
+                            </td>
+                        </tr>
                     </table>
                     
-                    <!-- Cookies table... -->
+                    <h4>Cookies in this category</h4>
+                    
                     <?php if (!empty($category['cookies'])) : ?>
-                        <!-- ...existing cookies table... -->
+                        <table class="widefat striped">
+                            <thead>
+                                <tr>
+                                    <th>Cookie Name / Pattern</th>
+                                    <th>Type</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($category['cookies'] as $index => $cookie) : ?>
+                                    <tr>
+                                        <td>
+                                            <input type="hidden" 
+                                                name="scc_options[cookie_categories][<?php echo esc_attr($category_id); ?>][cookies][<?php echo $index; ?>][name]" 
+                                                value="<?php echo esc_attr($cookie['name']); ?>" />
+                                            <?php echo esc_html($cookie['name']); ?>
+                                        </td>
+                                        <td>
+                                            <input type="hidden" 
+                                                name="scc_options[cookie_categories][<?php echo esc_attr($category_id); ?>][cookies][<?php echo $index; ?>][is_regex]" 
+                                                value="<?php echo $cookie['is_regex'] ? '1' : ''; ?>" />
+                                            <?php echo $cookie['is_regex'] ? 'Regular Expression' : 'Exact Match'; ?>
+                                        </td>
+                                        <td>
+                                            <a href="<?php echo wp_nonce_url(
+                                                add_query_arg(
+                                                    array(
+                                                        'page' => 'simple-cookie-consent',
+                                                        'action' => 'delete_cookie',
+                                                        'category' => $category_id,
+                                                        'cookie_index' => $index
+                                                    ),
+                                                    admin_url('options-general.php')
+                                                ),
+                                                'delete_cookie_' . $category_id . '_' . $index
+                                            ); ?>" class="button button-small" onclick="return confirm('Are you sure you want to remove this cookie?');">
+                                                Remove
+                                            </a>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
                     <?php else : ?>
                         <p>No cookies defined for this category yet.</p>
                     <?php endif; ?>
                     
-                    <!-- Add cookie form - must be outside the main form -->
+                    <div style="margin-top: 10px;">
+                        <button type="button" class="button show-add-cookie-form" data-category="<?php echo esc_attr($category_id); ?>">
+                            Add Cookie to this Category
+                        </button>
+                    </div>
                 </div>
             <?php 
                 endforeach;
@@ -239,62 +378,75 @@ function scc_render_options_page() {
                 <?php wp_nonce_field('scc_add_category', 'scc_category_nonce'); ?>
                 <input type="text" name="new_category_id" placeholder="New category ID (e.g. marketing)" class="regular-text" required />
                 <input type="submit" name="scc_add_category" value="Add New Category" class="button button-secondary" />
+                <p class="description">Common categories: marketing, preferences, functional, etc.</p>
             </form>
         </div>
         
         <?php foreach ($options['cookie_categories'] as $category_id => $category) : ?>
-        <div style="margin: 10px 0; display: none;" id="scc-add-cookie-form-<?php echo esc_attr($category_id); ?>">
-            <h4>Add Cookie to <?php echo esc_html($category['title']); ?></h4>
-            <form method="post" action="" class="scc-add-cookie-form">
-                <?php wp_nonce_field('scc_add_cookie', 'scc_cookie_nonce'); ?>
-                <input type="hidden" name="category_id" value="<?php echo esc_attr($category_id); ?>" />
-                <input type="text" name="cookie_name" placeholder="Cookie name or pattern (e.g. _ga or /^_ga/)" class="regular-text" required />
-                <label>
-                    <input type="checkbox" name="is_regex" />
-                    Regular Expression
-                </label>
-                <input type="submit" name="scc_add_cookie" value="Add Cookie" class="button button-secondary" />
-            </form>
+        <div class="add-cookie-form-container" style="margin: 10px 0; display: none;" id="add-cookie-form-<?php echo esc_attr($category_id); ?>">
+            <div style="padding: 15px; background: #f5f5f5; border: 1px solid #ddd;">
+                <h4>Add Cookie to "<?php echo esc_html($category['title']); ?>"</h4>
+                <form method="post" action="" class="scc-add-cookie-form">
+                    <?php wp_nonce_field('scc_add_cookie', 'scc_cookie_nonce'); ?>
+                    <input type="hidden" name="category_id" value="<?php echo esc_attr($category_id); ?>" />
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row">Cookie Name/Pattern</th>
+                            <td>
+                                <input type="text" name="cookie_name" placeholder="e.g., _ga or /^_ga/" class="regular-text" required />
+                                <p class="description">Enter a specific cookie name or a pattern to match multiple cookies.</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Match Type</th>
+                            <td>
+                                <label>
+                                    <input type="checkbox" name="is_regex" />
+                                    Regular Expression
+                                </label>
+                                <p class="description">Check if using a pattern like /^_ga/ to match multiple cookies.</p>
+                            </td>
+                        </tr>
+                    </table>
+                    
+                    <p>
+                        <input type="submit" name="scc_add_cookie" value="Add Cookie" class="button button-primary" />
+                        <button type="button" class="button button-secondary cancel-add-cookie">Cancel</button>
+                    </p>
+                    
+                    <h5>Common Cookie Patterns</h5>
+                    <ul class="cookie-pattern-examples">
+                        <li><strong>Google Analytics:</strong> <code>/^_ga/</code>, <code>_gid</code>, <code>_gat</code></li>
+                        <li><strong>Facebook:</strong> <code>/^_fb/</code>, <code>/^fb_/</code>, <code>_fbp</code></li>
+                        <li><strong>Google Ads:</strong> <code>_gcl_au</code>, <code>/^_gcl_/</code></li>
+                    </ul>
+                </form>
+            </div>
         </div>
         <?php endforeach; ?>
     </div>
     
     <script type="text/javascript">
     jQuery(document).ready(function($) {
+        // Show/hide cookie add form
+        $('.show-add-cookie-form').on('click', function() {
+            var categoryId = $(this).data('category');
+            $('#add-cookie-form-' + categoryId).show();
+        });
+        
+        // Cancel button for cookie add form
+        $('.cancel-add-cookie').on('click', function(e) {
+            e.preventDefault();
+            $(this).closest('.add-cookie-form-container').hide();
+        });
+        
         // Debug form submission
         $('#scc-main-settings-form').on('submit', function(e) {
             console.log('Main settings form submitted');
             
-            // Check if any form fields are empty (just for debugging)
-            var emptyFields = $(this).find('input[type="text"]').filter(function() {
-                return $(this).val() === '';
-            });
-            
-            if (emptyFields.length > 0) {
-                console.warn('Warning: Form has empty fields:', emptyFields);
-            }
-            
             // Debug form data
             var formData = $(this).serialize();
             console.log('Form data:', formData);
-            
-            // Make sure the form actually submits (don't return false)
-        });
-        
-        // Add cookie button handler - show the form
-        $('.scc-category-section').each(function() {
-            var categoryId = $(this).find('.scc-category-title-field').data('category-id');
-            if (categoryId) {
-                // Create a button to show the add cookie form
-                var $addBtn = $('<button type="button" class="button">Add Cookie to this Category</button>');
-                $(this).append($addBtn);
-                
-                // Show the add cookie form when button is clicked
-                $addBtn.on('click', function(e) {
-                    e.preventDefault();
-                    $('#scc-add-cookie-form-' + categoryId).toggle();
-                });
-            }
         });
         
         // Highlight changed fields
