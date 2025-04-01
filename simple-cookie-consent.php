@@ -55,6 +55,9 @@ function scc_get_default_options() {
 
 // Validate options
 function scc_validate_options($input) {
+    // Debug input
+    error_log('Validating options: ' . print_r($input, true));
+    
     $valid = array();
     
     $valid['current_lang'] = sanitize_text_field($input['current_lang']);
@@ -77,8 +80,15 @@ function scc_validate_options($input) {
         foreach ($input['cookie_categories'] as $category_id => $category) {
             $sanitized_id = sanitize_key($category_id);
             
+            // Debug each category's data
+            error_log("Processing category: $sanitized_id - " . print_r($category, true));
+            
+            // Make sure title is properly processed
+            $title = isset($category['title']) ? sanitize_text_field($category['title']) : '';
+            error_log("Category title: $title");
+            
             $valid['cookie_categories'][$sanitized_id] = array(
-                'title' => sanitize_text_field($category['title']),
+                'title' => $title,
                 'description' => wp_kses_post($category['description']),
                 'enabled' => isset($category['enabled']) ? true : false,
                 'readonly' => isset($category['readonly']) ? true : false,
@@ -98,6 +108,9 @@ function scc_validate_options($input) {
             }
         }
     }
+    
+    // Debug output
+    error_log('Validated options: ' . print_r($valid, true));
     
     return $valid;
 }
@@ -433,7 +446,7 @@ function scc_render_options_page() {
             </div>
             
             <div class="submit-wrapper" style="margin-top: 20px; padding: 15px; background: #f5f5f5; border-top: 1px solid #ddd;">
-                <input type="submit" name="submit" id="submit" class="button button-primary" value="Save All Settings" style="font-size: 16px; padding: 8px 20px;">
+                <?php submit_button('Save All Settings', 'primary', 'submit', false); ?>
                 <p class="description">Save all cookie consent settings including category configurations.</p>
             </div>
         </form>
@@ -441,26 +454,25 @@ function scc_render_options_page() {
     
     <script type="text/javascript">
     jQuery(document).ready(function($) {
-        // Add confirmation when leaving the page with unsaved changes
-        var formChanged = false;
-        
-        $('#scc-main-settings-form input, #scc-main-settings-form textarea, #scc-main-settings-form select').on('change', function() {
-            formChanged = true;
+        // Debug form submission
+        $('#scc-main-settings-form').on('submit', function(e) {
+            console.log('Form submitted');
+            // Log all form values to debug what's being submitted
+            var formData = $(this).serializeArray();
+            console.log('Form data:', formData);
+            
+            // Check specifically for cookie category titles
+            formData.forEach(function(field) {
+                if (field.name.includes('cookie_categories') && field.name.includes('[title]')) {
+                    console.log('Category title field:', field.name, field.value);
+                }
+            });
         });
         
-        // Debug output to confirm value changes
-        $('.scc-category-title-field').on('change', function() {
-            console.log('Category title changed to: ' + $(this).val());
-        });
-        
-        // Highlight fields that have been changed
+        // Highlight fields when changed
         $('#scc-main-settings-form input[type=text], #scc-main-settings-form textarea').on('change', function() {
             $(this).css('background-color', '#e6f7ff');
-        });
-        
-        $('#scc-main-settings-form').on('submit', function() {
-            // Reset the changed flag when form is submitted
-            formChanged = false;
+            console.log('Field changed:', $(this).attr('name'), 'New value:', $(this).val());
         });
     });
     </script>
@@ -550,6 +562,7 @@ function scc_render_category_title_field($category_id, $title) {
            name="scc_options[cookie_categories][<?php echo esc_attr($category_id); ?>][title]" 
            value="<?php echo esc_attr($title); ?>" 
            class="regular-text scc-category-title-field" 
-           id="scc-category-<?php echo esc_attr($category_id); ?>-title" />
+           data-category-id="<?php echo esc_attr($category_id); ?>" />
+    <p class="description">The name displayed to users in the consent preferences panel.</p>
     <?php
 }
