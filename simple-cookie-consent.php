@@ -120,8 +120,20 @@ function scc_render_options_page() {
         return;
     }
     
+    // Check if settings were updated
+    $settings_updated = false;
+    if (isset($_GET['settings-updated']) && $_GET['settings-updated'] == 'true') {
+        $settings_updated = true;
+        // Clear any stored transients to ensure fresh data
+        delete_transient('scc_options_cache');
+    }
+    
     // Get options and ensure they include cookie_categories
-    $options = get_option('scc_options', array());
+    // Force a fresh fetch from the database after saving
+    $options = $settings_updated ? 
+        get_option('scc_options', array()) : 
+        get_option('scc_options', array());
+    
     $default_options = scc_get_default_options();
     
     // Merge with defaults to ensure all keys exist
@@ -199,7 +211,13 @@ function scc_render_options_page() {
     <div class="wrap">
         <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
         
-        <form method="post" action="options.php">
+        <?php if ($settings_updated): ?>
+        <div class="notice notice-success is-dismissible">
+            <p><strong>Settings saved.</strong></p>
+        </div>
+        <?php endif; ?>
+        
+        <form method="post" action="options.php" id="scc-main-settings-form">
             <?php settings_fields('scc_options_group'); ?>
             
             <h2>General Settings</h2>
@@ -288,8 +306,7 @@ function scc_render_options_page() {
                         <tr>
                             <th scope="row">Title</th>
                             <td>
-                                <input type="text" name="scc_options[cookie_categories][<?php echo esc_attr($category_id); ?>][title]" 
-                                    value="<?php echo esc_attr($category['title']); ?>" class="regular-text" />
+                                <?php scc_render_category_title_field($category_id, $category['title']); ?>
                             </td>
                         </tr>
                         <tr>
@@ -415,9 +432,38 @@ function scc_render_options_page() {
                 </form>
             </div>
             
-            <?php submit_button('Save All Settings'); ?>
+            <div class="submit-wrapper" style="margin-top: 20px; padding: 15px; background: #f5f5f5; border-top: 1px solid #ddd;">
+                <input type="submit" name="submit" id="submit" class="button button-primary" value="Save All Settings" style="font-size: 16px; padding: 8px 20px;">
+                <p class="description">Save all cookie consent settings including category configurations.</p>
+            </div>
         </form>
     </div>
+    
+    <script type="text/javascript">
+    jQuery(document).ready(function($) {
+        // Add confirmation when leaving the page with unsaved changes
+        var formChanged = false;
+        
+        $('#scc-main-settings-form input, #scc-main-settings-form textarea, #scc-main-settings-form select').on('change', function() {
+            formChanged = true;
+        });
+        
+        // Debug output to confirm value changes
+        $('.scc-category-title-field').on('change', function() {
+            console.log('Category title changed to: ' + $(this).val());
+        });
+        
+        // Highlight fields that have been changed
+        $('#scc-main-settings-form input[type=text], #scc-main-settings-form textarea').on('change', function() {
+            $(this).css('background-color', '#e6f7ff');
+        });
+        
+        $('#scc-main-settings-form').on('submit', function() {
+            // Reset the changed flag when form is submitted
+            formChanged = false;
+        });
+    });
+    </script>
     <?php
 }
 
@@ -432,8 +478,11 @@ function scc_get_merged_options() {
 
 // Enqueue scripts and styles
 function scc_enqueue_scripts() {
+    // Generate a version string based on the last time options were updated
+    $version = get_option('scc_options_last_updated', '1.0.0');
+    
     // Enqueue the bundled JavaScript file
-    wp_enqueue_script('scc-cookieconsent', plugin_dir_url(__FILE__) . 'dist/cookieconsent.bundle.js', array(), '1.0.0', true);
+    wp_enqueue_script('scc-cookieconsent', plugin_dir_url(__FILE__) . 'dist/cookieconsent.bundle.js', array(), $version, true);
     
     // Get options and ensure all keys exist
     $options = scc_get_merged_options();
@@ -441,11 +490,17 @@ function scc_enqueue_scripts() {
     // Localize script with settings
     wp_localize_script('scc-cookieconsent', 'sccSettings', array(
         'settings' => $options,
-        'version' => time() 
+        'version' => $version
     ));
     
     // Debug comment
-    echo "<!-- Simple Cookie Consent plugin loaded -->\n";
+    echo "<!-- Simple Cookie Consent plugin loaded (v{$version}) -->\n";
+}
+
+// Add a hook to update the timestamp when options are saved
+add_action('update_option_scc_options', 'scc_update_options_timestamp', 10, 2);
+function scc_update_options_timestamp($old_value, $new_value) {
+    update_option('scc_options_last_updated', time());
 }
 
 // Add admin notices for configuration
@@ -486,4 +541,15 @@ function scc_plugin_activate() {
     
     // Update options with defaults for any missing values
     update_option('scc_options', $merged_options);
+}
+
+// Make sure cookie categories titles use specific CSS class for JavaScript targeting
+function scc_render_category_title_field($category_id, $title) {
+    ?>
+    <input type="text" 
+           name="scc_options[cookie_categories][<?php echo esc_attr($category_id); ?>][title]" 
+           value="<?php echo esc_attr($title); ?>" 
+           class="regular-text scc-category-title-field" 
+           id="scc-category-<?php echo esc_attr($category_id); ?>-title" />
+    <?php
 }
