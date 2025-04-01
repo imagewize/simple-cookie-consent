@@ -30,6 +30,26 @@ function scc_get_default_options() {
         'secondary_btn_text' => 'Reject all',
         'secondary_btn_role' => 'accept_necessary',
         'privacy_policy_url' => '#privacy-policy',
+        'cookie_categories' => array(
+            'necessary' => array(
+                'title' => 'Strictly Necessary',
+                'description' => 'These cookies are essential for the proper functioning of the website and cannot be disabled.',
+                'enabled' => true,
+                'readonly' => true,
+                'cookies' => array()
+            ),
+            'analytics' => array(
+                'title' => 'Performance and Analytics',
+                'description' => 'These cookies collect information about how you use our website. All of the data is anonymized and cannot be used to identify you.',
+                'enabled' => false,
+                'readonly' => false,
+                'cookies' => array(
+                    array('name' => '/^_ga/', 'is_regex' => true),
+                    array('name' => '_gid', 'is_regex' => false),
+                    array('name' => '_gat', 'is_regex' => false)
+                )
+            )
+        )
     );
 }
 
@@ -49,6 +69,35 @@ function scc_validate_options($input) {
     $valid['secondary_btn_role'] = in_array($input['secondary_btn_role'], array('accept_necessary', 'settings')) 
         ? $input['secondary_btn_role'] : 'accept_necessary';
     $valid['privacy_policy_url'] = sanitize_text_field($input['privacy_policy_url']);
+    
+    // Validate cookie categories
+    if (isset($input['cookie_categories']) && is_array($input['cookie_categories'])) {
+        $valid['cookie_categories'] = array();
+        
+        foreach ($input['cookie_categories'] as $category_id => $category) {
+            $sanitized_id = sanitize_key($category_id);
+            
+            $valid['cookie_categories'][$sanitized_id] = array(
+                'title' => sanitize_text_field($category['title']),
+                'description' => wp_kses_post($category['description']),
+                'enabled' => isset($category['enabled']) ? true : false,
+                'readonly' => isset($category['readonly']) ? true : false,
+                'cookies' => array()
+            );
+            
+            // Process cookies for this category
+            if (isset($category['cookies']) && is_array($category['cookies'])) {
+                foreach ($category['cookies'] as $cookie) {
+                    if (!empty($cookie['name'])) {
+                        $valid['cookie_categories'][$sanitized_id]['cookies'][] = array(
+                            'name' => sanitize_text_field($cookie['name']),
+                            'is_regex' => isset($cookie['is_regex']) ? true : false
+                        );
+                    }
+                }
+            }
+        }
+    }
     
     return $valid;
 }
@@ -72,9 +121,74 @@ function scc_render_options_page() {
     }
     
     $options = get_option('scc_options', scc_get_default_options());
+    
+    // Handle adding a new category
+    if (isset($_POST['scc_add_category']) && isset($_POST['new_category_id']) && !empty($_POST['new_category_id'])) {
+        check_admin_referer('scc_add_category', 'scc_category_nonce');
+        
+        $new_id = sanitize_key($_POST['new_category_id']);
+        
+        if (!isset($options['cookie_categories'][$new_id])) {
+            $options['cookie_categories'][$new_id] = array(
+                'title' => ucfirst($new_id),
+                'description' => '',
+                'enabled' => false,
+                'readonly' => false,
+                'cookies' => array()
+            );
+            
+            update_option('scc_options', $options);
+        }
+    }
+    
+    // Handle adding a new cookie to a category
+    if (isset($_POST['scc_add_cookie']) && isset($_POST['category_id']) && isset($_POST['cookie_name'])) {
+        check_admin_referer('scc_add_cookie', 'scc_cookie_nonce');
+        
+        $category_id = sanitize_key($_POST['category_id']);
+        $cookie_name = sanitize_text_field($_POST['cookie_name']);
+        $is_regex = isset($_POST['is_regex']) ? true : false;
+        
+        if (isset($options['cookie_categories'][$category_id]) && !empty($cookie_name)) {
+            $options['cookie_categories'][$category_id]['cookies'][] = array(
+                'name' => $cookie_name,
+                'is_regex' => $is_regex
+            );
+            
+            update_option('scc_options', $options);
+        }
+    }
+    
+    // Handle removing a cookie category
+    if (isset($_GET['action']) && $_GET['action'] === 'delete_category' && isset($_GET['category']) && isset($_GET['_wpnonce'])) {
+        $category_id = sanitize_key($_GET['category']);
+        
+        if (wp_verify_nonce($_GET['_wpnonce'], 'delete_category_' . $category_id) && isset($options['cookie_categories'][$category_id])) {
+            // Don't allow deleting the necessary category
+            if ($category_id !== 'necessary') {
+                unset($options['cookie_categories'][$category_id]);
+                update_option('scc_options', $options);
+            }
+        }
+    }
+    
+    // Handle removing a cookie
+    if (isset($_GET['action']) && $_GET['action'] === 'delete_cookie' && isset($_GET['category']) && isset($_GET['cookie_index']) && isset($_GET['_wpnonce'])) {
+        $category_id = sanitize_key($_GET['category']);
+        $cookie_index = intval($_GET['cookie_index']);
+        
+        if (wp_verify_nonce($_GET['_wpnonce'], 'delete_cookie_' . $category_id . '_' . $cookie_index) && 
+            isset($options['cookie_categories'][$category_id]['cookies'][$cookie_index])) {
+            
+            array_splice($options['cookie_categories'][$category_id]['cookies'], $cookie_index, 1);
+            update_option('scc_options', $options);
+        }
+    }
+    
     ?>
     <div class="wrap">
         <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
+        
         <form method="post" action="options.php">
             <?php settings_fields('scc_options_group'); ?>
             
@@ -149,7 +263,140 @@ function scc_render_options_page() {
                 </tr>
             </table>
             
-            <?php submit_button('Save Settings'); ?>
+            <h2>Cookie Categories</h2>
+            <p>Configure cookie categories and specific cookies to be blocked until consent is given.</p>
+            
+            <?php foreach ($options['cookie_categories'] as $category_id => $category) : ?>
+                <div class="scc-category-section" style="margin-bottom: 20px; padding: 15px; background: #f9f9f9; border: 1px solid #ddd;">
+                    <h3 style="margin-top: 0;"><?php echo esc_html($category['title']); ?> (<?php echo esc_html($category_id); ?>)</h3>
+                    
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row">Title</th>
+                            <td>
+                                <input type="text" name="scc_options[cookie_categories][<?php echo esc_attr($category_id); ?>][title]" 
+                                    value="<?php echo esc_attr($category['title']); ?>" class="regular-text" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Description</th>
+                            <td>
+                                <textarea name="scc_options[cookie_categories][<?php echo esc_attr($category_id); ?>][description]" 
+                                    rows="2" class="large-text"><?php echo esc_textarea($category['description']); ?></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Settings</th>
+                            <td>
+                                <label>
+                                    <input type="checkbox" name="scc_options[cookie_categories][<?php echo esc_attr($category_id); ?>][enabled]" 
+                                        <?php checked($category['enabled'], true); ?> />
+                                    Enabled by default
+                                </label>
+                                <br>
+                                <label>
+                                    <input type="checkbox" name="scc_options[cookie_categories][<?php echo esc_attr($category_id); ?>][readonly]" 
+                                        <?php checked($category['readonly'], true); ?> 
+                                        <?php if ($category_id === 'necessary') echo 'disabled'; ?> />
+                                    Read-only (user cannot change)
+                                </label>
+                            </td>
+                        </tr>
+                    </table>
+                    
+                    <h4>Cookies in this category</h4>
+                    
+                    <?php if (!empty($category['cookies'])) : ?>
+                        <table class="widefat striped">
+                            <thead>
+                                <tr>
+                                    <th>Cookie Name / Pattern</th>
+                                    <th>Type</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($category['cookies'] as $index => $cookie) : ?>
+                                    <tr>
+                                        <td>
+                                            <input type="hidden" 
+                                                name="scc_options[cookie_categories][<?php echo esc_attr($category_id); ?>][cookies][<?php echo $index; ?>][name]" 
+                                                value="<?php echo esc_attr($cookie['name']); ?>" />
+                                            <?php echo esc_html($cookie['name']); ?>
+                                        </td>
+                                        <td>
+                                            <input type="hidden" 
+                                                name="scc_options[cookie_categories][<?php echo esc_attr($category_id); ?>][cookies][<?php echo $index; ?>][is_regex]" 
+                                                value="<?php echo $cookie['is_regex'] ? '1' : ''; ?>" 
+                                                <?php checked($cookie['is_regex'], true); ?> />
+                                            <?php echo $cookie['is_regex'] ? 'Regular Expression' : 'Exact Match'; ?>
+                                        </td>
+                                        <td>
+                                            <a href="<?php echo wp_nonce_url(
+                                                add_query_arg(
+                                                    array(
+                                                        'page' => 'simple-cookie-consent',
+                                                        'action' => 'delete_cookie',
+                                                        'category' => $category_id,
+                                                        'cookie_index' => $index
+                                                    ),
+                                                    admin_url('options-general.php')
+                                                ),
+                                                'delete_cookie_' . $category_id . '_' . $index
+                                            ); ?>" class="button button-small" onclick="return confirm('Are you sure you want to remove this cookie?');">
+                                                Remove
+                                            </a>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    <?php else : ?>
+                        <p>No cookies defined for this category yet.</p>
+                    <?php endif; ?>
+                    
+                    <div style="margin-top: 10px;">
+                        <form method="post" action="">
+                            <?php wp_nonce_field('scc_add_cookie', 'scc_cookie_nonce'); ?>
+                            <input type="hidden" name="category_id" value="<?php echo esc_attr($category_id); ?>" />
+                            <input type="text" name="cookie_name" placeholder="Cookie name or pattern (e.g. _ga or /^_ga/)" class="regular-text" />
+                            <label>
+                                <input type="checkbox" name="is_regex" />
+                                Regular Expression
+                            </label>
+                            <input type="submit" name="scc_add_cookie" value="Add Cookie" class="button button-secondary" />
+                        </form>
+                    </div>
+                    
+                    <?php if ($category_id !== 'necessary') : ?>
+                        <div style="margin-top: 10px; text-align: right;">
+                            <a href="<?php echo wp_nonce_url(
+                                add_query_arg(
+                                    array(
+                                        'page' => 'simple-cookie-consent',
+                                        'action' => 'delete_category',
+                                        'category' => $category_id
+                                    ),
+                                    admin_url('options-general.php')
+                                ),
+                                'delete_category_' . $category_id
+                            ); ?>" class="button button-link-delete" onclick="return confirm('Are you sure you want to remove this category?');">
+                                Delete Category
+                            </a>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            <?php endforeach; ?>
+            
+            <div style="margin: 20px 0;">
+                <form method="post" action="">
+                    <?php wp_nonce_field('scc_add_category', 'scc_category_nonce'); ?>
+                    <input type="text" name="new_category_id" placeholder="New category ID (e.g. marketing)" class="regular-text" />
+                    <input type="submit" name="scc_add_category" value="Add New Category" class="button button-secondary" />
+                </form>
+            </div>
+            
+            <?php submit_button('Save All Settings'); ?>
         </form>
     </div>
     <?php

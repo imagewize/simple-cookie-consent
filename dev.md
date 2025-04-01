@@ -208,6 +208,60 @@ onChange: ({changedCategories, changedServices}) => {
 }
 ```
 
+## Managing Cookie Categories and Patterns
+
+The plugin now allows you to manage cookie categories and specific cookie patterns through the WordPress admin interface.
+
+### Adding Cookie Categories
+
+You can add new cookie categories (e.g., marketing, preferences) through the admin interface:
+
+1. Go to Settings > Cookie Consent
+2. At the bottom of the Cookie Categories section, enter a new category ID (e.g., "marketing")
+3. Click "Add New Category"
+4. Configure the new category's settings (title, description, etc.)
+5. Save the settings
+
+Each category will automatically appear as a new section in the cookie preferences modal.
+
+### Adding Cookies to Categories
+
+You can specify which cookies should be blocked until consent is given:
+
+1. Go to Settings > Cookie Consent
+2. Find the relevant cookie category
+3. Enter a cookie name or pattern in the input field
+4. Check "Regular Expression" if you're using a pattern (e.g., `/^_ga/` will match all cookies starting with "_ga")
+5. Click "Add Cookie"
+
+### How Cookie Patterns Work
+
+Two types of cookie patterns are supported:
+
+1. **Exact Match**: Simple cookie names like "_gid" - these will match only the exact cookie name
+2. **Regular Expression**: Patterns like "/^_ga/" - these allow matching multiple cookies with similar patterns
+
+Regular expressions should be entered with the forward slashes (e.g., `/^_ga/`). Some useful patterns:
+
+- `/^_ga/` - Match all cookies starting with "_ga"
+- `/analytics/` - Match all cookies containing "analytics"
+- `/^__[a-z]/` - Match all cookies starting with double underscore followed by a lowercase letter
+
+### How Cookies are Blocked
+
+When a user has not consented to a particular category:
+
+1. Scripts marked with `type="text/plain" data-cookiecategory="category_id"` won't execute
+2. Cookies matching patterns in that category will be automatically cleared if set
+
+Example of a script that will only run with analytics consent:
+
+```html
+<script type="text/plain" data-cookiecategory="analytics">
+    // Google Analytics code here
+</script>
+```
+
 ## Troubleshooting
 
 Common issues and their solutions:
