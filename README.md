@@ -62,14 +62,46 @@ You can customize the plugin through the admin interface:
    - Banner title and description
    - Button text and actions
    - Privacy policy link
+   - **Cookie categories and patterns** (NEW!)
 
-For advanced customization, you can modify the configuration in `src/index.js` and rebuild the plugin.
+### NEW: Cookie Categories Management
+
+The plugin now allows you to manage cookie categories and patterns directly through the admin interface:
+
+- **Add new cookie categories** like Marketing or Preferences
+- **Define specific cookies** to block within each category
+- **Use regular expressions** to match multiple cookies with similar names
+- **Automatically clear cookies** when consent is withdrawn
+
+This means you can easily configure which cookies to block and when to allow them, all without editing any code.
 
 ### Cookie Categories
 
 The default configuration includes:
 - **Necessary cookies**: Always enabled, required for basic website functionality
 - **Analytics cookies**: Optional tracking and analytics cookies
+
+## Usage Examples
+
+### Blocking Google Analytics Until Consent
+
+Add your Google Analytics script with the `data-cookiecategory` attribute:
+
+```html
+<script type="text/plain" data-cookiecategory="analytics">
+  // Your Google Analytics code here
+</script>
+```
+
+The script won't execute until the visitor accepts analytics cookies.
+
+### Managing Third-party Cookies
+
+The plugin automatically handles third-party cookies by:
+1. Preventing scripts from loading until consent is given
+2. Clearing cookies if consent is withdrawn
+
+For detailed implementation guides, see the `dev.md` documentation file.
 
 ## Dependencies
 
