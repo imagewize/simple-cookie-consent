@@ -120,7 +120,17 @@ function scc_render_options_page() {
         return;
     }
     
-    $options = get_option('scc_options', scc_get_default_options());
+    // Get options and ensure they include cookie_categories
+    $options = get_option('scc_options', array());
+    $default_options = scc_get_default_options();
+    
+    // Merge with defaults to ensure all keys exist
+    $options = wp_parse_args($options, $default_options);
+    
+    // Ensure cookie_categories exists and is an array
+    if (!isset($options['cookie_categories']) || !is_array($options['cookie_categories'])) {
+        $options['cookie_categories'] = $default_options['cookie_categories'];
+    }
     
     // Handle adding a new category
     if (isset($_POST['scc_add_category']) && isset($_POST['new_category_id']) && !empty($_POST['new_category_id'])) {
@@ -266,7 +276,11 @@ function scc_render_options_page() {
             <h2>Cookie Categories</h2>
             <p>Configure cookie categories and specific cookies to be blocked until consent is given.</p>
             
-            <?php foreach ($options['cookie_categories'] as $category_id => $category) : ?>
+            <?php 
+            // Ensure cookie_categories is an array before trying to iterate
+            if (isset($options['cookie_categories']) && is_array($options['cookie_categories'])) {
+                foreach ($options['cookie_categories'] as $category_id => $category) : 
+            ?>
                 <div class="scc-category-section" style="margin-bottom: 20px; padding: 15px; background: #f9f9f9; border: 1px solid #ddd;">
                     <h3 style="margin-top: 0;"><?php echo esc_html($category['title']); ?> (<?php echo esc_html($category_id); ?>)</h3>
                     
@@ -386,7 +400,12 @@ function scc_render_options_page() {
                         </div>
                     <?php endif; ?>
                 </div>
-            <?php endforeach; ?>
+            <?php 
+                endforeach;
+            } else {
+                echo '<p>No cookie categories found. Default categories will be created when you save settings.</p>';
+            }
+            ?>
             
             <div style="margin: 20px 0;">
                 <form method="post" action="">
@@ -402,25 +421,32 @@ function scc_render_options_page() {
     <?php
 }
 
+// Ensure proper defaults when getting options
+function scc_get_merged_options() {
+    $options = get_option('scc_options', array());
+    $default_options = scc_get_default_options();
+    
+    // Merge with defaults to ensure all keys exist
+    return wp_parse_args($options, $default_options);
+}
+
 // Enqueue scripts and styles
 function scc_enqueue_scripts() {
     // Enqueue the bundled JavaScript file
     wp_enqueue_script('scc-cookieconsent', plugin_dir_url(__FILE__) . 'dist/cookieconsent.bundle.js', array(), '1.0.0', true);
     
-    // Get options from database or use defaults
-    $options = get_option('scc_options', scc_get_default_options());
+    // Get options and ensure all keys exist
+    $options = scc_get_merged_options();
     
-    // FIXED: Added version number to avoid caching issues
+    // Localize script with settings
     wp_localize_script('scc-cookieconsent', 'sccSettings', array(
         'settings' => $options,
-        // Add debug timestamp to detect if script is properly loaded
         'version' => time() 
     ));
     
-    // FIXED: Added console debug to check if script is loaded
+    // Debug comment
     echo "<!-- Simple Cookie Consent plugin loaded -->\n";
 }
-add_action('wp_enqueue_scripts', 'scc_enqueue_scripts');
 
 // Add admin notices for configuration
 function scc_admin_notices() {
@@ -449,11 +475,15 @@ function scc_admin_notices() {
 }
 add_action('admin_notices', 'scc_admin_notices');
 
-// FIXED: Add activation hook to ensure default options are set
+// Update activation hook to properly set default options
 register_activation_hook(__FILE__, 'scc_plugin_activate');
 function scc_plugin_activate() {
-    // Ensure default options are set on plugin activation
-    if (false === get_option('scc_options')) {
-        add_option('scc_options', scc_get_default_options());
-    }
+    $options = get_option('scc_options', array());
+    $default_options = scc_get_default_options();
+    
+    // Only add missing keys from defaults
+    $merged_options = wp_parse_args($options, $default_options);
+    
+    // Update options with defaults for any missing values
+    update_option('scc_options', $merged_options);
 }
