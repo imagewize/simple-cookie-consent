@@ -85,10 +85,10 @@ The default configuration includes:
 
 ### Blocking Google Analytics Until Consent
 
-Add your Google Analytics script with the `data-cookiecategory` attribute:
+Add your Google Analytics script with the `data-category` attribute:
 
 ```html
-<script type="text/plain" data-cookiecategory="analytics">
+<script type="text/plain" data-category="analytics">
   // Your Google Analytics code here
 </script>
 ```
