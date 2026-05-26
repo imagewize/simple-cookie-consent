@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
-<ruleset name="Simple Cookie Consent">
-    <description>WordPress Coding Standards for Simple Cookie Consent</description>
-    <file>simple-cookie-consent.php</file>
+<ruleset name="Warder Cookie Consent">
+    <description>WordPress Coding Standards for Warder Cookie Consent</description>
+    <file>warder-cookie-consent.php</file>
     <arg name="extensions" value="php"/>
     <rule ref="WordPress"/>
     <rule ref="WordPress.WP.I18n">
         <properties>
             <property name="text_domain" type="array">
-                <element value="simple-cookie-consent"/>
+                <element value="warder-cookie-consent"/>
             </property>
         </properties>
     </rule>
