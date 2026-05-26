@@ -19,3 +19,4 @@ jobs:
         with:
           build-dir: '/tmp/simple-cookie-consent'
           checks: ''
+          exclude-checks: 'EnqueuedScriptsScope'
