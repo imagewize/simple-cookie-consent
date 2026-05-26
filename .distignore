@@ -1,0 +1,40 @@
+# Version control
+.git/*
+.github/*
+
+# Development files
+.DS_Store
+.gitignore
+.distignore
+phpcs.xml
+composer.json
+composer.lock
+package.json
+package-lock.json
+webpack.config.js
+
+# Source files (bundled output is in dist/)
+src/*
+node_modules/*
+vendor/*
+
+# AI guidance and dev docs
+AGENTS.md
+CLAUDE.md
+README.md
+dev.md
+docs/*
+*.sh
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/*
+.idea/*
+*.sublime-project
+*.sublime-workspace
+
+# Logs and OS files
+*.log
+__MACOSX
