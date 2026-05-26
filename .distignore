@@ -19,6 +19,7 @@ node_modules/*
 vendor/*
 
 # AI guidance and dev docs
+.claude/*
 AGENTS.md
 CLAUDE.md
 README.md
