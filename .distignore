@@ -4,6 +4,7 @@
 
 # Development files
 .DS_Store
+.gitattributes
 .gitignore
 .distignore
 phpcs.xml
