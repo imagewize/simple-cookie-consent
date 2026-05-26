@@ -3,6 +3,7 @@ name: Create plugin release
 on:
   release:
     types: [published, edited]
+  workflow_dispatch:
 
 jobs:
   build:
