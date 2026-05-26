@@ -2,6 +2,15 @@
 
 All notable changes to Simple Cookie Consent are documented here.
 
+## [1.2.1] - 2026-05-26
+
+### Fixed
+- `composer.json` license corrected from MIT to GPL-2.0-or-later to match plugin header and LICENSE.md
+- `composer.json` support URLs were pointing to wrong repository (carousel-block → simple-cookie-consent)
+
+### Added
+- `.gitattributes` with `export-ignore` directives to exclude dev files from Composer installs and git archives — resolves Plugin Check false-positive warnings when installing via Composer
+
 ## [1.2.0] - 2026-05-26
 
 ### Added

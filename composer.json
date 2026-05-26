@@ -2,7 +2,7 @@
     "name": "imagewize/simple-cookie-consent",
     "description": "Implements GDPR-compliant cookie consent functionality.",
     "type": "wordpress-plugin",
-    "license": "MIT",
+    "license": "GPL-2.0-or-later",
     "authors": [
         {
             "name": "Jasper Frumau",
@@ -20,8 +20,8 @@
         "consent"
     ],
     "support": {
-        "issues": "https://github.com/imagewize/carousel-block/issues",
-        "source": "https://github.com/imagewize/carousel-block"
+        "issues": "https://github.com/imagewize/simple-cookie-consent/issues",
+        "source": "https://github.com/imagewize/simple-cookie-consent"
     },
     "require": {
         "php": ">=8.0",

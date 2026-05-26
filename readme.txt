@@ -4,7 +4,7 @@ Donate link: https://imagewize.com
 Tags: cookie, consent, gdpr, privacy, compliance
 Requires at least: 5.0
 Tested up to: 7.0
-Stable tag: 1.2.0
+Stable tag: 1.2.1
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -58,6 +58,13 @@ Yes. Settings are versioned via a timestamp that is appended to the script URL, 
 
 == Changelog ==
 
+= 1.2.1 =
+*2026-05-26*
+
+* Fixed composer.json license field (MIT → GPL-2.0-or-later) to match plugin header
+* Fixed composer.json support URLs pointing to wrong repository
+* Added .gitattributes to exclude dev files from Composer installs and git archives
+
 = 1.2.0 =
 *2026-05-26*
 
@@ -86,6 +93,9 @@ Yes. Settings are versioned via a timestamp that is appended to the script URL, 
 * Initial release
 
 == Upgrade Notice ==
+
+= 1.2.1 =
+Fixes composer.json license and support URLs; adds .gitattributes for Composer installs.
 
 = 1.2.0 =
 Adds a floating preferences toggle button so visitors can revisit their cookie choices at any time.
