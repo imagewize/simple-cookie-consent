@@ -230,7 +230,14 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Initialize cookie consent
         CookieConsent.run(config);
-        
+
+        const prefButton = document.getElementById('scc-preferences-toggle');
+        if (prefButton) {
+            prefButton.addEventListener('click', function() {
+                CookieConsent.showPreferences();
+            });
+        }
+
         console.log('Cookie consent initialized successfully');
     } catch (error) {
         console.error('Error initializing cookie consent:', error);

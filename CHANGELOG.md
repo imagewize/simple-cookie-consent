@@ -2,6 +2,22 @@
 
 All notable changes to Simple Cookie Consent are documented here.
 
+## [1.2.0] - 2026-05-26
+
+### Added
+- Floating preferences toggle button rendered in the page footer — a cookie icon that opens the preferences modal so users can revisit consent choices at any time
+- `show_preferences_toggle` option (enabled by default) to turn the button on or off without touching code
+- `preferences_toggle_position` option with four choices: `bottom-right` (default), `bottom-left`, `top-right`, `top-left`
+- "Preferences Toggle Button" row in General Settings admin UI with checkbox and position dropdown
+- `scc_add_preferences_button()` hooked to `wp_footer` — only outputs when both `enabled` and `show_preferences_toggle` are true
+- `scc_get_preferences_toggle_css()` — button styles registered via `wp_add_inline_style` (no render-blocking CSS file)
+
+### Changed
+- `scc_get_default_options()` extended with the two new option keys
+- `scc_validate_options()` sanitizes the new checkbox and allowlisted position value
+- `scc_enqueue_scripts()` conditionally registers the inline style handle when the toggle is enabled
+- `src/index.js` wires the button's click event to `CookieConsent.showPreferences()` after `CookieConsent.run()`
+
 ## [1.1.0] - 2026-05-26
 
 ### Added

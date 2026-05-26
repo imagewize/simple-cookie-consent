@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Simple Cookie Consent
  * Description: Implements GDPR-compliant cookie consent functionality.
- * Version: 1.1.0
+ * Version: 1.2.0
  * Author: Jasper Frumau
  * Author URI: https://imagewize.com
  * Text Domain: simple-cookie-consent
@@ -33,18 +33,20 @@ add_action( 'admin_init', 'scc_register_settings' );
  */
 function scc_get_default_options() {
 	return array(
-		'enabled'            => true,
-		'current_lang'       => 'en',
-		'autoclear_cookies'  => true,
-		'page_scripts'       => true,
-		'title'              => 'We use cookies!',
-		'description'        => 'Hello, this website uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. The latter will be set only after consent.',
-		'primary_btn_text'   => 'Accept all',
-		'primary_btn_role'   => 'accept_all',
-		'secondary_btn_text' => 'Reject all',
-		'secondary_btn_role' => 'accept_necessary',
-		'privacy_policy_url' => '#privacy-policy',
-		'cookie_categories'  => array(
+		'enabled'                     => true,
+		'current_lang'                => 'en',
+		'autoclear_cookies'           => true,
+		'page_scripts'                => true,
+		'title'                       => 'We use cookies!',
+		'description'                 => 'Hello, this website uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. The latter will be set only after consent.',
+		'primary_btn_text'            => 'Accept all',
+		'primary_btn_role'            => 'accept_all',
+		'secondary_btn_text'          => 'Reject all',
+		'secondary_btn_role'          => 'accept_necessary',
+		'privacy_policy_url'          => '#privacy-policy',
+		'show_preferences_toggle'     => true,
+		'preferences_toggle_position' => 'bottom-right',
+		'cookie_categories'           => array(
 			'necessary' => array(
 				'title'       => 'Strictly Necessary',
 				'description' => 'These cookies are essential for the proper functioning of the website and cannot be disabled.',
@@ -90,19 +92,22 @@ function scc_get_default_options() {
 function scc_validate_options( $input ) {
 	$valid = array();
 
-	$valid['enabled']            = isset( $input['enabled'] ) ? true : false;
-	$valid['current_lang']       = sanitize_text_field( $input['current_lang'] );
-	$valid['autoclear_cookies']  = isset( $input['autoclear_cookies'] ) ? true : false;
-	$valid['page_scripts']       = isset( $input['page_scripts'] ) ? true : false;
-	$valid['title']              = sanitize_text_field( $input['title'] );
-	$valid['description']        = wp_kses_post( $input['description'] );
-	$valid['primary_btn_text']   = sanitize_text_field( $input['primary_btn_text'] );
-	$valid['primary_btn_role']   = in_array( $input['primary_btn_role'], array( 'accept_all', 'accept_selected' ), true )
+	$valid['enabled']                     = isset( $input['enabled'] ) ? true : false;
+	$valid['current_lang']                = sanitize_text_field( $input['current_lang'] );
+	$valid['autoclear_cookies']           = isset( $input['autoclear_cookies'] ) ? true : false;
+	$valid['page_scripts']                = isset( $input['page_scripts'] ) ? true : false;
+	$valid['title']                       = sanitize_text_field( $input['title'] );
+	$valid['description']                 = wp_kses_post( $input['description'] );
+	$valid['primary_btn_text']            = sanitize_text_field( $input['primary_btn_text'] );
+	$valid['primary_btn_role']            = in_array( $input['primary_btn_role'], array( 'accept_all', 'accept_selected' ), true )
 		? $input['primary_btn_role'] : 'accept_all';
-	$valid['secondary_btn_text'] = sanitize_text_field( $input['secondary_btn_text'] );
-	$valid['secondary_btn_role'] = in_array( $input['secondary_btn_role'], array( 'accept_necessary', 'settings' ), true )
+	$valid['secondary_btn_text']          = sanitize_text_field( $input['secondary_btn_text'] );
+	$valid['secondary_btn_role']          = in_array( $input['secondary_btn_role'], array( 'accept_necessary', 'settings' ), true )
 		? $input['secondary_btn_role'] : 'accept_necessary';
-	$valid['privacy_policy_url'] = sanitize_text_field( $input['privacy_policy_url'] );
+	$valid['privacy_policy_url']          = sanitize_text_field( $input['privacy_policy_url'] );
+	$valid['show_preferences_toggle']     = isset( $input['show_preferences_toggle'] ) ? true : false;
+	$valid['preferences_toggle_position'] = in_array( $input['preferences_toggle_position'], array( 'bottom-right', 'bottom-left', 'top-right', 'top-left' ), true )
+		? $input['preferences_toggle_position'] : 'bottom-right';
 
 	if ( isset( $input['cookie_categories'] ) && is_array( $input['cookie_categories'] ) ) {
 		$valid['cookie_categories'] = array();
@@ -229,6 +234,24 @@ function scc_render_options_page() {
 							<input type="checkbox" name="scc_options[page_scripts]" <?php checked( $options['page_scripts'], true ); ?> />
 							Control script execution based on user consent
 						</label>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row">Preferences Toggle Button</th>
+					<td>
+						<label>
+							<input type="checkbox" name="scc_options[show_preferences_toggle]" <?php checked( $options['show_preferences_toggle'], true ); ?> />
+							Show a floating button to reopen cookie preferences
+						</label>
+						<p class="description">Displays a cookie icon button that lets users revisit their consent choices at any time.</p>
+						<br>
+						<select name="scc_options[preferences_toggle_position]">
+							<option value="bottom-right" <?php selected( $options['preferences_toggle_position'], 'bottom-right' ); ?>>Bottom Right</option>
+							<option value="bottom-left" <?php selected( $options['preferences_toggle_position'], 'bottom-left' ); ?>>Bottom Left</option>
+							<option value="top-right" <?php selected( $options['preferences_toggle_position'], 'top-right' ); ?>>Top Right</option>
+							<option value="top-left" <?php selected( $options['preferences_toggle_position'], 'top-left' ); ?>>Top Left</option>
+						</select>
+						<p class="description">Corner where the floating button appears.</p>
 					</td>
 				</tr>
 			</table>
@@ -531,6 +554,12 @@ function scc_enqueue_scripts() {
 			'version'  => $version,
 		)
 	);
+
+	if ( ! empty( $options['show_preferences_toggle'] ) ) {
+		wp_register_style( 'scc-preferences-toggle', false, array(), $version ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
+		wp_enqueue_style( 'scc-preferences-toggle' );
+		wp_add_inline_style( 'scc-preferences-toggle', scc_get_preferences_toggle_css() );
+	}
 }
 add_action( 'wp_enqueue_scripts', 'scc_enqueue_scripts' );
 
@@ -587,6 +616,71 @@ function scc_plugin_activate() {
 
 	update_option( 'scc_options', $merged_options );
 }
+
+/**
+ * Returns CSS for the floating preferences toggle button.
+ *
+ * @return string
+ */
+function scc_get_preferences_toggle_css() {
+	return '
+.scc-preferences-toggle {
+	position: fixed;
+	width: 48px;
+	height: 48px;
+	border-radius: 50%;
+	background: #333;
+	color: #fff;
+	border: none;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+	z-index: 9999;
+	transition: background 0.2s ease, transform 0.2s ease;
+}
+.scc-preferences-toggle:hover {
+	background: #555;
+	transform: scale(1.1);
+}
+.scc-preferences-toggle svg {
+	width: 24px;
+	height: 24px;
+	pointer-events: none;
+}
+.scc-preferences-toggle--bottom-right { bottom: 20px; right: 20px; }
+.scc-preferences-toggle--bottom-left  { bottom: 20px; left: 20px; }
+.scc-preferences-toggle--top-right    { top: 20px; right: 20px; }
+.scc-preferences-toggle--top-left     { top: 20px; left: 20px; }
+';
+}
+
+/**
+ * Outputs the floating preferences toggle button in the footer.
+ */
+function scc_add_preferences_button() {
+	$options = scc_get_merged_options();
+	if ( empty( $options['enabled'] ) || empty( $options['show_preferences_toggle'] ) ) {
+		return;
+	}
+
+	$allowed  = array( 'bottom-right', 'bottom-left', 'top-right', 'top-left' );
+	$position = isset( $options['preferences_toggle_position'] ) && in_array( $options['preferences_toggle_position'], $allowed, true )
+		? $options['preferences_toggle_position']
+		: 'bottom-right';
+
+	echo '<button id="scc-preferences-toggle" class="scc-preferences-toggle scc-preferences-toggle--' . esc_attr( $position ) . '" aria-label="' . esc_attr__( 'Cookie Preferences', 'simple-cookie-consent' ) . '">';
+	echo '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">';
+	echo '<circle cx="12" cy="12" r="10"/>';
+	echo '<circle cx="9" cy="9" r="1.5" fill="currentColor"/>';
+	echo '<circle cx="15" cy="8" r="1" fill="currentColor"/>';
+	echo '<circle cx="14" cy="14" r="1.5" fill="currentColor"/>';
+	echo '<circle cx="9" cy="15" r="1" fill="currentColor"/>';
+	echo '</svg>';
+	echo '</button>';
+}
+add_action( 'wp_footer', 'scc_add_preferences_button' );
 
 /**
  * Renders an input field for a cookie category title with the correct CSS class.

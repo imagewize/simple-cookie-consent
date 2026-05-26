@@ -8,6 +8,7 @@ A lightweight plugin that implements GDPR-compliant cookie consent functionality
 - 🌐 Multi-language support
 - 🎨 Customizable appearance
 - 🔒 GDPR-compliant cookie management
+- 🔁 Floating preferences toggle button — lets users revisit consent choices at any time
 - 📱 Fully responsive design
 - 🧩 Easy integration with WordPress
 
@@ -64,9 +65,17 @@ You can customize the plugin through the admin interface:
    - Privacy policy link
    - **Cookie categories and patterns** (NEW!)
 
-### NEW: Cookie Categories Management
+### Preferences Toggle Button
 
-The plugin now allows you to manage cookie categories and patterns directly through the admin interface:
+A floating cookie icon button is rendered in the page footer, giving visitors a persistent way to reopen the preferences modal and change their consent choices at any time.
+
+- **Enable/disable** the button via the "Preferences Toggle Button" checkbox in General Settings
+- **Position** it in any corner: Bottom Right (default), Bottom Left, Top Right, Top Left
+- The button only appears when the plugin is enabled and the toggle option is active
+
+### Cookie Categories Management
+
+The plugin allows you to manage cookie categories and patterns directly through the admin interface:
 
 - **Add new cookie categories** like Marketing or Preferences
 - **Define specific cookies** to block within each category
