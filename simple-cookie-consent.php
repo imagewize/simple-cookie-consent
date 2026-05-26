@@ -36,7 +36,9 @@ function scc_get_default_options() {
                 'description' => 'These cookies are essential for the proper functioning of the website and cannot be disabled.',
                 'enabled' => true,
                 'readonly' => true,
-                'cookies' => array()
+                'cookies' => array(
+                    array('name' => '/^sbjs_/', 'is_regex' => true) // Moved sbjs_* cookies to necessary
+                )
             ),
             'analytics' => array(
                 'title' => 'Performance and Analytics',
