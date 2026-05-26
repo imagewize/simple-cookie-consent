@@ -1,6 +1,22 @@
 # Changelog
 
-All notable changes to Simple Cookie Consent are documented here.
+All notable changes to Warder Cookie Consent are documented here.
+
+## [1.3.0] - 2026-05-26
+
+### Added
+- `languages/` directory for shipping and community-contributed translation files (WordPress 4.6+ auto-loads translations via the `Text Domain` header)
+
+### Changed
+- Plugin renamed from Simple Cookie Consent to **Warder Cookie Consent** (Wheel of Time inspired, consistent with Elayne FSE theme and Waygate pattern builder)
+- Main plugin file renamed to `warder-cookie-consent.php`
+- Text domain changed from `simple-cookie-consent` to `warder-cookie-consent`
+- All function and option prefixes changed from `scc_` to `warder_`
+- Composer package renamed to `imagewize/warder-cookie-consent`
+- GitHub repository renamed to `imagewize/warder-cookie-consent`
+
+### Fixed
+- Plugin Check workflow build directory renamed to `warder-cookie-consent` to match the text domain header, resolving `textdomain_mismatch` warnings
 
 ## [1.2.1] - 2026-05-26
 

@@ -1,10 +1,10 @@
-=== Simple Cookie Consent ===
+=== Warder Cookie Consent ===
 Contributors: jasperfrumau
 Donate link: https://imagewize.com
 Tags: cookie, consent, gdpr, privacy, compliance
 Requires at least: 5.0
 Tested up to: 7.0
-Stable tag: 1.2.1
+Stable tag: 1.3.0
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -13,7 +13,7 @@ A lightweight plugin that implements GDPR-compliant cookie consent functionality
 
 == Description ==
 
-Simple Cookie Consent provides an easy way to add GDPR-compliant cookie consent banners to your WordPress website. The plugin uses the lightweight [CookieConsent v3](https://github.com/orestbida/cookieconsent) library and offers full customization through the WordPress admin interface.
+Warder Cookie Consent provides an easy way to add GDPR-compliant cookie consent banners to your WordPress website. The plugin uses the lightweight [CookieConsent v3](https://github.com/orestbida/cookieconsent) library and offers full customization through the WordPress admin interface.
 
 = Features =
 
@@ -58,6 +58,18 @@ Yes. Settings are versioned via a timestamp that is appended to the script URL, 
 
 == Changelog ==
 
+= 1.3.0 =
+*2026-05-26*
+
+* Added languages/ directory for translation files (WordPress 4.6+ auto-loads translations via the Text Domain header)
+* Fixed Plugin Check workflow directory name to match text domain header (resolves textdomain_mismatch warnings)
+* Renamed plugin to Warder Cookie Consent (Wheel of Time inspired, consistent with Elayne theme and Waygate pattern builder)
+* Renamed main plugin file to warder-cookie-consent.php
+* Updated text domain to warder-cookie-consent
+* Updated all function prefixes from scc_ to warder_
+* Updated Composer package name to imagewize/warder-cookie-consent
+* GitHub repository renamed to imagewize/warder-cookie-consent
+
 = 1.2.1 =
 *2026-05-26*
 
@@ -93,6 +105,9 @@ Yes. Settings are versioned via a timestamp that is appended to the script URL, 
 * Initial release
 
 == Upgrade Notice ==
+
+= 1.3.0 =
+Plugin renamed to Warder Cookie Consent; added languages/ directory for translations; updated text domain, function prefixes, and Composer package name.
 
 = 1.2.1 =
 Fixes composer.json license and support URLs; adds .gitattributes for Composer installs.

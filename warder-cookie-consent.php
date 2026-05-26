@@ -1,15 +1,15 @@
 <?php
 /**
- * Plugin Name: Simple Cookie Consent
- * Description: Implements GDPR-compliant cookie consent functionality.
- * Version: 1.2.1
+ * Plugin Name: Warder Cookie Consent
+ * Description: GDPR-compliant cookie consent banner with category management and floating preferences toggle.
+ * Version: 1.3.0
  * Author: Jasper Frumau
  * Author URI: https://imagewize.com
- * Text Domain: simple-cookie-consent
+ * Text Domain: warder-cookie-consent
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  *
- * @package Simple_Cookie_Consent
+ * @package Warder_Cookie_Consent
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -17,21 +17,21 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Registers plugin settings and adds default options on first activation.
  */
-function scc_register_settings() {
-	register_setting( 'scc_options_group', 'scc_options', 'scc_validate_options' );
+function warder_register_settings() {
+	register_setting( 'warder_options_group', 'warder_options', 'warder_validate_options' );
 
-	if ( false === get_option( 'scc_options' ) ) {
-		add_option( 'scc_options', scc_get_default_options() );
+	if ( false === get_option( 'warder_options' ) ) {
+		add_option( 'warder_options', warder_get_default_options() );
 	}
 }
-add_action( 'admin_init', 'scc_register_settings' );
+add_action( 'admin_init', 'warder_register_settings' );
 
 /**
  * Returns the canonical default options structure.
  *
  * @return array
  */
-function scc_get_default_options() {
+function warder_get_default_options() {
 	return array(
 		'enabled'                     => true,
 		'current_lang'                => 'en',
@@ -89,7 +89,7 @@ function scc_get_default_options() {
  * @param array $input Raw input from the settings form.
  * @return array Sanitized options.
  */
-function scc_validate_options( $input ) {
+function warder_validate_options( $input ) {
 	$valid = array();
 
 	$valid['enabled']                     = isset( $input['enabled'] ) ? true : false;
@@ -144,21 +144,21 @@ function scc_validate_options( $input ) {
 /**
  * Registers the plugin settings page under the Settings menu.
  */
-function scc_add_options_page() {
+function warder_add_options_page() {
 	add_options_page(
 		'Cookie Consent Settings',
 		'Cookie Consent',
 		'manage_options',
-		'simple-cookie-consent',
-		'scc_render_options_page'
+		'warder-cookie-consent',
+		'warder_render_options_page'
 	);
 }
-add_action( 'admin_menu', 'scc_add_options_page' );
+add_action( 'admin_menu', 'warder_add_options_page' );
 
 /**
  * Renders the plugin settings page in the WordPress admin.
  */
-function scc_render_options_page() {
+function warder_render_options_page() {
 	if ( ! current_user_can( 'manage_options' ) ) {
 		return;
 	}
@@ -167,11 +167,11 @@ function scc_render_options_page() {
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$settings_updated = isset( $_GET['settings-updated'] ) && 'true' === sanitize_text_field( wp_unslash( $_GET['settings-updated'] ) );
 	if ( $settings_updated ) {
-		delete_transient( 'scc_options_cache' );
+		delete_transient( 'warder_options_cache' );
 	}
 
-	$options         = get_option( 'scc_options', array() );
-	$default_options = scc_get_default_options();
+	$options         = get_option( 'warder_options', array() );
+	$default_options = warder_get_default_options();
 	$options         = wp_parse_args( $options, $default_options );
 
 	if ( ! isset( $options['cookie_categories'] ) || ! is_array( $options['cookie_categories'] ) ) {
@@ -189,8 +189,8 @@ function scc_render_options_page() {
 		<?php endif; ?>
 
 		<!-- MAIN SETTINGS FORM -->
-		<form method="post" action="options.php" id="scc-main-settings-form">
-			<?php settings_fields( 'scc_options_group' ); ?>
+		<form method="post" action="options.php" id="warder-main-settings-form">
+			<?php settings_fields( 'warder_options_group' ); ?>
 
 			<!-- General Settings Section -->
 			<h2>General Settings</h2>
@@ -199,7 +199,7 @@ function scc_render_options_page() {
 					<th scope="row">Enable Plugin</th>
 					<td>
 						<label>
-							<input type="checkbox" name="scc_options[enabled]" <?php checked( $options['enabled'], true ); ?> />
+							<input type="checkbox" name="warder_options[enabled]" <?php checked( $options['enabled'], true ); ?> />
 							Display the cookie consent banner on the frontend
 						</label>
 					</td>
@@ -207,7 +207,7 @@ function scc_render_options_page() {
 				<tr>
 					<th scope="row">Language</th>
 					<td>
-						<select name="scc_options[current_lang]">
+						<select name="warder_options[current_lang]">
 							<option value="en" <?php selected( $options['current_lang'], 'en' ); ?>>English</option>
 							<option value="fr" <?php selected( $options['current_lang'], 'fr' ); ?>>French</option>
 							<option value="de" <?php selected( $options['current_lang'], 'de' ); ?>>German</option>
@@ -222,7 +222,7 @@ function scc_render_options_page() {
 					<th scope="row">Auto-clear Cookies</th>
 					<td>
 						<label>
-							<input type="checkbox" name="scc_options[autoclear_cookies]" <?php checked( $options['autoclear_cookies'], true ); ?> />
+							<input type="checkbox" name="warder_options[autoclear_cookies]" <?php checked( $options['autoclear_cookies'], true ); ?> />
 							Automatically clear cookies when user rejects them
 						</label>
 					</td>
@@ -231,7 +231,7 @@ function scc_render_options_page() {
 					<th scope="row">Page Scripts</th>
 					<td>
 						<label>
-							<input type="checkbox" name="scc_options[page_scripts]" <?php checked( $options['page_scripts'], true ); ?> />
+							<input type="checkbox" name="warder_options[page_scripts]" <?php checked( $options['page_scripts'], true ); ?> />
 							Control script execution based on user consent
 						</label>
 					</td>
@@ -240,12 +240,12 @@ function scc_render_options_page() {
 					<th scope="row">Preferences Toggle Button</th>
 					<td>
 						<label>
-							<input type="checkbox" name="scc_options[show_preferences_toggle]" <?php checked( $options['show_preferences_toggle'], true ); ?> />
+							<input type="checkbox" name="warder_options[show_preferences_toggle]" <?php checked( $options['show_preferences_toggle'], true ); ?> />
 							Show a floating button to reopen cookie preferences
 						</label>
 						<p class="description">Displays a cookie icon button that lets users revisit their consent choices at any time.</p>
 						<br>
-						<select name="scc_options[preferences_toggle_position]">
+						<select name="warder_options[preferences_toggle_position]">
 							<option value="bottom-right" <?php selected( $options['preferences_toggle_position'], 'bottom-right' ); ?>>Bottom Right</option>
 							<option value="bottom-left" <?php selected( $options['preferences_toggle_position'], 'bottom-left' ); ?>>Bottom Left</option>
 							<option value="top-right" <?php selected( $options['preferences_toggle_position'], 'top-right' ); ?>>Top Right</option>
@@ -262,22 +262,22 @@ function scc_render_options_page() {
 				<tr>
 					<th scope="row">Title</th>
 					<td>
-						<input type="text" name="scc_options[title]" value="<?php echo esc_attr( $options['title'] ); ?>" class="regular-text" />
+						<input type="text" name="warder_options[title]" value="<?php echo esc_attr( $options['title'] ); ?>" class="regular-text" />
 						<p class="description">Title displayed in the cookie consent banner.</p>
 					</td>
 				</tr>
 				<tr>
 					<th scope="row">Description</th>
 					<td>
-						<textarea name="scc_options[description]" rows="4" class="large-text"><?php echo esc_textarea( $options['description'] ); ?></textarea>
+						<textarea name="warder_options[description]" rows="4" class="large-text"><?php echo esc_textarea( $options['description'] ); ?></textarea>
 						<p class="description">Main description explaining cookie usage on your site.</p>
 					</td>
 				</tr>
 				<tr>
 					<th scope="row">Primary Button</th>
 					<td>
-						<input type="text" name="scc_options[primary_btn_text]" value="<?php echo esc_attr( $options['primary_btn_text'] ); ?>" class="regular-text" />
-						<select name="scc_options[primary_btn_role]">
+						<input type="text" name="warder_options[primary_btn_text]" value="<?php echo esc_attr( $options['primary_btn_text'] ); ?>" class="regular-text" />
+						<select name="warder_options[primary_btn_role]">
 							<option value="accept_all" <?php selected( $options['primary_btn_role'], 'accept_all' ); ?>>Accept All</option>
 							<option value="accept_selected" <?php selected( $options['primary_btn_role'], 'accept_selected' ); ?>>Accept Selected</option>
 						</select>
@@ -287,8 +287,8 @@ function scc_render_options_page() {
 				<tr>
 					<th scope="row">Secondary Button</th>
 					<td>
-						<input type="text" name="scc_options[secondary_btn_text]" value="<?php echo esc_attr( $options['secondary_btn_text'] ); ?>" class="regular-text" />
-						<select name="scc_options[secondary_btn_role]">
+						<input type="text" name="warder_options[secondary_btn_text]" value="<?php echo esc_attr( $options['secondary_btn_text'] ); ?>" class="regular-text" />
+						<select name="warder_options[secondary_btn_role]">
 							<option value="accept_necessary" <?php selected( $options['secondary_btn_role'], 'accept_necessary' ); ?>>Accept Necessary</option>
 							<option value="settings" <?php selected( $options['secondary_btn_role'], 'settings' ); ?>>Settings</option>
 						</select>
@@ -298,7 +298,7 @@ function scc_render_options_page() {
 				<tr>
 					<th scope="row">Privacy Policy URL</th>
 					<td>
-						<input type="text" name="scc_options[privacy_policy_url]" value="<?php echo esc_attr( $options['privacy_policy_url'] ); ?>" class="regular-text" />
+						<input type="text" name="warder_options[privacy_policy_url]" value="<?php echo esc_attr( $options['privacy_policy_url'] ); ?>" class="regular-text" />
 						<p class="description">Link to your privacy policy page. Default: #privacy-policy</p>
 					</td>
 				</tr>
@@ -312,7 +312,7 @@ function scc_render_options_page() {
 			if ( isset( $options['cookie_categories'] ) && is_array( $options['cookie_categories'] ) ) {
 				foreach ( $options['cookie_categories'] as $category_id => $category ) :
 					?>
-				<div class="scc-category-section" style="margin-bottom: 20px; padding: 15px; background: #f9f9f9; border: 1px solid #ddd;">
+				<div class="warder-category-section" style="margin-bottom: 20px; padding: 15px; background: #f9f9f9; border: 1px solid #ddd;">
 					<h3 style="margin-top: 0;"><?php echo esc_html( $category['title'] ); ?> (<?php echo esc_html( $category_id ); ?>)</h3>
 
 					<table class="form-table">
@@ -320,17 +320,17 @@ function scc_render_options_page() {
 							<th scope="row">Title</th>
 							<td>
 								<input type="text"
-										name="scc_options[cookie_categories][<?php echo esc_attr( $category_id ); ?>][title]"
+										name="warder_options[cookie_categories][<?php echo esc_attr( $category_id ); ?>][title]"
 										value="<?php echo esc_attr( $category['title'] ); ?>"
-										class="regular-text scc-category-title-field"
-										id="scc-category-<?php echo esc_attr( $category_id ); ?>-title" />
+										class="regular-text warder-category-title-field"
+										id="warder-category-<?php echo esc_attr( $category_id ); ?>-title" />
 								<p class="description">The name displayed to users in the consent preferences panel.</p>
 							</td>
 						</tr>
 						<tr>
 							<th scope="row">Description</th>
 							<td>
-								<textarea name="scc_options[cookie_categories][<?php echo esc_attr( $category_id ); ?>][description]"
+								<textarea name="warder_options[cookie_categories][<?php echo esc_attr( $category_id ); ?>][description]"
 									rows="2" class="large-text"><?php echo esc_textarea( $category['description'] ); ?></textarea>
 								<p class="description">Explanation of what these cookies do and why they're used.</p>
 							</td>
@@ -339,14 +339,14 @@ function scc_render_options_page() {
 							<th scope="row">Settings</th>
 							<td>
 								<label>
-									<input type="checkbox" name="scc_options[cookie_categories][<?php echo esc_attr( $category_id ); ?>][enabled]"
+									<input type="checkbox" name="warder_options[cookie_categories][<?php echo esc_attr( $category_id ); ?>][enabled]"
 										<?php checked( $category['enabled'], true ); ?> />
 									Enabled by default
 								</label>
 								<p class="description">If checked, this category will be pre-selected when the user sees the banner.</p>
 								<br>
 								<label>
-									<input type="checkbox" name="scc_options[cookie_categories][<?php echo esc_attr( $category_id ); ?>][readonly]"
+									<input type="checkbox" name="warder_options[cookie_categories][<?php echo esc_attr( $category_id ); ?>][readonly]"
 										<?php checked( $category['readonly'], true ); ?>
 										<?php
 										if ( 'necessary' === $category_id ) {
@@ -377,15 +377,15 @@ function scc_render_options_page() {
 									<tr>
 										<td>
 											<input type="hidden"
-												name="scc_options[cookie_categories][<?php echo esc_attr( $category_id ); ?>][cookies][<?php echo esc_attr( $index ); ?>][name]"
+												name="warder_options[cookie_categories][<?php echo esc_attr( $category_id ); ?>][cookies][<?php echo esc_attr( $index ); ?>][name]"
 												value="<?php echo esc_attr( $cookie['name'] ); ?>" />
 											<?php echo esc_html( $cookie['name'] ); ?>
 										</td>
 										<td>
 											<input type="hidden"
-												name="scc_options[cookie_categories][<?php echo esc_attr( $category_id ); ?>][cookies][<?php echo esc_attr( $index ); ?>][is_regex]"
+												name="warder_options[cookie_categories][<?php echo esc_attr( $category_id ); ?>][cookies][<?php echo esc_attr( $index ); ?>][is_regex]"
 												value="<?php echo esc_attr( $cookie['is_regex'] ? '1' : '' ); ?>" />
-											<?php echo $cookie['is_regex'] ? esc_html__( 'Regular Expression', 'simple-cookie-consent' ) : esc_html__( 'Exact Match', 'simple-cookie-consent' ); ?>
+											<?php echo $cookie['is_regex'] ? esc_html__( 'Regular Expression', 'warder-cookie-consent' ) : esc_html__( 'Exact Match', 'warder-cookie-consent' ); ?>
 										</td>
 										<td>
 											<a href="
@@ -394,7 +394,7 @@ function scc_render_options_page() {
 												wp_nonce_url(
 													add_query_arg(
 														array(
-															'page'         => 'simple-cookie-consent',
+															'page'         => 'warder-cookie-consent',
 															'action'       => 'delete_cookie',
 															'category'     => $category_id,
 															'cookie_index' => $index,
@@ -437,20 +437,20 @@ function scc_render_options_page() {
 		<!-- SEPARATE FORMS FOR ADDING COOKIES AND CATEGORIES -->
 		<div style="margin: 20px 0; padding: 15px; background: #f5f5f5; border: 1px solid #ddd;">
 			<h3>Add New Category</h3>
-			<form method="post" action="" id="scc-add-category-form">
-				<?php wp_nonce_field( 'scc_add_category', 'scc_category_nonce' ); ?>
+			<form method="post" action="" id="warder-add-category-form">
+				<?php wp_nonce_field( 'warder_add_category', 'warder_category_nonce' ); ?>
 				<input type="text" name="new_category_id" placeholder="New category ID (e.g. marketing)" class="regular-text" required />
-				<input type="submit" name="scc_add_category" value="Add New Category" class="button button-secondary" />
+				<input type="submit" name="warder_add_category" value="Add New Category" class="button button-secondary" />
 				<p class="description">Common categories: marketing, preferences, functional, etc.</p>
 			</form>
 		</div>
 
 		<?php foreach ( $options['cookie_categories'] as $category_id => $category ) : ?>
-		<div class="add-cookie-form-container" style="margin: 10px 0; display: none;" id="add-cookie-form-<?php echo esc_attr( $category_id ); ?>">
+		<div class="warder-add-cookie-form-container" style="margin: 10px 0; display: none;" id="warder-add-cookie-form-<?php echo esc_attr( $category_id ); ?>">
 			<div style="padding: 15px; background: #f5f5f5; border: 1px solid #ddd;">
 				<h4>Add Cookie to "<?php echo esc_html( $category['title'] ); ?>"</h4>
 				<form method="post" action="" class="scc-add-cookie-form">
-					<?php wp_nonce_field( 'scc_add_cookie', 'scc_cookie_nonce' ); ?>
+					<?php wp_nonce_field( 'warder_add_cookie', 'warder_cookie_nonce' ); ?>
 					<input type="hidden" name="category_id" value="<?php echo esc_attr( $category_id ); ?>" />
 					<table class="form-table">
 						<tr>
@@ -473,7 +473,7 @@ function scc_render_options_page() {
 					</table>
 
 					<p>
-						<input type="submit" name="scc_add_cookie" value="Add Cookie" class="button button-primary" />
+						<input type="submit" name="warder_add_cookie" value="Add Cookie" class="button button-primary" />
 						<button type="button" class="button button-secondary cancel-add-cookie">Cancel</button>
 					</p>
 
@@ -494,17 +494,17 @@ function scc_render_options_page() {
 		// Show/hide cookie add form.
 		$('.show-add-cookie-form').on('click', function() {
 			var categoryId = $(this).data('category');
-			$('#add-cookie-form-' + categoryId).show();
+			$('#warder-add-cookie-form-' + categoryId).show();
 		});
 
 		// Cancel button for cookie add form.
 		$('.cancel-add-cookie').on('click', function(e) {
 			e.preventDefault();
-			$(this).closest('.add-cookie-form-container').hide();
+			$(this).closest('.warder-add-cookie-form-container').hide();
 		});
 
 		// Highlight changed fields.
-		$('#scc-main-settings-form input, #scc-main-settings-form textarea, #scc-main-settings-form select').on('change', function() {
+		$('#warder-main-settings-form input, #warder-main-settings-form textarea, #warder-main-settings-form select').on('change', function() {
 			$(this).css('background-color', '#ffffdd');
 		});
 	});
@@ -517,9 +517,9 @@ function scc_render_options_page() {
  *
  * @return array
  */
-function scc_get_merged_options() {
-	$options         = get_option( 'scc_options', array() );
-	$default_options = scc_get_default_options();
+function warder_get_merged_options() {
+	$options         = get_option( 'warder_options', array() );
+	$default_options = warder_get_default_options();
 
 	return wp_parse_args( $options, $default_options );
 }
@@ -527,16 +527,16 @@ function scc_get_merged_options() {
 /**
  * Enqueues the bundled cookie consent script and localizes plugin settings.
  */
-function scc_enqueue_scripts() {
-	$options = scc_get_merged_options();
+function warder_enqueue_scripts() {
+	$options = warder_get_merged_options();
 	if ( empty( $options['enabled'] ) ) {
 		return;
 	}
 
-	$version = get_option( 'scc_options_last_updated', '1.0.0' );
+	$version = get_option( 'warder_options_last_updated', '1.0.0' );
 
 	wp_enqueue_script(
-		'scc-cookieconsent',
+		'warder-cookieconsent',
 		plugin_dir_url( __FILE__ ) . 'dist/cookieconsent.bundle.js',
 		array(),
 		$version,
@@ -547,8 +547,8 @@ function scc_enqueue_scripts() {
 	);
 
 	wp_localize_script(
-		'scc-cookieconsent',
-		'sccSettings',
+		'warder-cookieconsent',
+		'warderSettings',
 		array(
 			'settings' => $options,
 			'version'  => $version,
@@ -556,33 +556,33 @@ function scc_enqueue_scripts() {
 	);
 
 	if ( ! empty( $options['show_preferences_toggle'] ) ) {
-		wp_register_style( 'scc-preferences-toggle', false, array(), $version ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
-		wp_enqueue_style( 'scc-preferences-toggle' );
-		wp_add_inline_style( 'scc-preferences-toggle', scc_get_preferences_toggle_css() );
+		wp_register_style( 'warder-preferences-toggle', false, array(), $version ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
+		wp_enqueue_style( 'warder-preferences-toggle' );
+		wp_add_inline_style( 'warder-preferences-toggle', warder_get_preferences_toggle_css() );
 	}
 }
-add_action( 'wp_enqueue_scripts', 'scc_enqueue_scripts' );
+add_action( 'wp_enqueue_scripts', 'warder_enqueue_scripts' );
 
-add_action( 'update_option_scc_options', 'scc_update_options_timestamp', 10, 2 );
+add_action( 'update_option_warder_options', 'warder_update_options_timestamp', 10, 2 );
 /**
  * Updates the options timestamp whenever the plugin settings are saved.
  *
  * @param mixed $old_value Previous option value (unused).
  * @param mixed $new_value New option value (unused).
  */
-function scc_update_options_timestamp( $old_value, $new_value ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
-	update_option( 'scc_options_last_updated', time() );
+function warder_update_options_timestamp( $old_value, $new_value ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
+	update_option( 'warder_options_last_updated', time() );
 }
 
 /**
  * Displays an admin notice prompting the user to configure the plugin.
  */
-function scc_admin_notices() {
+function warder_admin_notices() {
 	global $pagenow;
 
 	// Do not show the notice on the plugin settings page itself.
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-	if ( 'options-general.php' === $pagenow && isset( $_GET['page'] ) && 'simple-cookie-consent' === sanitize_text_field( wp_unslash( $_GET['page'] ) ) ) {
+	if ( 'options-general.php' === $pagenow && isset( $_GET['page'] ) && 'warder-cookie-consent' === sanitize_text_field( wp_unslash( $_GET['page'] ) ) ) {
 		return;
 	}
 
@@ -590,31 +590,31 @@ function scc_admin_notices() {
 		$plugin_data = get_plugin_data( __FILE__ );
 		$plugin_name = $plugin_data['Name'];
 	} else {
-		$plugin_name = 'Simple Cookie Consent';
+		$plugin_name = 'Warder Cookie Consent';
 	}
 
 	echo '<div class="notice notice-info is-dismissible">';
 	echo '<p>' . sprintf(
 		/* translators: 1: Plugin name, 2: HTML link to settings page. */
-		esc_html__( 'Thank you for installing %1$s! Please configure your settings on the %2$s.', 'simple-cookie-consent' ),
+		esc_html__( 'Thank you for installing %1$s! Please configure your settings on the %2$s.', 'warder-cookie-consent' ),
 		esc_html( $plugin_name ),
-		'<a href="' . esc_url( admin_url( 'options-general.php?page=simple-cookie-consent' ) ) . '">settings page</a>'
+		'<a href="' . esc_url( admin_url( 'options-general.php?page=warder-cookie-consent' ) ) . '">settings page</a>'
 	) . '</p>';
 	echo '</div>';
 }
-add_action( 'admin_notices', 'scc_admin_notices' );
+add_action( 'admin_notices', 'warder_admin_notices' );
 
-register_activation_hook( __FILE__, 'scc_plugin_activate' );
+register_activation_hook( __FILE__, 'warder_plugin_activate' );
 /**
  * Merges existing options with defaults on plugin activation to preserve user data.
  */
-function scc_plugin_activate() {
-	$options         = get_option( 'scc_options', array() );
-	$default_options = scc_get_default_options();
+function warder_plugin_activate() {
+	$options         = get_option( 'warder_options', array() );
+	$default_options = warder_get_default_options();
 
 	$merged_options = wp_parse_args( $options, $default_options );
 
-	update_option( 'scc_options', $merged_options );
+	update_option( 'warder_options', $merged_options );
 }
 
 /**
@@ -622,9 +622,9 @@ function scc_plugin_activate() {
  *
  * @return string
  */
-function scc_get_preferences_toggle_css() {
+function warder_get_preferences_toggle_css() {
 	return '
-.scc-preferences-toggle {
+.warder-preferences-toggle {
 	position: fixed;
 	width: 48px;
 	height: 48px;
@@ -640,27 +640,27 @@ function scc_get_preferences_toggle_css() {
 	z-index: 9999;
 	transition: background 0.2s ease, transform 0.2s ease;
 }
-.scc-preferences-toggle:hover {
+.warder-preferences-toggle:hover {
 	background: #555;
 	transform: scale(1.1);
 }
-.scc-preferences-toggle svg {
+.warder-preferences-toggle svg {
 	width: 24px;
 	height: 24px;
 	pointer-events: none;
 }
-.scc-preferences-toggle--bottom-right { bottom: 20px; right: 20px; }
-.scc-preferences-toggle--bottom-left  { bottom: 20px; left: 20px; }
-.scc-preferences-toggle--top-right    { top: 20px; right: 20px; }
-.scc-preferences-toggle--top-left     { top: 20px; left: 20px; }
+.warder-preferences-toggle--bottom-right { bottom: 20px; right: 20px; }
+.warder-preferences-toggle--bottom-left  { bottom: 20px; left: 20px; }
+.warder-preferences-toggle--top-right    { top: 20px; right: 20px; }
+.warder-preferences-toggle--top-left     { top: 20px; left: 20px; }
 ';
 }
 
 /**
  * Outputs the floating preferences toggle button in the footer.
  */
-function scc_add_preferences_button() {
-	$options = scc_get_merged_options();
+function warder_add_preferences_button() {
+	$options = warder_get_merged_options();
 	if ( empty( $options['enabled'] ) || empty( $options['show_preferences_toggle'] ) ) {
 		return;
 	}
@@ -670,7 +670,7 @@ function scc_add_preferences_button() {
 		? $options['preferences_toggle_position']
 		: 'bottom-right';
 
-	echo '<button id="scc-preferences-toggle" class="scc-preferences-toggle scc-preferences-toggle--' . esc_attr( $position ) . '" aria-label="' . esc_attr__( 'Cookie Preferences', 'simple-cookie-consent' ) . '">';
+	echo '<button id="warder-preferences-toggle" class="warder-preferences-toggle warder-preferences-toggle--' . esc_attr( $position ) . '" aria-label="' . esc_attr__( 'Cookie Preferences', 'warder-cookie-consent' ) . '">';
 	echo '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">';
 	echo '<circle cx="12" cy="12" r="10"/>';
 	echo '<circle cx="9" cy="9" r="1.5" fill="currentColor"/>';
@@ -680,7 +680,7 @@ function scc_add_preferences_button() {
 	echo '</svg>';
 	echo '</button>';
 }
-add_action( 'wp_footer', 'scc_add_preferences_button' );
+add_action( 'wp_footer', 'warder_add_preferences_button' );
 
 /**
  * Renders an input field for a cookie category title with the correct CSS class.
@@ -688,12 +688,12 @@ add_action( 'wp_footer', 'scc_add_preferences_button' );
  * @param string $category_id The category identifier.
  * @param string $title       The current category title.
  */
-function scc_render_category_title_field( $category_id, $title ) {
+function warder_render_category_title_field( $category_id, $title ) {
 	?>
 	<input type="text"
-			name="scc_options[cookie_categories][<?php echo esc_attr( $category_id ); ?>][title]"
+			name="warder_options[cookie_categories][<?php echo esc_attr( $category_id ); ?>][title]"
 			value="<?php echo esc_attr( $title ); ?>"
-			class="regular-text scc-category-title-field"
+			class="regular-text warder-category-title-field"
 			data-category-id="<?php echo esc_attr( $category_id ); ?>" />
 	<p class="description">The name displayed to users in the consent preferences panel.</p>
 	<?php

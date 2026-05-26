@@ -1,6 +1,6 @@
 {
-    "name": "imagewize/simple-cookie-consent",
-    "description": "Implements GDPR-compliant cookie consent functionality.",
+    "name": "imagewize/warder-cookie-consent",
+    "description": "GDPR-compliant cookie consent banner with category management and floating preferences toggle.",
     "type": "wordpress-plugin",
     "license": "GPL-2.0-or-later",
     "authors": [
@@ -20,8 +20,8 @@
         "consent"
     ],
     "support": {
-        "issues": "https://github.com/imagewize/simple-cookie-consent/issues",
-        "source": "https://github.com/imagewize/simple-cookie-consent"
+        "issues": "https://github.com/imagewize/warder-cookie-consent/issues",
+        "source": "https://github.com/imagewize/warder-cookie-consent"
     },
     "require": {
         "php": ">=8.0",

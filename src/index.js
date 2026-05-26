@@ -221,8 +221,8 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Initializing cookie consent...');
         
         // Get dynamic configuration from WordPress settings
-        const config = typeof window.sccSettings !== 'undefined'
-            ? createConfigFromSettings(defaultConfig, window.sccSettings)
+        const config = typeof window.warderSettings !== 'undefined'
+            ? createConfigFromSettings(defaultConfig, window.warderSettings)
             : defaultConfig;
         
         // Debug the final configuration
@@ -231,7 +231,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Initialize cookie consent
         CookieConsent.run(config);
 
-        const prefButton = document.getElementById('scc-preferences-toggle');
+        const prefButton = document.getElementById('warder-preferences-toggle');
         if (prefButton) {
             prefButton.addEventListener('click', function() {
                 CookieConsent.showPreferences();
