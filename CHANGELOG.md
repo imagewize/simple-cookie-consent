@@ -2,6 +2,11 @@
 
 All notable changes to Warder Cookie Consent are documented here.
 
+## [1.3.1] - 2026-05-26
+
+### Fixed
+- `composer.json` is no longer `export-ignore`d in `.gitattributes`, so the package manifest ships in Composer/Packagist dist archives (it remains excluded from WordPress.org builds via `.distignore`, which is correct since WP.org does not use Composer)
+
 ## [1.3.0] - 2026-05-26
 
 ### Added
