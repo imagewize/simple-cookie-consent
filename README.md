@@ -1,4 +1,4 @@
-# Simple Cookie Consent
+# Warder Cookie Consent
 
 A lightweight plugin that implements GDPR-compliant cookie consent functionality for WordPress websites using the [vanilla-cookieconsent](https://github.com/orestbida/cookieconsent) library.
 
@@ -46,7 +46,7 @@ A lightweight plugin that implements GDPR-compliant cookie consent functionality
 
 You can also install the plugin using Composer:
 ```bash
-composer require imagewize/simple-cookie-consent
+composer require imagewize/warder-cookie-consent
 ```
 
 ## Usage

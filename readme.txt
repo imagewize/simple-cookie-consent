@@ -1,4 +1,4 @@
-=== Simple Cookie Consent ===
+=== Warder Cookie Consent ===
 Contributors: jasperfrumau
 Donate link: https://imagewize.com
 Tags: cookie, consent, gdpr, privacy, compliance
@@ -13,7 +13,7 @@ A lightweight plugin that implements GDPR-compliant cookie consent functionality
 
 == Description ==
 
-Simple Cookie Consent provides an easy way to add GDPR-compliant cookie consent banners to your WordPress website. The plugin uses the lightweight [CookieConsent v3](https://github.com/orestbida/cookieconsent) library and offers full customization through the WordPress admin interface.
+Warder Cookie Consent provides an easy way to add GDPR-compliant cookie consent banners to your WordPress website. The plugin uses the lightweight [CookieConsent v3](https://github.com/orestbida/cookieconsent) library and offers full customization through the WordPress admin interface.
 
 = Features =
 

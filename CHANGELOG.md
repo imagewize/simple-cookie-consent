@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to Simple Cookie Consent are documented here.
+All notable changes to Warder Cookie Consent are documented here.
 
 ## [1.2.1] - 2026-05-26
 
