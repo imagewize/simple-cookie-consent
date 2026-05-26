@@ -9,8 +9,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Build clean plugin directory
+        run: |
+          mkdir -p /tmp/plugin
+          rsync -a --exclude='.git' --exclude-from='.distignore' . /tmp/plugin/
+
       - name: Run Plugin Check
         uses: WordPress/plugin-check-action@v1
         with:
-          build-dir: '.'
+          build-dir: '/tmp/plugin'
           checks: ''

@@ -496,7 +496,7 @@ function scc_get_merged_options() {
 function scc_enqueue_scripts() {
 	$version = get_option( 'scc_options_last_updated', '1.0.0' );
 
-	wp_enqueue_script( 'scc-cookieconsent', plugin_dir_url( __FILE__ ) . 'dist/cookieconsent.bundle.js', array(), $version, true );
+	wp_enqueue_script( 'scc-cookieconsent', plugin_dir_url( __FILE__ ) . 'dist/cookieconsent.bundle.js', array(), $version, array( 'strategy' => 'defer', 'in_footer' => true ) );
 
 	$options = scc_get_merged_options();
 
