@@ -1,5 +1,5 @@
 === Warder Cookie Consent ===
-Contributors: jasperfrumau
+Contributors: rhand
 Donate link: https://imagewize.com
 Tags: cookie, consent, gdpr, privacy, compliance
 Requires at least: 5.0
@@ -31,6 +31,20 @@ Warder Cookie Consent provides an easy way to add GDPR-compliant cookie consent 
 1. Upload the plugin folder to `/wp-content/plugins/`
 2. Activate the plugin through the WordPress admin panel
 3. Configure settings at **Settings > Cookie Consent**
+
+== Source Code & Build Process ==
+
+The bundled file `dist/cookieconsent.bundle.js` is compiled from source using webpack. The full source code is publicly available at:
+
+https://github.com/imagewize/warder-cookie-consent
+
+The entry point is `src/index.js`, which imports the [vanilla-cookieconsent v3](https://github.com/orestbida/cookieconsent) library. To build from source:
+
+1. Install Node.js dependencies: `npm install`
+2. Build the bundle: `npx webpack`
+3. Watch for changes during development: `npx webpack --watch`
+
+The webpack configuration is in `webpack.config.js`. Third-party library source: https://github.com/orestbida/cookieconsent
 
 == Frequently Asked Questions ==
 
