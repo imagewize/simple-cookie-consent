@@ -68,7 +68,7 @@ Yes. Settings are versioned via a timestamp that is appended to the script URL, 
 * Full WordPress Coding Standards compliance (PHPCS 0 errors)
 * Added PHPDoc blocks to all functions
 * Updated license from MIT to GPLv2 or later
-* Added readme.txt, phpcs.xml, .distignore, and GitHub Actions workflows
+* Added readme.txt, phpcs.xml, .distignore, and GitHub Actions workflows (WPCS, Plugin Check, release zip)
 
 = 1.0.0 =
 *2025-05-26*

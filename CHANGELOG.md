@@ -11,6 +11,7 @@ All notable changes to Simple Cookie Consent are documented here.
 - `phpcs.xml` with WordPress Coding Standards configuration
 - `.distignore` to exclude dev files from distribution zip
 - `.github/workflows/wpcs.yml` — WPCS check on pull requests
+- `.github/workflows/plugin-check.yml` — WordPress Plugin Check on pull requests
 - `.github/workflows/create-release.yml` — builds and attaches plugin zip on GitHub releases
 - PHPDoc blocks on all public functions
 

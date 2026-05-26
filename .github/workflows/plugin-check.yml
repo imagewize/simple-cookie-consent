@@ -1,0 +1,16 @@
+name: Plugin Check
+
+on: pull_request
+
+jobs:
+  plugin-check:
+    name: WP Plugin Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Plugin Check
+        uses: WordPress/plugin-check-action@v1
+        with:
+          build-dir: '.'
+          checks: ''
