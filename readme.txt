@@ -4,7 +4,7 @@ Donate link: https://imagewize.com
 Tags: cookie, consent, gdpr, privacy, compliance
 Requires at least: 5.0
 Tested up to: 7.0
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -22,6 +22,7 @@ Simple Cookie Consent provides an easy way to add GDPR-compliant cookie consent 
 * Customizable banner appearance and text
 * Cookie category management (Necessary, Analytics, etc.)
 * Automatic cookie blocking and clearing
+* Floating preferences toggle button — lets users revisit consent choices at any time
 * Fully responsive design
 * No external dependencies
 
@@ -57,6 +58,13 @@ Yes. Settings are versioned via a timestamp that is appended to the script URL, 
 
 == Changelog ==
 
+= 1.2.0 =
+*2026-05-26*
+
+* Added floating preferences toggle button — a cookie icon button rendered in the page footer that opens the preferences modal, letting users change their consent choices at any time
+* Added "Preferences Toggle Button" setting in General Settings with a position dropdown (bottom-right, bottom-left, top-right, top-left)
+* Toggle button can be enabled/disabled independently of the main banner
+
 = 1.1.0 =
 *2026-05-26*
 
@@ -78,6 +86,9 @@ Yes. Settings are versioned via a timestamp that is appended to the script URL, 
 * Initial release
 
 == Upgrade Notice ==
+
+= 1.2.0 =
+Adds a floating preferences toggle button so visitors can revisit their cookie choices at any time.
 
 = 1.1.0 =
 Adds "Enable Plugin" toggle; WordPress.org compliance (PHPCS, Plugin Check, readme.txt, workflows).
