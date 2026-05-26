@@ -5,8 +5,7 @@ All notable changes to Warder Cookie Consent are documented here.
 ## [1.3.0] - 2026-05-26
 
 ### Added
-- `load_plugin_textdomain()` hooked to `init` so `.po`/`.mo` files in the `languages/` directory are loaded automatically
-- `languages/` directory for shipping and community-contributed translation files
+- `languages/` directory for shipping and community-contributed translation files (WordPress 4.6+ auto-loads translations via the `Text Domain` header)
 
 ### Changed
 - Plugin renamed from Simple Cookie Consent to **Warder Cookie Consent** (Wheel of Time inspired, consistent with Elayne FSE theme and Waygate pattern builder)

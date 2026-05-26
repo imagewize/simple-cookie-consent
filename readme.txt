@@ -61,8 +61,7 @@ Yes. Settings are versioned via a timestamp that is appended to the script URL, 
 = 1.3.0 =
 *2026-05-26*
 
-* Added load_plugin_textdomain() so .po/.mo translation files in the languages/ directory are loaded automatically
-* Added languages/ directory for translation files
+* Added languages/ directory for translation files (WordPress 4.6+ auto-loads translations via the Text Domain header)
 * Fixed Plugin Check workflow directory name to match text domain header (resolves textdomain_mismatch warnings)
 * Renamed plugin to Warder Cookie Consent (Wheel of Time inspired, consistent with Elayne theme and Waygate pattern builder)
 * Renamed main plugin file to warder-cookie-consent.php
@@ -108,7 +107,7 @@ Yes. Settings are versioned via a timestamp that is appended to the script URL, 
 == Upgrade Notice ==
 
 = 1.3.0 =
-Plugin renamed to Warder Cookie Consent; added translation support (load_plugin_textdomain + languages/ directory); updated text domain, function prefixes, and Composer package name.
+Plugin renamed to Warder Cookie Consent; added languages/ directory for translations; updated text domain, function prefixes, and Composer package name.
 
 = 1.2.1 =
 Fixes composer.json license and support URLs; adds .gitattributes for Composer installs.
