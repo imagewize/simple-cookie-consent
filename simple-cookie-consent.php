@@ -624,13 +624,35 @@ function scc_plugin_activate() {
  */
 function scc_get_preferences_toggle_css() {
 	return '
-.scc-preferences-toggle{position:fixed;width:48px;height:48px;border-radius:50%;background:#333;color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,.3);z-index:9999;transition:background .2s ease,transform .2s ease;}
-.scc-preferences-toggle:hover{background:#555;transform:scale(1.1);}
-.scc-preferences-toggle svg{width:24px;height:24px;pointer-events:none;}
-.scc-preferences-toggle--bottom-right{bottom:20px;right:20px;}
-.scc-preferences-toggle--bottom-left{bottom:20px;left:20px;}
-.scc-preferences-toggle--top-right{top:20px;right:20px;}
-.scc-preferences-toggle--top-left{top:20px;left:20px;}
+.scc-preferences-toggle {
+	position: fixed;
+	width: 48px;
+	height: 48px;
+	border-radius: 50%;
+	background: #333;
+	color: #fff;
+	border: none;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+	z-index: 9999;
+	transition: background 0.2s ease, transform 0.2s ease;
+}
+.scc-preferences-toggle:hover {
+	background: #555;
+	transform: scale(1.1);
+}
+.scc-preferences-toggle svg {
+	width: 24px;
+	height: 24px;
+	pointer-events: none;
+}
+.scc-preferences-toggle--bottom-right { bottom: 20px; right: 20px; }
+.scc-preferences-toggle--bottom-left  { bottom: 20px; left: 20px; }
+.scc-preferences-toggle--top-right    { top: 20px; right: 20px; }
+.scc-preferences-toggle--top-left     { top: 20px; left: 20px; }
 ';
 }
 
