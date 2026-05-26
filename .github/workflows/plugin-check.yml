@@ -11,12 +11,12 @@ jobs:
 
       - name: Build clean plugin directory
         run: |
-          mkdir -p /tmp/simple-cookie-consent
-          rsync -a --exclude='.git' --exclude-from='.distignore' . /tmp/simple-cookie-consent/
+          mkdir -p /tmp/warder-cookie-consent
+          rsync -a --exclude='.git' --exclude-from='.distignore' . /tmp/warder-cookie-consent/
 
       - name: Run Plugin Check
         uses: WordPress/plugin-check-action@v1
         with:
-          build-dir: '/tmp/simple-cookie-consent'
+          build-dir: '/tmp/warder-cookie-consent'
           checks: ''
           exclude-checks: 'EnqueuedScriptsScope'

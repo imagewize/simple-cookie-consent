@@ -15,6 +15,14 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
+ * Loads the plugin text domain for translations.
+ */
+function warder_load_textdomain() {
+	load_plugin_textdomain( 'warder-cookie-consent', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+}
+add_action( 'init', 'warder_load_textdomain' );
+
+/**
  * Registers plugin settings and adds default options on first activation.
  */
 function warder_register_settings() {
