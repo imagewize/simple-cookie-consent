@@ -1,0 +1,24 @@
+name: Create plugin release
+
+on:
+  release:
+    types: [published, edited]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install JS dependencies and build
+        run: npm ci && npx webpack
+
+      - name: Create distribution zip
+        run: zip -r ${{ github.event.repository.name }}.zip . -x@.distignore
+
+      - name: Attach zip to release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ${{ github.event.repository.name }}.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
