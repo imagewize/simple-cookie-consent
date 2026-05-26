@@ -2,9 +2,10 @@
 
 All notable changes to Simple Cookie Consent are documented here.
 
-## [1.0.1] - 2026-05-26
+## [1.1.0] - 2026-05-26
 
 ### Added
+- "Enable Plugin" toggle in General Settings — allows disabling the consent banner without deactivating the plugin
 - Plugin header fields required by WordPress.org: `Author URI`, `Text Domain`, `License`, `License URI`
 - Direct file access protection via `defined('ABSPATH') || exit`
 - `readme.txt` in WordPress.org standard format
@@ -25,6 +26,8 @@ All notable changes to Simple Cookie Consent are documented here.
 - Removed all `error_log()` debug calls from `scc_validate_options()`
 - Removed debug `console.log` statements from inline admin JavaScript
 - Full WordPress Coding Standards compliance — PHPCS passes with 0 errors
+- Plugin Check workflow now uses correct plugin directory name, resolving false `textdomain_mismatch` and `trademarked_term` warnings
+- `EnqueuedScriptsScope` Plugin Check warning resolved — frontend script only enqueued when plugin is enabled
 
 ### Security
 - All `in_array()` calls hardened with strict mode to prevent type coercion bypass

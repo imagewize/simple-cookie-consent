@@ -4,7 +4,7 @@ Donate link: https://imagewize.com
 Tags: cookie, consent, gdpr, privacy, compliance
 Requires at least: 5.0
 Tested up to: 7.0
-Stable tag: 1.0.1
+Stable tag: 1.1.0
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -39,7 +39,7 @@ Go to **Settings > Cookie Consent** and use the "Add New Category" section at th
 
 = Can I block specific scripts until consent is given? =
 
-Yes, add a `data-cookiecategory` attribute to your script tags (e.g. `data-cookiecategory="analytics"`). Scripts with this attribute are managed by the cookie consent library based on user consent.
+Yes, add a `data-category` attribute to your script tags (e.g. `data-category="analytics"`). Scripts with this attribute are managed by the cookie consent library based on user consent.
 
 = Which cookies are blocked by default? =
 
@@ -57,13 +57,15 @@ Yes. Settings are versioned via a timestamp that is appended to the script URL, 
 
 == Changelog ==
 
-= 1.0.1 =
+= 1.1.0 =
 *2026-05-26*
 
+* Added "Enable Plugin" toggle to General Settings (disable the banner without deactivating the plugin)
 * Added plugin header fields required by WordPress.org (Author URI, Text Domain, License, License URI)
 * Added direct file access protection (ABSPATH check)
 * Removed debug error_log and console.log statements
 * Fixed output escaping throughout admin UI (esc_url, esc_attr, esc_html)
+* Fixed Plugin Check workflow directory name (resolved textdomain_mismatch and trademarked_term warnings)
 * Added strict comparison to in_array calls
 * Full WordPress Coding Standards compliance (PHPCS 0 errors)
 * Added PHPDoc blocks to all functions
@@ -77,8 +79,8 @@ Yes. Settings are versioned via a timestamp that is appended to the script URL, 
 
 == Upgrade Notice ==
 
-= 1.0.1 =
-Code quality and WordPress.org compliance release. No functional changes.
+= 1.1.0 =
+Adds "Enable Plugin" toggle; WordPress.org compliance (PHPCS, Plugin Check, readme.txt, workflows).
 
 = 1.0.0 =
 Initial release.

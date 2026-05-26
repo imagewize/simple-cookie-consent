@@ -127,4 +127,4 @@ npx webpack --watch
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under GPLv2 or later - see the LICENSE file for details.

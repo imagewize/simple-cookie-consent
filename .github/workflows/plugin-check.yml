@@ -11,11 +11,11 @@ jobs:
 
       - name: Build clean plugin directory
         run: |
-          mkdir -p /tmp/plugin
-          rsync -a --exclude='.git' --exclude-from='.distignore' . /tmp/plugin/
+          mkdir -p /tmp/simple-cookie-consent
+          rsync -a --exclude='.git' --exclude-from='.distignore' . /tmp/simple-cookie-consent/
 
       - name: Run Plugin Check
         uses: WordPress/plugin-check-action@v1
         with:
-          build-dir: '/tmp/plugin'
+          build-dir: '/tmp/simple-cookie-consent'
           checks: ''

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Simple Cookie Consent
  * Description: Implements GDPR-compliant cookie consent functionality.
- * Version: 1.0.1
+ * Version: 1.1.0
  * Author: Jasper Frumau
  * Author URI: https://imagewize.com
  * Text Domain: simple-cookie-consent
@@ -33,6 +33,7 @@ add_action( 'admin_init', 'scc_register_settings' );
  */
 function scc_get_default_options() {
 	return array(
+		'enabled'            => true,
 		'current_lang'       => 'en',
 		'autoclear_cookies'  => true,
 		'page_scripts'       => true,
@@ -89,6 +90,7 @@ function scc_get_default_options() {
 function scc_validate_options( $input ) {
 	$valid = array();
 
+	$valid['enabled']            = isset( $input['enabled'] ) ? true : false;
 	$valid['current_lang']       = sanitize_text_field( $input['current_lang'] );
 	$valid['autoclear_cookies']  = isset( $input['autoclear_cookies'] ) ? true : false;
 	$valid['page_scripts']       = isset( $input['page_scripts'] ) ? true : false;
@@ -188,6 +190,15 @@ function scc_render_options_page() {
 			<!-- General Settings Section -->
 			<h2>General Settings</h2>
 			<table class="form-table">
+				<tr>
+					<th scope="row">Enable Plugin</th>
+					<td>
+						<label>
+							<input type="checkbox" name="scc_options[enabled]" <?php checked( $options['enabled'], true ); ?> />
+							Display the cookie consent banner on the frontend
+						</label>
+					</td>
+				</tr>
 				<tr>
 					<th scope="row">Language</th>
 					<td>
@@ -494,6 +505,11 @@ function scc_get_merged_options() {
  * Enqueues the bundled cookie consent script and localizes plugin settings.
  */
 function scc_enqueue_scripts() {
+	$options = scc_get_merged_options();
+	if ( empty( $options['enabled'] ) ) {
+		return;
+	}
+
 	$version = get_option( 'scc_options_last_updated', '1.0.0' );
 
 	wp_enqueue_script(
@@ -506,8 +522,6 @@ function scc_enqueue_scripts() {
 			'in_footer' => true,
 		)
 	);
-
-	$options = scc_get_merged_options();
 
 	wp_localize_script(
 		'scc-cookieconsent',
