@@ -156,6 +156,37 @@ function warder_add_options_page() {
 add_action( 'admin_menu', 'warder_add_options_page' );
 
 /**
+ * Enqueues jQuery-dependent admin scripts for the plugin settings page.
+ *
+ * @param string $hook The current admin page hook suffix.
+ */
+function warder_enqueue_admin_scripts( $hook ) {
+	if ( 'settings_page_warder-cookie-consent' !== $hook ) {
+		return;
+	}
+
+	wp_enqueue_script( 'jquery' );
+
+	$admin_js = '
+jQuery(document).ready(function($) {
+	$(".show-add-cookie-form").on("click", function() {
+		var categoryId = $(this).data("category");
+		$("#warder-add-cookie-form-" + categoryId).show();
+	});
+	$(".cancel-add-cookie").on("click", function(e) {
+		e.preventDefault();
+		$(this).closest(".warder-add-cookie-form-container").hide();
+	});
+	$("#warder-main-settings-form input, #warder-main-settings-form textarea, #warder-main-settings-form select").on("change", function() {
+		$(this).css("background-color", "#ffffdd");
+	});
+});';
+
+	wp_add_inline_script( 'jquery', $admin_js );
+}
+add_action( 'admin_enqueue_scripts', 'warder_enqueue_admin_scripts' );
+
+/**
  * Renders the plugin settings page in the WordPress admin.
  */
 function warder_render_options_page() {
@@ -489,26 +520,6 @@ function warder_render_options_page() {
 		<?php endforeach; ?>
 	</div>
 
-	<script type="text/javascript">
-	jQuery(document).ready(function($) {
-		// Show/hide cookie add form.
-		$('.show-add-cookie-form').on('click', function() {
-			var categoryId = $(this).data('category');
-			$('#warder-add-cookie-form-' + categoryId).show();
-		});
-
-		// Cancel button for cookie add form.
-		$('.cancel-add-cookie').on('click', function(e) {
-			e.preventDefault();
-			$(this).closest('.warder-add-cookie-form-container').hide();
-		});
-
-		// Highlight changed fields.
-		$('#warder-main-settings-form input, #warder-main-settings-form textarea, #warder-main-settings-form select').on('change', function() {
-			$(this).css('background-color', '#ffffdd');
-		});
-	});
-	</script>
 	<?php
 }
 
