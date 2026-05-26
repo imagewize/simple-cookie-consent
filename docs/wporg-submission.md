@@ -148,6 +148,31 @@ unzip -l simple-cookie-consent.zip
 - [ ] Ensure no proprietary code is included
 - [ ] Confirm all third-party assets have proper attribution
 
+## 12. WordPress.org Official Guidelines Compliance
+
+This section verifies compliance with all [18 Detailed Plugin Guidelines](https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/).
+
+| # | Guideline | Status | Notes |
+|---|-----------|--------|-------|
+| 1 | Plugins must be compatible with GPLv2 or later | ✅ | License header: `GPLv2 or later`, LICENSE.md confirms GPLv2 |
+| 2 | Developers are responsible for plugin contents and actions | ✅ | All code reviewed; third-party libs verified (MIT for vanilla-cookieconsent) |
+| 3 | Stable version must be available from WP.org directory | ⏳ | Pending submission; current version 1.2.0 is stable |
+| 4 | Code must be (mostly) human readable | ✅ | No obfuscation; source code available in repo; build tools documented |
+| 5 | Trialware is not permitted | ✅ | No locked/premium features; all functionality available in free plugin |
+| 6 | Software as a Service is permitted | ✅ | Not a SaaS plugin; no external service dependencies |
+| 7 | Plugins may not track users without consent | ✅ | Plugin only sets cookies based on explicit user consent |
+| 8 | Plugins may not send executable code via third-party systems | ✅ | All JS/CSS bundled locally; no external code loading |
+| 9 | No illegal, dishonest, or morally offensive actions | ✅ | Follows all community guidelines |
+| 10 | No external links/credits on public site without permission | ✅ | No "Powered By" links; no forced credits |
+| 11 | Plugins should not hijack the admin dashboard | ✅ | Single dismissible notice; no ads or excessive nags |
+| 12 | Readmes must not spam | ✅ | readme.txt has 5 tags (max allowed: 5); no keyword stuffing |
+| 13 | Plugins must use WordPress' default libraries | ✅ | No bundled jQuery or other WP-included libraries |
+| 14 | Frequent commits to plugin should be avoided | ⏳ | Will follow best practices in SVN after approval |
+| 15 | Plugin version numbers must be incremented for each release | ✅ | Semantic versioning used (1.0.0 → 1.1.0 → 1.2.0) |
+| 16 | Complete plugin must be available at time of submission | ✅ | Full plugin with all features included |
+| 17 | Plugins must respect trademarks, copyrights, and project names | ✅ | Original branding; no trademark violations |
+| 18 | WP.org reserves right to maintain directory | ✅ | Acknowledged and accepted |
+
 ## Timeline
 
 | Task | Estimated Time | Status |
