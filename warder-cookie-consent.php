@@ -569,7 +569,7 @@ function warder_enqueue_scripts() {
 	if ( ! empty( $options['show_preferences_toggle'] ) ) {
 		wp_register_style( 'warder-preferences-toggle', false, array(), $version ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
 		wp_enqueue_style( 'warder-preferences-toggle' );
-		wp_add_inline_style( 'warder-preferences-toggle', warder_get_preferences_toggle_css() );
+		wp_add_inline_style( 'warder-preferences-toggle', wp_strip_all_tags( warder_get_preferences_toggle_css() ) );
 	}
 }
 add_action( 'wp_enqueue_scripts', 'warder_enqueue_scripts' );
