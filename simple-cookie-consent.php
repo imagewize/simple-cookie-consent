@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Simple Cookie Consent
  * Description: Implements GDPR-compliant cookie consent functionality.
- * Version: 1.2.0
+ * Version: 1.2.1
  * Author: Jasper Frumau
  * Author URI: https://imagewize.com
  * Text Domain: simple-cookie-consent
