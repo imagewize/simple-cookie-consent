@@ -2,6 +2,18 @@
 
 All notable changes to Warder Cookie Consent are documented here.
 
+## [1.3.2] - 2026-05-27
+
+### Fixed
+- Moved inline `<script>` block out of `warder_render_options_page()` and into a dedicated `warder_enqueue_admin_scripts()` function hooked to `admin_enqueue_scripts`, using `wp_add_inline_script()` — resolves WP.org guideline violation for direct `<script>` output
+- Wrapped `warder_get_preferences_toggle_css()` output with `wp_strip_all_tags()` before passing to `wp_add_inline_style()` — satisfies WP.org late-escaping requirement
+
+### Added
+- `== Source Code & Build Process ==` section in `readme.txt` documenting the GitHub repository, `src/index.js` entry point, and `npm install` / `npx webpack` build steps — satisfies WP.org requirement for human-readable source documentation of compiled assets
+
+### Changed
+- `Contributors` field in `readme.txt` updated to WordPress.org username `rhand`
+
 ## [1.3.1] - 2026-05-26
 
 ### Fixed

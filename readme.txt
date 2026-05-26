@@ -4,7 +4,7 @@ Donate link: https://imagewize.com
 Tags: cookie, consent, gdpr, privacy, compliance
 Requires at least: 5.0
 Tested up to: 7.0
-Stable tag: 1.3.1
+Stable tag: 1.3.2
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -72,6 +72,14 @@ Yes. Settings are versioned via a timestamp that is appended to the script URL, 
 
 == Changelog ==
 
+= 1.3.2 =
+*2026-05-27*
+
+* Fixed: moved inline admin `<script>` to `wp_add_inline_script()` via `admin_enqueue_scripts` hook
+* Fixed: sanitize CSS output with `wp_strip_all_tags()` before passing to `wp_add_inline_style()`
+* Added: `== Source Code & Build Process ==` section to readme.txt documenting webpack build and GitHub source link
+* Changed: Contributors field updated to WordPress.org username `rhand`
+
 = 1.3.1 =
 *2026-05-26*
 
@@ -124,6 +132,9 @@ Yes. Settings are versioned via a timestamp that is appended to the script URL, 
 * Initial release
 
 == Upgrade Notice ==
+
+= 1.3.2 =
+WordPress.org compliance fixes: inline script moved to wp_add_inline_script, CSS output sanitized, source code documentation added to readme.
 
 = 1.3.0 =
 Plugin renamed to Warder Cookie Consent; added languages/ directory for translations; updated text domain, function prefixes, and Composer package name.
