@@ -4,7 +4,7 @@ Donate link: https://imagewize.com
 Tags: cookie, consent, gdpr, privacy, compliance
 Requires at least: 5.0
 Tested up to: 7.0
-Stable tag: 1.2.1
+Stable tag: 1.3.0
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -58,6 +58,16 @@ Yes. Settings are versioned via a timestamp that is appended to the script URL, 
 
 == Changelog ==
 
+= 1.3.0 =
+*2026-05-26*
+
+* Renamed plugin to Warder Cookie Consent (Wheel of Time inspired, consistent with Elayne theme and Waygate pattern builder)
+* Renamed main plugin file to warder-cookie-consent.php
+* Updated text domain to warder-cookie-consent
+* Updated all function prefixes from scc_ to warder_
+* Updated Composer package name to imagewize/warder-cookie-consent
+* GitHub repository renamed to imagewize/warder-cookie-consent
+
 = 1.2.1 =
 *2026-05-26*
 
@@ -93,6 +103,9 @@ Yes. Settings are versioned via a timestamp that is appended to the script URL, 
 * Initial release
 
 == Upgrade Notice ==
+
+= 1.3.0 =
+Plugin renamed to Warder Cookie Consent; updated text domain, function prefixes, and Composer package name.
 
 = 1.2.1 =
 Fixes composer.json license and support URLs; adds .gitattributes for Composer installs.

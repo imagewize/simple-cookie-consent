@@ -2,6 +2,16 @@
 
 All notable changes to Warder Cookie Consent are documented here.
 
+## [1.3.0] - 2026-05-26
+
+### Changed
+- Plugin renamed from Simple Cookie Consent to **Warder Cookie Consent** (Wheel of Time inspired, consistent with Elayne FSE theme and Waygate pattern builder)
+- Main plugin file renamed to `warder-cookie-consent.php`
+- Text domain changed from `simple-cookie-consent` to `warder-cookie-consent`
+- All function and option prefixes changed from `scc_` to `warder_`
+- Composer package renamed to `imagewize/warder-cookie-consent`
+- GitHub repository renamed to `imagewize/warder-cookie-consent`
+
 ## [1.2.1] - 2026-05-26
 
 ### Fixed
