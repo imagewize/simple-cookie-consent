@@ -1,10 +1,10 @@
-name: PHP Coding Standards
+name: WPCS Check
 
 on: pull_request
 
 jobs:
   phpcs:
-    name: PHP Coding Standards Check
+    name: WPCS Check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

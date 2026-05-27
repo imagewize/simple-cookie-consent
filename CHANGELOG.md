@@ -4,8 +4,8 @@ All notable changes to Warder Cookie Consent are documented here.
 
 ## [1.4.1] - 2026-05-27
 
-### Added
-- GitHub Actions workflow for PHP Coding Standards (WPCS) to catch i18n and escaping issues on pull requests, using existing `phpcs.xml` configuration with WordPress.WP.I18n rules for the `warder-cookie-consent` text domain
+### Changed
+- Replaced the `10up/wpcs-action`-based WPCS workflow with a local PHPCS workflow that runs against `phpcs.xml` — enforces `WordPress.WP.I18n` with the `warder-cookie-consent` text domain and `WordPress.Security.EscapeOutput`, catching i18n and escaping issues the old workflow missed
 
 ## [1.4.0] - 2026-05-27
 

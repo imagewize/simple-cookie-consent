@@ -75,7 +75,7 @@ Yes. Settings are versioned via a timestamp that is appended to the script URL, 
 = 1.4.1 =
 *2026-05-27*
 
-* Added: GitHub Actions workflow for PHP Coding Standards (WPCS) to catch i18n and escaping issues on pull requests
+* Changed: Replaced the 10up/wpcs-action workflow with a local PHPCS workflow using phpcs.xml, adding enforcement of WordPress.WP.I18n (text domain: warder-cookie-consent) and WordPress.Security.EscapeOutput on pull requests
 
 = 1.4.0 =
 *2026-05-27*
@@ -148,7 +148,7 @@ Yes. Settings are versioned via a timestamp that is appended to the script URL, 
 == Upgrade Notice ==
 
 = 1.4.1 =
-Adds PHP Coding Standards GitHub Actions workflow to enforce i18n and escaping checks on pull requests.
+Replaces the 10up/wpcs-action CI workflow with local PHPCS, adding strict i18n (text domain) and output escaping checks on pull requests.
 
 = 1.4.0 =
 Restores the category/cookie management buttons (add/remove category and cookie) that were not working, with nonce-protected handlers. Adds minimum WordPress/PHP version headers.
