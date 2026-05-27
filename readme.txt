@@ -4,7 +4,7 @@ Donate link: https://imagewize.com
 Tags: cookie, consent, gdpr, privacy, compliance
 Requires at least: 5.0
 Tested up to: 7.0
-Stable tag: 1.3.2
+Stable tag: 1.4.0
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -72,6 +72,14 @@ Yes. Settings are versioned via a timestamp that is appended to the script URL, 
 
 == Changelog ==
 
+= 1.4.0 =
+*2026-05-27*
+
+* Fixed: the "Add New Category", "Add Cookie", and "Remove" cookie controls rendered but had no backend handler after an earlier refactor — they now work again
+* Added: restored category/cookie management handlers (add category, add cookie, delete cookie, delete category) consolidated in `warder_handle_admin_actions()`, each with nonce verification and input sanitization
+* Added: "Delete Category" link in each non-necessary category header
+* Added: `Requires at least` and `Requires PHP` headers to the main plugin file
+
 = 1.3.2 =
 *2026-05-27*
 
@@ -132,6 +140,9 @@ Yes. Settings are versioned via a timestamp that is appended to the script URL, 
 * Initial release
 
 == Upgrade Notice ==
+
+= 1.4.0 =
+Restores the category/cookie management buttons (add/remove category and cookie) that were not working, with nonce-protected handlers. Adds minimum WordPress/PHP version headers.
 
 = 1.3.2 =
 WordPress.org compliance fixes: inline script moved to wp_add_inline_script, CSS output sanitized, source code documentation added to readme.
