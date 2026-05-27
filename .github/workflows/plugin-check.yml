@@ -40,7 +40,15 @@ jobs:
         run: |
           wp-env run cli wp plugin check warder-cookie-consent \
             --exclude-checks=EnqueuedScriptsScope \
-            --format=table
+            --format=table \
+            | tee plugin-check-results.txt
+
+      - name: Upload Plugin Check results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: plugin-check-results
+          path: plugin-check-results.txt
 
       - name: Stop wp-env
         if: always()
