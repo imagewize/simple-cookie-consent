@@ -2,6 +2,19 @@
 
 All notable changes to Warder Cookie Consent are documented here.
 
+## [1.4.0] - 2026-05-27
+
+### Added
+- Restored the cookie category and cookie management actions in the settings page, now consolidated in `warder_handle_admin_actions()`: add a new category, add a cookie to a category, delete a cookie, and delete a category — each guarded by a dedicated nonce (`check_admin_referer()` / `wp_verify_nonce()`) and sanitized with `sanitize_key()` / `sanitize_text_field()` / `absint()`
+- "Delete Category" link in each non-necessary category header so the delete-category action is reachable from the UI
+- `Requires at least` (5.0) and `Requires PHP` (8.0) headers in the main plugin file so WordPress can enforce minimum-version compatibility at activation
+
+### Changed
+- Wrapped all hardcoded admin settings-page strings (section headings, field labels, descriptions, select options, buttons, placeholders, and confirm dialogs) in `esc_html_e()` / `esc_attr_e()` / `esc_html__()` / `esc_js()` with the `warder-cookie-consent` text domain — they are now translatable and escaped on output, and pass the `WordPress.WP.I18n` sniff
+
+### Fixed
+- The "Add New Category", "Add Cookie", and "Remove" cookie controls were rendering but had no backend handler after the earlier form refactor — clicking them did nothing. They now work again
+
 ## [1.3.2] - 2026-05-27
 
 ### Fixed

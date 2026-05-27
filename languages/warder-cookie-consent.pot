@@ -1,0 +1,349 @@
+# Copyright (C) 2026 Jasper Frumau
+# This file is distributed under the GPLv2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Warder Cookie Consent 1.4.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/warder-cookie-consent\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-05-27T00:18:47+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: warder-cookie-consent\n"
+
+#. Plugin Name of the plugin
+#: warder-cookie-consent.php
+msgid "Warder Cookie Consent"
+msgstr ""
+
+#. Description of the plugin
+#: warder-cookie-consent.php
+msgid "GDPR-compliant cookie consent banner with category management and floating preferences toggle."
+msgstr ""
+
+#. Author of the plugin
+#: warder-cookie-consent.php
+msgid "Jasper Frumau"
+msgstr ""
+
+#. Author URI of the plugin
+#: warder-cookie-consent.php
+msgid "https://imagewize.com"
+msgstr ""
+
+#: warder-cookie-consent.php:301
+msgid "Settings saved successfully."
+msgstr ""
+
+#: warder-cookie-consent.php:310
+msgid "General Settings"
+msgstr ""
+
+#: warder-cookie-consent.php:313
+msgid "Enable Plugin"
+msgstr ""
+
+#: warder-cookie-consent.php:317
+msgid "Display the cookie consent banner on the frontend"
+msgstr ""
+
+#: warder-cookie-consent.php:322
+msgid "Language"
+msgstr ""
+
+#: warder-cookie-consent.php:325
+msgid "English"
+msgstr ""
+
+#: warder-cookie-consent.php:326
+msgid "French"
+msgstr ""
+
+#: warder-cookie-consent.php:327
+msgid "German"
+msgstr ""
+
+#: warder-cookie-consent.php:328
+msgid "Spanish"
+msgstr ""
+
+#: warder-cookie-consent.php:329
+msgid "Italian"
+msgstr ""
+
+#: warder-cookie-consent.php:330
+msgid "Dutch"
+msgstr ""
+
+#: warder-cookie-consent.php:332
+msgid "Default language for the cookie consent banner. For more languages, you'll need to modify the src/index.js file."
+msgstr ""
+
+#: warder-cookie-consent.php:336
+msgid "Auto-clear Cookies"
+msgstr ""
+
+#: warder-cookie-consent.php:340
+msgid "Automatically clear cookies when user rejects them"
+msgstr ""
+
+#: warder-cookie-consent.php:345
+msgid "Page Scripts"
+msgstr ""
+
+#: warder-cookie-consent.php:349
+msgid "Control script execution based on user consent"
+msgstr ""
+
+#: warder-cookie-consent.php:354
+msgid "Preferences Toggle Button"
+msgstr ""
+
+#: warder-cookie-consent.php:358
+msgid "Show a floating button to reopen cookie preferences"
+msgstr ""
+
+#: warder-cookie-consent.php:360
+msgid "Displays a cookie icon button that lets users revisit their consent choices at any time."
+msgstr ""
+
+#: warder-cookie-consent.php:363
+msgid "Bottom Right"
+msgstr ""
+
+#: warder-cookie-consent.php:364
+msgid "Bottom Left"
+msgstr ""
+
+#: warder-cookie-consent.php:365
+msgid "Top Right"
+msgstr ""
+
+#: warder-cookie-consent.php:366
+msgid "Top Left"
+msgstr ""
+
+#: warder-cookie-consent.php:368
+msgid "Corner where the floating button appears."
+msgstr ""
+
+#: warder-cookie-consent.php:374
+msgid "Consent Modal"
+msgstr ""
+
+#: warder-cookie-consent.php:377
+#: warder-cookie-consent.php:455
+msgid "Title"
+msgstr ""
+
+#: warder-cookie-consent.php:380
+msgid "Title displayed in the cookie consent banner."
+msgstr ""
+
+#: warder-cookie-consent.php:384
+#: warder-cookie-consent.php:466
+msgid "Description"
+msgstr ""
+
+#: warder-cookie-consent.php:387
+msgid "Main description explaining cookie usage on your site."
+msgstr ""
+
+#: warder-cookie-consent.php:391
+msgid "Primary Button"
+msgstr ""
+
+#: warder-cookie-consent.php:395
+msgid "Accept All"
+msgstr ""
+
+#: warder-cookie-consent.php:396
+msgid "Accept Selected"
+msgstr ""
+
+#: warder-cookie-consent.php:398
+msgid "Primary action button for the consent banner."
+msgstr ""
+
+#: warder-cookie-consent.php:402
+msgid "Secondary Button"
+msgstr ""
+
+#: warder-cookie-consent.php:406
+msgid "Accept Necessary"
+msgstr ""
+
+#: warder-cookie-consent.php:407
+#: warder-cookie-consent.php:474
+msgid "Settings"
+msgstr ""
+
+#: warder-cookie-consent.php:409
+msgid "Secondary action button for the consent banner."
+msgstr ""
+
+#: warder-cookie-consent.php:413
+msgid "Privacy Policy URL"
+msgstr ""
+
+#: warder-cookie-consent.php:416
+msgid "Link to your privacy policy page. Default: #privacy-policy"
+msgstr ""
+
+#: warder-cookie-consent.php:422
+msgid "Cookie Categories"
+msgstr ""
+
+#: warder-cookie-consent.php:423
+msgid "Configure cookie categories and specific cookies to be blocked until consent is given."
+msgstr ""
+
+#: warder-cookie-consent.php:449
+msgid "Delete this entire category and its cookies?"
+msgstr ""
+
+#: warder-cookie-consent.php:449
+msgid "Delete Category"
+msgstr ""
+
+#: warder-cookie-consent.php:462
+#: warder-cookie-consent.php:818
+msgid "The name displayed to users in the consent preferences panel."
+msgstr ""
+
+#: warder-cookie-consent.php:470
+msgid "Explanation of what these cookies do and why they're used."
+msgstr ""
+
+#: warder-cookie-consent.php:479
+msgid "Enabled by default"
+msgstr ""
+
+#: warder-cookie-consent.php:481
+msgid "If checked, this category will be pre-selected when the user sees the banner."
+msgstr ""
+
+#: warder-cookie-consent.php:492
+msgid "Read-only (user cannot change)"
+msgstr ""
+
+#: warder-cookie-consent.php:494
+msgid "If checked, users won't be able to toggle this category off. The \"necessary\" category is always read-only."
+msgstr ""
+
+#: warder-cookie-consent.php:499
+msgid "Cookies in this category"
+msgstr ""
+
+#: warder-cookie-consent.php:505
+msgid "Cookie Name / Pattern"
+msgstr ""
+
+#: warder-cookie-consent.php:506
+msgid "Type"
+msgstr ""
+
+#: warder-cookie-consent.php:507
+msgid "Actions"
+msgstr ""
+
+#: warder-cookie-consent.php:523
+#: warder-cookie-consent.php:608
+msgid "Regular Expression"
+msgstr ""
+
+#: warder-cookie-consent.php:523
+msgid "Exact Match"
+msgstr ""
+
+#: warder-cookie-consent.php:543
+msgid "Are you sure you want to remove this cookie?"
+msgstr ""
+
+#: warder-cookie-consent.php:544
+msgid "Remove"
+msgstr ""
+
+#: warder-cookie-consent.php:552
+msgid "No cookies defined for this category yet."
+msgstr ""
+
+#: warder-cookie-consent.php:557
+msgid "Add Cookie to this Category"
+msgstr ""
+
+#: warder-cookie-consent.php:564
+msgid "No cookie categories found. Default categories will be created when you save settings."
+msgstr ""
+
+#: warder-cookie-consent.php:569
+msgid "Save All Settings"
+msgstr ""
+
+#: warder-cookie-consent.php:574
+#: warder-cookie-consent.php:578
+msgid "Add New Category"
+msgstr ""
+
+#: warder-cookie-consent.php:577
+msgid "New category ID (e.g. marketing)"
+msgstr ""
+
+#: warder-cookie-consent.php:579
+msgid "Common categories: marketing, preferences, functional, etc."
+msgstr ""
+
+#. translators: %s: cookie category title.
+#: warder-cookie-consent.php:589
+#, php-format
+msgid "Add Cookie to \"%s\""
+msgstr ""
+
+#: warder-cookie-consent.php:597
+msgid "Cookie Name/Pattern"
+msgstr ""
+
+#: warder-cookie-consent.php:599
+msgid "e.g., _ga or /^_ga/"
+msgstr ""
+
+#: warder-cookie-consent.php:600
+msgid "Enter a specific cookie name or a pattern to match multiple cookies."
+msgstr ""
+
+#: warder-cookie-consent.php:604
+msgid "Match Type"
+msgstr ""
+
+#: warder-cookie-consent.php:610
+msgid "Check if using a pattern like /^_ga/ to match multiple cookies."
+msgstr ""
+
+#: warder-cookie-consent.php:616
+msgid "Add Cookie"
+msgstr ""
+
+#: warder-cookie-consent.php:617
+msgid "Cancel"
+msgstr ""
+
+#: warder-cookie-consent.php:620
+msgid "Common Cookie Patterns"
+msgstr ""
+
+#. translators: 1: Plugin name, 2: HTML link to settings page.
+#: warder-cookie-consent.php:719
+#, php-format
+msgid "Thank you for installing %1$s! Please configure your settings on the %2$s."
+msgstr ""
+
+#: warder-cookie-consent.php:721
+msgid "settings page"
+msgstr ""
+
+#: warder-cookie-consent.php:793
+msgid "Cookie Preferences"
+msgstr ""
