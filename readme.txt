@@ -4,7 +4,7 @@ Donate link: https://imagewize.com
 Tags: cookie, consent, gdpr, privacy, compliance
 Requires at least: 5.0
 Tested up to: 7.0
-Stable tag: 1.4.0
+Stable tag: 1.4.1
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -71,6 +71,11 @@ Yes. Settings are versioned via a timestamp that is appended to the script URL, 
 3. Cookie category management interface
 
 == Changelog ==
+
+= 1.4.1 =
+*2026-05-27*
+
+* Added: GitHub Actions workflow for PHP Coding Standards (WPCS) to catch i18n and escaping issues on pull requests
 
 = 1.4.0 =
 *2026-05-27*
@@ -141,6 +146,9 @@ Yes. Settings are versioned via a timestamp that is appended to the script URL, 
 * Initial release
 
 == Upgrade Notice ==
+
+= 1.4.1 =
+Adds PHP Coding Standards GitHub Actions workflow to enforce i18n and escaping checks on pull requests.
 
 = 1.4.0 =
 Restores the category/cookie management buttons (add/remove category and cookie) that were not working, with nonce-protected handlers. Adds minimum WordPress/PHP version headers.
