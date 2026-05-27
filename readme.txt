@@ -79,6 +79,7 @@ Yes. Settings are versioned via a timestamp that is appended to the script URL, 
 * Added: restored category/cookie management handlers (add category, add cookie, delete cookie, delete category) consolidated in `warder_handle_admin_actions()`, each with nonce verification and input sanitization
 * Added: "Delete Category" link in each non-necessary category header
 * Added: `Requires at least` and `Requires PHP` headers to the main plugin file
+* Changed: wrapped all hardcoded admin settings-page strings in translation/escaping functions (`esc_html_e`, `esc_attr_e`, `esc_html__`, `esc_js`) so admin UI text is translatable and escaped on output
 
 = 1.3.2 =
 *2026-05-27*

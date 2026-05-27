@@ -298,7 +298,7 @@ function warder_render_options_page() {
 
 		<?php if ( $settings_updated ) : ?>
 		<div class="notice notice-success is-dismissible">
-			<p><strong>Settings saved successfully.</strong></p>
+			<p><strong><?php esc_html_e( 'Settings saved successfully.', 'warder-cookie-consent' ); ?></strong></p>
 		</div>
 		<?php endif; ?>
 
@@ -307,120 +307,120 @@ function warder_render_options_page() {
 			<?php settings_fields( 'warder_options_group' ); ?>
 
 			<!-- General Settings Section -->
-			<h2>General Settings</h2>
+			<h2><?php esc_html_e( 'General Settings', 'warder-cookie-consent' ); ?></h2>
 			<table class="form-table">
 				<tr>
-					<th scope="row">Enable Plugin</th>
+					<th scope="row"><?php esc_html_e( 'Enable Plugin', 'warder-cookie-consent' ); ?></th>
 					<td>
 						<label>
 							<input type="checkbox" name="warder_options[enabled]" <?php checked( $options['enabled'], true ); ?> />
-							Display the cookie consent banner on the frontend
+							<?php esc_html_e( 'Display the cookie consent banner on the frontend', 'warder-cookie-consent' ); ?>
 						</label>
 					</td>
 				</tr>
 				<tr>
-					<th scope="row">Language</th>
+					<th scope="row"><?php esc_html_e( 'Language', 'warder-cookie-consent' ); ?></th>
 					<td>
 						<select name="warder_options[current_lang]">
-							<option value="en" <?php selected( $options['current_lang'], 'en' ); ?>>English</option>
-							<option value="fr" <?php selected( $options['current_lang'], 'fr' ); ?>>French</option>
-							<option value="de" <?php selected( $options['current_lang'], 'de' ); ?>>German</option>
-							<option value="es" <?php selected( $options['current_lang'], 'es' ); ?>>Spanish</option>
-							<option value="it" <?php selected( $options['current_lang'], 'it' ); ?>>Italian</option>
-							<option value="nl" <?php selected( $options['current_lang'], 'nl' ); ?>>Dutch</option>
+							<option value="en" <?php selected( $options['current_lang'], 'en' ); ?>><?php esc_html_e( 'English', 'warder-cookie-consent' ); ?></option>
+							<option value="fr" <?php selected( $options['current_lang'], 'fr' ); ?>><?php esc_html_e( 'French', 'warder-cookie-consent' ); ?></option>
+							<option value="de" <?php selected( $options['current_lang'], 'de' ); ?>><?php esc_html_e( 'German', 'warder-cookie-consent' ); ?></option>
+							<option value="es" <?php selected( $options['current_lang'], 'es' ); ?>><?php esc_html_e( 'Spanish', 'warder-cookie-consent' ); ?></option>
+							<option value="it" <?php selected( $options['current_lang'], 'it' ); ?>><?php esc_html_e( 'Italian', 'warder-cookie-consent' ); ?></option>
+							<option value="nl" <?php selected( $options['current_lang'], 'nl' ); ?>><?php esc_html_e( 'Dutch', 'warder-cookie-consent' ); ?></option>
 						</select>
-						<p class="description">Default language for the cookie consent banner. For more languages, you'll need to modify the src/index.js file.</p>
+						<p class="description"><?php esc_html_e( "Default language for the cookie consent banner. For more languages, you'll need to modify the src/index.js file.", 'warder-cookie-consent' ); ?></p>
 					</td>
 				</tr>
 				<tr>
-					<th scope="row">Auto-clear Cookies</th>
+					<th scope="row"><?php esc_html_e( 'Auto-clear Cookies', 'warder-cookie-consent' ); ?></th>
 					<td>
 						<label>
 							<input type="checkbox" name="warder_options[autoclear_cookies]" <?php checked( $options['autoclear_cookies'], true ); ?> />
-							Automatically clear cookies when user rejects them
+							<?php esc_html_e( 'Automatically clear cookies when user rejects them', 'warder-cookie-consent' ); ?>
 						</label>
 					</td>
 				</tr>
 				<tr>
-					<th scope="row">Page Scripts</th>
+					<th scope="row"><?php esc_html_e( 'Page Scripts', 'warder-cookie-consent' ); ?></th>
 					<td>
 						<label>
 							<input type="checkbox" name="warder_options[page_scripts]" <?php checked( $options['page_scripts'], true ); ?> />
-							Control script execution based on user consent
+							<?php esc_html_e( 'Control script execution based on user consent', 'warder-cookie-consent' ); ?>
 						</label>
 					</td>
 				</tr>
 				<tr>
-					<th scope="row">Preferences Toggle Button</th>
+					<th scope="row"><?php esc_html_e( 'Preferences Toggle Button', 'warder-cookie-consent' ); ?></th>
 					<td>
 						<label>
 							<input type="checkbox" name="warder_options[show_preferences_toggle]" <?php checked( $options['show_preferences_toggle'], true ); ?> />
-							Show a floating button to reopen cookie preferences
+							<?php esc_html_e( 'Show a floating button to reopen cookie preferences', 'warder-cookie-consent' ); ?>
 						</label>
-						<p class="description">Displays a cookie icon button that lets users revisit their consent choices at any time.</p>
+						<p class="description"><?php esc_html_e( 'Displays a cookie icon button that lets users revisit their consent choices at any time.', 'warder-cookie-consent' ); ?></p>
 						<br>
 						<select name="warder_options[preferences_toggle_position]">
-							<option value="bottom-right" <?php selected( $options['preferences_toggle_position'], 'bottom-right' ); ?>>Bottom Right</option>
-							<option value="bottom-left" <?php selected( $options['preferences_toggle_position'], 'bottom-left' ); ?>>Bottom Left</option>
-							<option value="top-right" <?php selected( $options['preferences_toggle_position'], 'top-right' ); ?>>Top Right</option>
-							<option value="top-left" <?php selected( $options['preferences_toggle_position'], 'top-left' ); ?>>Top Left</option>
+							<option value="bottom-right" <?php selected( $options['preferences_toggle_position'], 'bottom-right' ); ?>><?php esc_html_e( 'Bottom Right', 'warder-cookie-consent' ); ?></option>
+							<option value="bottom-left" <?php selected( $options['preferences_toggle_position'], 'bottom-left' ); ?>><?php esc_html_e( 'Bottom Left', 'warder-cookie-consent' ); ?></option>
+							<option value="top-right" <?php selected( $options['preferences_toggle_position'], 'top-right' ); ?>><?php esc_html_e( 'Top Right', 'warder-cookie-consent' ); ?></option>
+							<option value="top-left" <?php selected( $options['preferences_toggle_position'], 'top-left' ); ?>><?php esc_html_e( 'Top Left', 'warder-cookie-consent' ); ?></option>
 						</select>
-						<p class="description">Corner where the floating button appears.</p>
+						<p class="description"><?php esc_html_e( 'Corner where the floating button appears.', 'warder-cookie-consent' ); ?></p>
 					</td>
 				</tr>
 			</table>
 
 			<!-- Consent Modal Section -->
-			<h2>Consent Modal</h2>
+			<h2><?php esc_html_e( 'Consent Modal', 'warder-cookie-consent' ); ?></h2>
 			<table class="form-table">
 				<tr>
-					<th scope="row">Title</th>
+					<th scope="row"><?php esc_html_e( 'Title', 'warder-cookie-consent' ); ?></th>
 					<td>
 						<input type="text" name="warder_options[title]" value="<?php echo esc_attr( $options['title'] ); ?>" class="regular-text" />
-						<p class="description">Title displayed in the cookie consent banner.</p>
+						<p class="description"><?php esc_html_e( 'Title displayed in the cookie consent banner.', 'warder-cookie-consent' ); ?></p>
 					</td>
 				</tr>
 				<tr>
-					<th scope="row">Description</th>
+					<th scope="row"><?php esc_html_e( 'Description', 'warder-cookie-consent' ); ?></th>
 					<td>
 						<textarea name="warder_options[description]" rows="4" class="large-text"><?php echo esc_textarea( $options['description'] ); ?></textarea>
-						<p class="description">Main description explaining cookie usage on your site.</p>
+						<p class="description"><?php esc_html_e( 'Main description explaining cookie usage on your site.', 'warder-cookie-consent' ); ?></p>
 					</td>
 				</tr>
 				<tr>
-					<th scope="row">Primary Button</th>
+					<th scope="row"><?php esc_html_e( 'Primary Button', 'warder-cookie-consent' ); ?></th>
 					<td>
 						<input type="text" name="warder_options[primary_btn_text]" value="<?php echo esc_attr( $options['primary_btn_text'] ); ?>" class="regular-text" />
 						<select name="warder_options[primary_btn_role]">
-							<option value="accept_all" <?php selected( $options['primary_btn_role'], 'accept_all' ); ?>>Accept All</option>
-							<option value="accept_selected" <?php selected( $options['primary_btn_role'], 'accept_selected' ); ?>>Accept Selected</option>
+							<option value="accept_all" <?php selected( $options['primary_btn_role'], 'accept_all' ); ?>><?php esc_html_e( 'Accept All', 'warder-cookie-consent' ); ?></option>
+							<option value="accept_selected" <?php selected( $options['primary_btn_role'], 'accept_selected' ); ?>><?php esc_html_e( 'Accept Selected', 'warder-cookie-consent' ); ?></option>
 						</select>
-						<p class="description">Primary action button for the consent banner.</p>
+						<p class="description"><?php esc_html_e( 'Primary action button for the consent banner.', 'warder-cookie-consent' ); ?></p>
 					</td>
 				</tr>
 				<tr>
-					<th scope="row">Secondary Button</th>
+					<th scope="row"><?php esc_html_e( 'Secondary Button', 'warder-cookie-consent' ); ?></th>
 					<td>
 						<input type="text" name="warder_options[secondary_btn_text]" value="<?php echo esc_attr( $options['secondary_btn_text'] ); ?>" class="regular-text" />
 						<select name="warder_options[secondary_btn_role]">
-							<option value="accept_necessary" <?php selected( $options['secondary_btn_role'], 'accept_necessary' ); ?>>Accept Necessary</option>
-							<option value="settings" <?php selected( $options['secondary_btn_role'], 'settings' ); ?>>Settings</option>
+							<option value="accept_necessary" <?php selected( $options['secondary_btn_role'], 'accept_necessary' ); ?>><?php esc_html_e( 'Accept Necessary', 'warder-cookie-consent' ); ?></option>
+							<option value="settings" <?php selected( $options['secondary_btn_role'], 'settings' ); ?>><?php esc_html_e( 'Settings', 'warder-cookie-consent' ); ?></option>
 						</select>
-						<p class="description">Secondary action button for the consent banner.</p>
+						<p class="description"><?php esc_html_e( 'Secondary action button for the consent banner.', 'warder-cookie-consent' ); ?></p>
 					</td>
 				</tr>
 				<tr>
-					<th scope="row">Privacy Policy URL</th>
+					<th scope="row"><?php esc_html_e( 'Privacy Policy URL', 'warder-cookie-consent' ); ?></th>
 					<td>
 						<input type="text" name="warder_options[privacy_policy_url]" value="<?php echo esc_attr( $options['privacy_policy_url'] ); ?>" class="regular-text" />
-						<p class="description">Link to your privacy policy page. Default: #privacy-policy</p>
+						<p class="description"><?php esc_html_e( 'Link to your privacy policy page. Default: #privacy-policy', 'warder-cookie-consent' ); ?></p>
 					</td>
 				</tr>
 			</table>
 
 			<!-- Cookie Categories Section -->
-			<h2>Cookie Categories</h2>
-			<p>Configure cookie categories and specific cookies to be blocked until consent is given.</p>
+			<h2><?php esc_html_e( 'Cookie Categories', 'warder-cookie-consent' ); ?></h2>
+			<p><?php esc_html_e( 'Configure cookie categories and specific cookies to be blocked until consent is given.', 'warder-cookie-consent' ); ?></p>
 
 			<?php
 			if ( isset( $options['cookie_categories'] ) && is_array( $options['cookie_categories'] ) ) {
@@ -452,33 +452,33 @@ function warder_render_options_page() {
 
 					<table class="form-table">
 						<tr>
-							<th scope="row">Title</th>
+							<th scope="row"><?php esc_html_e( 'Title', 'warder-cookie-consent' ); ?></th>
 							<td>
 								<input type="text"
 										name="warder_options[cookie_categories][<?php echo esc_attr( $category_id ); ?>][title]"
 										value="<?php echo esc_attr( $category['title'] ); ?>"
 										class="regular-text warder-category-title-field"
 										id="warder-category-<?php echo esc_attr( $category_id ); ?>-title" />
-								<p class="description">The name displayed to users in the consent preferences panel.</p>
+								<p class="description"><?php esc_html_e( 'The name displayed to users in the consent preferences panel.', 'warder-cookie-consent' ); ?></p>
 							</td>
 						</tr>
 						<tr>
-							<th scope="row">Description</th>
+							<th scope="row"><?php esc_html_e( 'Description', 'warder-cookie-consent' ); ?></th>
 							<td>
 								<textarea name="warder_options[cookie_categories][<?php echo esc_attr( $category_id ); ?>][description]"
 									rows="2" class="large-text"><?php echo esc_textarea( $category['description'] ); ?></textarea>
-								<p class="description">Explanation of what these cookies do and why they're used.</p>
+								<p class="description"><?php esc_html_e( "Explanation of what these cookies do and why they're used.", 'warder-cookie-consent' ); ?></p>
 							</td>
 						</tr>
 						<tr>
-							<th scope="row">Settings</th>
+							<th scope="row"><?php esc_html_e( 'Settings', 'warder-cookie-consent' ); ?></th>
 							<td>
 								<label>
 									<input type="checkbox" name="warder_options[cookie_categories][<?php echo esc_attr( $category_id ); ?>][enabled]"
 										<?php checked( $category['enabled'], true ); ?> />
-									Enabled by default
+									<?php esc_html_e( 'Enabled by default', 'warder-cookie-consent' ); ?>
 								</label>
-								<p class="description">If checked, this category will be pre-selected when the user sees the banner.</p>
+								<p class="description"><?php esc_html_e( 'If checked, this category will be pre-selected when the user sees the banner.', 'warder-cookie-consent' ); ?></p>
 								<br>
 								<label>
 									<input type="checkbox" name="warder_options[cookie_categories][<?php echo esc_attr( $category_id ); ?>][readonly]"
@@ -489,22 +489,22 @@ function warder_render_options_page() {
 										}
 										?>
 										/>
-									Read-only (user cannot change)
+									<?php esc_html_e( 'Read-only (user cannot change)', 'warder-cookie-consent' ); ?>
 								</label>
-								<p class="description">If checked, users won't be able to toggle this category off. The "necessary" category is always read-only.</p>
+								<p class="description"><?php esc_html_e( 'If checked, users won\'t be able to toggle this category off. The "necessary" category is always read-only.', 'warder-cookie-consent' ); ?></p>
 							</td>
 						</tr>
 					</table>
 
-					<h4>Cookies in this category</h4>
+					<h4><?php esc_html_e( 'Cookies in this category', 'warder-cookie-consent' ); ?></h4>
 
 					<?php if ( ! empty( $category['cookies'] ) ) : ?>
 						<table class="widefat striped">
 							<thead>
 								<tr>
-									<th>Cookie Name / Pattern</th>
-									<th>Type</th>
-									<th>Actions</th>
+									<th><?php esc_html_e( 'Cookie Name / Pattern', 'warder-cookie-consent' ); ?></th>
+									<th><?php esc_html_e( 'Type', 'warder-cookie-consent' ); ?></th>
+									<th><?php esc_html_e( 'Actions', 'warder-cookie-consent' ); ?></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -540,8 +540,8 @@ function warder_render_options_page() {
 												)
 											);
 											?>
-											" class="button button-small" onclick="return confirm('Are you sure you want to remove this cookie?');">
-												Remove
+											" class="button button-small" onclick="return confirm('<?php echo esc_js( __( 'Are you sure you want to remove this cookie?', 'warder-cookie-consent' ) ); ?>');">
+												<?php esc_html_e( 'Remove', 'warder-cookie-consent' ); ?>
 											</a>
 										</td>
 									</tr>
@@ -549,70 +549,75 @@ function warder_render_options_page() {
 							</tbody>
 						</table>
 					<?php else : ?>
-						<p>No cookies defined for this category yet.</p>
+						<p><?php esc_html_e( 'No cookies defined for this category yet.', 'warder-cookie-consent' ); ?></p>
 					<?php endif; ?>
 
 					<div style="margin-top: 10px;">
 						<button type="button" class="button show-add-cookie-form" data-category="<?php echo esc_attr( $category_id ); ?>">
-							Add Cookie to this Category
+							<?php esc_html_e( 'Add Cookie to this Category', 'warder-cookie-consent' ); ?>
 						</button>
 					</div>
 				</div>
 					<?php
 				endforeach;
 			} else {
-				echo '<p>No cookie categories found. Default categories will be created when you save settings.</p>';
+				echo '<p>' . esc_html__( 'No cookie categories found. Default categories will be created when you save settings.', 'warder-cookie-consent' ) . '</p>';
 			}
 			?>
 
 			<!-- Submit button for main settings -->
-			<?php submit_button( 'Save All Settings', 'primary', 'submit', false ); ?>
+			<?php submit_button( __( 'Save All Settings', 'warder-cookie-consent' ), 'primary', 'submit', false ); ?>
 		</form>
 
 		<!-- SEPARATE FORMS FOR ADDING COOKIES AND CATEGORIES -->
 		<div style="margin: 20px 0; padding: 15px; background: #f5f5f5; border: 1px solid #ddd;">
-			<h3>Add New Category</h3>
+			<h3><?php esc_html_e( 'Add New Category', 'warder-cookie-consent' ); ?></h3>
 			<form method="post" action="" id="warder-add-category-form">
 				<?php wp_nonce_field( 'warder_add_category', 'warder_category_nonce' ); ?>
-				<input type="text" name="new_category_id" placeholder="New category ID (e.g. marketing)" class="regular-text" required />
-				<input type="submit" name="warder_add_category" value="Add New Category" class="button button-secondary" />
-				<p class="description">Common categories: marketing, preferences, functional, etc.</p>
+				<input type="text" name="new_category_id" placeholder="<?php esc_attr_e( 'New category ID (e.g. marketing)', 'warder-cookie-consent' ); ?>" class="regular-text" required />
+				<input type="submit" name="warder_add_category" value="<?php esc_attr_e( 'Add New Category', 'warder-cookie-consent' ); ?>" class="button button-secondary" />
+				<p class="description"><?php esc_html_e( 'Common categories: marketing, preferences, functional, etc.', 'warder-cookie-consent' ); ?></p>
 			</form>
 		</div>
 
 		<?php foreach ( $options['cookie_categories'] as $category_id => $category ) : ?>
 		<div class="warder-add-cookie-form-container" style="margin: 10px 0; display: none;" id="warder-add-cookie-form-<?php echo esc_attr( $category_id ); ?>">
 			<div style="padding: 15px; background: #f5f5f5; border: 1px solid #ddd;">
-				<h4>Add Cookie to "<?php echo esc_html( $category['title'] ); ?>"</h4>
+				<h4>
+					<?php
+					/* translators: %s: cookie category title. */
+					printf( esc_html__( 'Add Cookie to "%s"', 'warder-cookie-consent' ), esc_html( $category['title'] ) );
+					?>
+				</h4>
 				<form method="post" action="" class="scc-add-cookie-form">
 					<?php wp_nonce_field( 'warder_add_cookie', 'warder_cookie_nonce' ); ?>
 					<input type="hidden" name="category_id" value="<?php echo esc_attr( $category_id ); ?>" />
 					<table class="form-table">
 						<tr>
-							<th scope="row">Cookie Name/Pattern</th>
+							<th scope="row"><?php esc_html_e( 'Cookie Name/Pattern', 'warder-cookie-consent' ); ?></th>
 							<td>
-								<input type="text" name="cookie_name" placeholder="e.g., _ga or /^_ga/" class="regular-text" required />
-								<p class="description">Enter a specific cookie name or a pattern to match multiple cookies.</p>
+								<input type="text" name="cookie_name" placeholder="<?php esc_attr_e( 'e.g., _ga or /^_ga/', 'warder-cookie-consent' ); ?>" class="regular-text" required />
+								<p class="description"><?php esc_html_e( 'Enter a specific cookie name or a pattern to match multiple cookies.', 'warder-cookie-consent' ); ?></p>
 							</td>
 						</tr>
 						<tr>
-							<th scope="row">Match Type</th>
+							<th scope="row"><?php esc_html_e( 'Match Type', 'warder-cookie-consent' ); ?></th>
 							<td>
 								<label>
 									<input type="checkbox" name="is_regex" />
-									Regular Expression
+									<?php esc_html_e( 'Regular Expression', 'warder-cookie-consent' ); ?>
 								</label>
-								<p class="description">Check if using a pattern like /^_ga/ to match multiple cookies.</p>
+								<p class="description"><?php esc_html_e( 'Check if using a pattern like /^_ga/ to match multiple cookies.', 'warder-cookie-consent' ); ?></p>
 							</td>
 						</tr>
 					</table>
 
 					<p>
-						<input type="submit" name="warder_add_cookie" value="Add Cookie" class="button button-primary" />
-						<button type="button" class="button button-secondary cancel-add-cookie">Cancel</button>
+						<input type="submit" name="warder_add_cookie" value="<?php esc_attr_e( 'Add Cookie', 'warder-cookie-consent' ); ?>" class="button button-primary" />
+						<button type="button" class="button button-secondary cancel-add-cookie"><?php esc_html_e( 'Cancel', 'warder-cookie-consent' ); ?></button>
 					</p>
 
-					<h5>Common Cookie Patterns</h5>
+					<h5><?php esc_html_e( 'Common Cookie Patterns', 'warder-cookie-consent' ); ?></h5>
 					<ul class="cookie-pattern-examples">
 						<li><strong>Google Analytics:</strong> <code>/^_ga/</code>, <code>_gid</code>, <code>_gat</code></li>
 						<li><strong>Facebook:</strong> <code>/^_fb/</code>, <code>/^fb_/</code>, <code>_fbp</code></li>
@@ -713,7 +718,7 @@ function warder_admin_notices() {
 		/* translators: 1: Plugin name, 2: HTML link to settings page. */
 		esc_html__( 'Thank you for installing %1$s! Please configure your settings on the %2$s.', 'warder-cookie-consent' ),
 		esc_html( $plugin_name ),
-		'<a href="' . esc_url( admin_url( 'options-general.php?page=warder-cookie-consent' ) ) . '">settings page</a>'
+		'<a href="' . esc_url( admin_url( 'options-general.php?page=warder-cookie-consent' ) ) . '">' . esc_html__( 'settings page', 'warder-cookie-consent' ) . '</a>'
 	) . '</p>';
 	echo '</div>';
 }
@@ -810,6 +815,6 @@ function warder_render_category_title_field( $category_id, $title ) {
 			value="<?php echo esc_attr( $title ); ?>"
 			class="regular-text warder-category-title-field"
 			data-category-id="<?php echo esc_attr( $category_id ); ?>" />
-	<p class="description">The name displayed to users in the consent preferences panel.</p>
+	<p class="description"><?php esc_html_e( 'The name displayed to users in the consent preferences panel.', 'warder-cookie-consent' ); ?></p>
 	<?php
 }
