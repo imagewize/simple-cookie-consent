@@ -36,9 +36,6 @@ jobs:
         run: wp-env start
         timeout-minutes: 5
 
-      - name: List available checks
-        run: wp-env run cli wp plugin check --list-checks
-
       - name: Run Plugin Check
         run: |
           wp-env run cli wp plugin check warder-cookie-consent \
