@@ -9,21 +9,47 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build clean plugin directory
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Build plugin directory
         run: |
-          mkdir -p ${{ github.workspace }}/plugin-build/warder-cookie-consent
-          rsync -a --exclude='.git' --exclude-from='.distignore' . ${{ github.workspace }}/plugin-build/warder-cookie-consent/
+          mkdir -p plugin-build/warder-cookie-consent
+          rsync -a --exclude='.git' --exclude-from='.distignore' . plugin-build/warder-cookie-consent/
+
+      - name: Install wp-env
+        run: npm install -g @wordpress/env
+
+      - name: Create wp-env config
+        run: |
+          echo '{
+            "core": null,
+            "plugins": [
+              "https://downloads.wordpress.org/plugin/plugin-check.zip",
+              "./plugin-build/warder-cookie-consent"
+            ]
+          }' > .wp-env.json
+
+      - name: Start wp-env
+        run: wp-env start
+        timeout-minutes: 5
 
       - name: Run Plugin Check
-        uses: WordPress/plugin-check-action@v1
-        with:
-          build-dir: '${{ github.workspace }}/plugin-build/warder-cookie-consent'
-          checks: ''
-          exclude-checks: 'EnqueuedScriptsScope'
+        run: |
+          wp-env run cli wp plugin check warder-cookie-consent \
+            --exclude-checks=EnqueuedScriptsScope \
+            --format=table \
+            | tee plugin-check-results.txt
 
-      - name: Upload Plugin Check Results
-        uses: actions/upload-artifact@v4
+      - name: Upload Plugin Check results
         if: always()
+        uses: actions/upload-artifact@v4
         with:
           name: plugin-check-results
-          path: ${{ github.workspace }}/plugin-build/warder-cookie-consent/plugin-check-results.txt
+          path: plugin-check-results.txt
+
+      - name: Stop wp-env
+        if: always()
+        run: wp-env stop

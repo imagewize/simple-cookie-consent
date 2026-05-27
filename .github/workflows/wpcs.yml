@@ -1,14 +1,21 @@
-name: WPCS check
+name: WPCS Check
 
 on: pull_request
 
 jobs:
   phpcs:
-    name: WPCS
+    name: WPCS Check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: WPCS check
-        uses: 10up/wpcs-action@stable
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
         with:
-          standard: 'WordPress'
+          php-version: '8.2'
+
+      - name: Install dependencies
+        run: composer install --no-progress --prefer-dist
+
+      - name: Run PHP_CodeSniffer
+        run: vendor/bin/phpcs --standard=phpcs.xml --warning-severity=0

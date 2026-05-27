@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Warder Cookie Consent
  * Description: GDPR-compliant cookie consent banner with category management and floating preferences toggle.
- * Version: 1.4.0
+ * Version: 1.4.1
  * Author: Jasper Frumau
  * Author URI: https://imagewize.com
  * Requires at least: 5.0
