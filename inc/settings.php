@@ -67,8 +67,8 @@ function warder_validate_options( $input ) {
 			$valid['cookie_categories'][ $sanitized_id ] = array(
 				'title'       => $title,
 				'description' => wp_kses_post( $category['description'] ),
-				'enabled'     => $is_necessary ? true : ( isset( $category['enabled'] ) ? true : false ),
-				'readonly'    => $is_necessary ? true : ( isset( $category['readonly'] ) ? true : false ),
+				'enabled'     => $is_necessary,
+				'readonly'    => $is_necessary,
 				'cookies'     => array(),
 			);
 

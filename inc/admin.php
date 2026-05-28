@@ -258,33 +258,21 @@ function warder_render_options_page() {
 							</td>
 						</tr>
 						<tr>
-							<th scope="row"><?php esc_html_e( 'Settings', 'warder-cookie-consent' ); ?></th>
+							<th scope="row"><?php esc_html_e( 'Consent behaviour', 'warder-cookie-consent' ); ?></th>
 							<td>
-								<label>
-									<input type="checkbox" name="warder_options[cookie_categories][<?php echo esc_attr( $category_id ); ?>][enabled]"
-										<?php checked( $category['enabled'], true ); ?>
-										<?php
-										if ( 'necessary' === $category_id ) {
-											echo 'disabled';
-										}
-										?>
-										/>
-									<?php esc_html_e( 'Enabled by default', 'warder-cookie-consent' ); ?>
-								</label>
-								<p class="description"><?php esc_html_e( 'If checked, this category will be pre-selected when the user sees the banner.', 'warder-cookie-consent' ); ?></p>
-								<br>
-								<label>
-									<input type="checkbox" name="warder_options[cookie_categories][<?php echo esc_attr( $category_id ); ?>][readonly]"
-										<?php checked( $category['readonly'], true ); ?>
-										<?php
-										if ( 'necessary' === $category_id ) {
-											echo 'disabled';
-										}
-										?>
-										/>
-									<?php esc_html_e( 'Read-only (user cannot change)', 'warder-cookie-consent' ); ?>
-								</label>
-								<p class="description"><?php esc_html_e( 'If checked, users won\'t be able to toggle this category off. The "necessary" category is always read-only.', 'warder-cookie-consent' ); ?></p>
+								<?php if ( 'necessary' === $category_id ) : ?>
+									<p>
+										<span class="dashicons dashicons-lock" style="color:#d63638;" aria-hidden="true"></span>
+										<strong><?php esc_html_e( 'Always enabled — users cannot turn this off', 'warder-cookie-consent' ); ?></strong>
+									</p>
+									<p class="description"><?php esc_html_e( 'Strictly necessary cookies are required for the website to function. They are always active and locked for all visitors.', 'warder-cookie-consent' ); ?></p>
+								<?php else : ?>
+									<p>
+										<span class="dashicons dashicons-unlock" style="color:#2271b1;" aria-hidden="true"></span>
+										<strong><?php esc_html_e( 'Always off by default — users can opt in', 'warder-cookie-consent' ); ?></strong>
+									</p>
+									<p class="description"><?php esc_html_e( 'Non-necessary cookies are always disabled by default. Visitors must actively choose to enable this category in the cookie preferences panel. This behaviour cannot be changed (GDPR requirement).', 'warder-cookie-consent' ); ?></p>
+								<?php endif; ?>
 							</td>
 						</tr>
 					</table>
