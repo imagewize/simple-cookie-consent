@@ -18,7 +18,7 @@ There are no tests. PHP requires 8.0+.
 
 To install as a Composer dependency:
 ```bash
-composer require imagewize/simple-cookie-consent
+composer require imagewize/warder-cookie-consent
 ```
 
 ## Architecture
@@ -26,23 +26,23 @@ composer require imagewize/simple-cookie-consent
 ### Data Flow
 
 ```
-WordPress DB (scc_options key)
-  → scc_enqueue_scripts() fetches and localizes
+WordPress DB (warder_options key)
+  → warder_enqueue_scripts() fetches and localizes
   → window.sccSettings in browser
   → createConfigFromSettings() in src/index.js
   → CookieConsent.run(config)
 ```
 
-### PHP Layer (`simple-cookie-consent.php`)
+### PHP Layer (`warder-cookie-consent.php`)
 
-All plugin logic is in this single file (~552 lines):
+All plugin logic is in this single file (~851 lines):
 
-- **`scc_get_default_options()`** — defines the canonical default settings structure
-- **`scc_get_merged_options()`** — retrieves DB options and deep-merges with defaults; always returns a complete settings object
-- **`scc_validate_options()`** — sanitizes/validates before saving to `scc_options` in `wp_options`
-- **`scc_enqueue_scripts()`** — enqueues `dist/cookieconsent.bundle.js` and localizes it as `window.sccSettings`
-- **`scc_settings_page()`** — renders the admin UI at Settings > Cookie Consent
-- Settings are versioned via `scc_options_last_updated` timestamp for cache busting
+- **`warder_get_default_options()`** — defines the canonical default settings structure
+- **`warder_get_merged_options()`** — retrieves DB options and deep-merges with defaults; always returns a complete settings object
+- **`warder_validate_options()`** — sanitizes/validates before saving to `warder_options` in `wp_options`
+- **`warder_enqueue_scripts()`** — enqueues `dist/cookieconsent.bundle.js` and localizes it as `window.sccSettings`
+- **`warder_render_options_page()`** — renders the admin UI at Settings > Cookie Consent
+- Settings are versioned via `warder_options_last_updated` timestamp for cache busting
 
 ### JS Layer (`src/index.js` → `dist/cookieconsent.bundle.js`)
 
@@ -59,12 +59,24 @@ Scripts are blocked until consent is given via `data-cookiecategory` HTML attrib
 ### Settings Structure
 
 ```php
-scc_options = [
-  'general'    => [ position, language, ... ],
-  'texts'      => [ banner title/description, accept/reject button labels, ... ],
-  'categories' => [
-    'necessary' => [ enabled, readonly, cookies[] ],
-    'analytics' => [ enabled, cookies[] ],
+warder_options = [
+  'enabled'                    => bool,
+  'current_lang'               => string,
+  'autoclear_cookies'          => bool,
+  'page_scripts'               => bool,
+  'show_preferences_toggle'    => bool,
+  'preferences_toggle_position'=> string,
+  'title'                      => string,
+  'description'                => string,
+  'primary_btn_text'           => string,
+  'primary_btn_role'           => string,
+  'secondary_btn_text'         => string,
+  'secondary_btn_role'         => string,
+  'privacy_policy_url'         => string,
+  'cookie_categories'          => [
+    'necessary' => [ title, description, enabled, readonly, cookies[] ],
+    'analytics' => [ title, description, enabled, cookies[] ],
+    ...  // user-defined categories
   ],
 ]
 ```
@@ -75,7 +87,7 @@ Each `cookies` entry supports `name` (exact string or `/regex/` pattern) and `do
 
 The `Version:` header in `warder-cookie-consent.php` is the canonical version (this is what WordPress.org reads). When bumping the version, update all of these together:
 
-- `warder-cookie-consent.php` — `Version:` header
+- `warder-cookie-consent.php` — `Version:` header and `WARDER_VERSION` constant
 - `readme.txt` — `Stable tag:` plus new `== Changelog ==` and `== Upgrade Notice ==` entries
 - `CHANGELOG.md` — new version heading
 - `package.json` — `version` field (kept in sync even though this package is not published to npm)
