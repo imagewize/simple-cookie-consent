@@ -300,6 +300,16 @@ function warder_handle_admin_actions( $options ) {
 	if ( $changed ) {
 		update_option( 'warder_options', $options );
 		delete_transient( 'warder_options_cache' );
+		wp_safe_redirect(
+			add_query_arg(
+				array(
+					'page'          => 'warder-cookie-consent',
+					'warder_notice' => 'saved',
+				),
+				admin_url( 'options-general.php' )
+			)
+		);
+		exit;
 	}
 
 	return $options;
@@ -320,6 +330,9 @@ function warder_render_options_page() {
 		delete_transient( 'warder_options_cache' );
 	}
 
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$warder_notice = isset( $_GET['warder_notice'] ) ? sanitize_key( wp_unslash( $_GET['warder_notice'] ) ) : '';
+
 	$options         = get_option( 'warder_options', array() );
 	$default_options = warder_get_default_options();
 	$options         = wp_parse_args( $options, $default_options );
@@ -334,7 +347,7 @@ function warder_render_options_page() {
 	<div class="wrap">
 		<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 
-		<?php if ( $settings_updated ) : ?>
+		<?php if ( $settings_updated || 'saved' === $warder_notice ) : ?>
 		<div class="notice notice-success is-dismissible">
 			<p><strong><?php esc_html_e( 'Settings saved successfully.', 'warder-cookie-consent' ); ?></strong></p>
 		</div>
@@ -596,54 +609,6 @@ function warder_render_options_page() {
 						</button>
 					</div>
 
-					<!-- Add Cookie Form Container (the actual <form> lives outside the main settings form;
-						inputs reference it via the HTML5 `form` attribute so they aren't nested). -->
-					<div class="warder-add-cookie-form-container" style="margin: 10px 0; display: none;" id="warder-add-cookie-container-<?php echo esc_attr( $category_id ); ?>">
-						<div style="padding: 15px; background: #f5f5f5; border: 1px solid #ddd;">
-							<h4>
-								<?php
-								/* translators: %s: cookie category title. */
-								printf( esc_html__( 'Add Cookie to "%s"', 'warder-cookie-consent' ), esc_html( $category['title'] ) );
-								?>
-							</h4>
-							<table class="form-table">
-								<tr>
-									<th scope="row"><?php esc_html_e( 'Cookie Name/Pattern', 'warder-cookie-consent' ); ?></th>
-									<td>
-										<input type="text" name="cookie_name" form="warder-add-cookie-form-<?php echo esc_attr( $category_id ); ?>" placeholder="<?php esc_attr_e( 'e.g., _ga or /^_ga/', 'warder-cookie-consent' ); ?>" class="regular-text" required />
-										<p class="description"><?php esc_html_e( 'Enter a specific cookie name or a pattern to match multiple cookies.', 'warder-cookie-consent' ); ?></p>
-									</td>
-								</tr>
-								<tr>
-									<th scope="row"><?php esc_html_e( 'Match Type', 'warder-cookie-consent' ); ?></th>
-									<td>
-										<label>
-											<input type="checkbox" name="is_regex" form="warder-add-cookie-form-<?php echo esc_attr( $category_id ); ?>" />
-											<?php esc_html_e( 'Regular Expression', 'warder-cookie-consent' ); ?>
-										</label>
-										<p class="description">
-											<?php esc_html_e( 'Leave unchecked for exact cookie names (e.g. _gid).', 'warder-cookie-consent' ); ?>
-											<br />
-											<?php esc_html_e( 'Tick this and wrap the value in /slashes/ to match multiple cookies with a pattern (e.g. /^_ga/).', 'warder-cookie-consent' ); ?>
-										</p>
-									</td>
-								</tr>
-							</table>
-
-							<p>
-								<input type="submit" name="warder_add_cookie" form="warder-add-cookie-form-<?php echo esc_attr( $category_id ); ?>" value="<?php esc_attr_e( 'Add Cookie', 'warder-cookie-consent' ); ?>" class="button button-primary" />
-								<button type="button" class="button button-secondary cancel-add-cookie"><?php esc_html_e( 'Cancel', 'warder-cookie-consent' ); ?></button>
-							</p>
-
-							<h5><?php esc_html_e( 'Common Cookie Patterns', 'warder-cookie-consent' ); ?></h5>
-							<ul class="cookie-pattern-examples">
-								<li><strong>Google Analytics:</strong> <code>/^_ga/</code> <?php esc_html_e( '(regex)', 'warder-cookie-consent' ); ?>, <code>_gid</code>, <code>_gat</code></li>
-								<li><strong>Facebook:</strong> <code>/^_fb/</code> <?php esc_html_e( '(regex)', 'warder-cookie-consent' ); ?>, <code>/^fb_/</code> <?php esc_html_e( '(regex)', 'warder-cookie-consent' ); ?>, <code>_fbp</code></li>
-								<li><strong>Google Ads:</strong> <code>_gcl_au</code>, <code>/^_gcl_/</code> <?php esc_html_e( '(regex)', 'warder-cookie-consent' ); ?></li>
-								<li><strong>Matomo:</strong> <code>/^_pk_/</code> <?php esc_html_e( '(regex)', 'warder-cookie-consent' ); ?>, <code>/^mtm_/</code> <?php esc_html_e( '(regex)', 'warder-cookie-consent' ); ?></li>
-							</ul>
-						</div>
-					</div>
 				</div>
 					<?php
 				endforeach;
@@ -657,15 +622,59 @@ function warder_render_options_page() {
 		</form>
 
 		<?php
-		// Out-of-DOM Add Cookie forms — one per category. The visible inputs above use
-		// form="warder-add-cookie-form-<id>" to submit here, avoiding nested forms.
+		// Add-cookie containers — one per category, outside the main settings form so
+		// inputs submit cleanly without needing the HTML5 `form` attribute.
 		if ( isset( $options['cookie_categories'] ) && is_array( $options['cookie_categories'] ) ) :
-			foreach ( array_keys( $options['cookie_categories'] ) as $form_category_id ) :
+			foreach ( $options['cookie_categories'] as $form_category_id => $form_category ) :
 				?>
-				<form method="post" action="" id="warder-add-cookie-form-<?php echo esc_attr( $form_category_id ); ?>" style="display:none;">
-					<?php wp_nonce_field( 'warder_add_cookie', 'warder_cookie_nonce' ); ?>
-					<input type="hidden" name="category_id" value="<?php echo esc_attr( $form_category_id ); ?>" />
-				</form>
+				<div class="warder-add-cookie-form-container" style="margin: 10px 0; display: none;" id="warder-add-cookie-container-<?php echo esc_attr( $form_category_id ); ?>">
+					<div style="padding: 15px; background: #f5f5f5; border: 1px solid #ddd;">
+						<form method="post" action="" id="warder-add-cookie-form-<?php echo esc_attr( $form_category_id ); ?>">
+							<?php wp_nonce_field( 'warder_add_cookie', 'warder_cookie_nonce' ); ?>
+							<input type="hidden" name="category_id" value="<?php echo esc_attr( $form_category_id ); ?>" />
+							<h4>
+								<?php
+								/* translators: %s: cookie category title. */
+								printf( esc_html__( 'Add Cookie to "%s"', 'warder-cookie-consent' ), esc_html( $form_category['title'] ) );
+								?>
+							</h4>
+							<table class="form-table">
+								<tr>
+									<th scope="row"><?php esc_html_e( 'Cookie Name/Pattern', 'warder-cookie-consent' ); ?></th>
+									<td>
+										<input type="text" name="cookie_name" placeholder="<?php esc_attr_e( 'e.g., _ga or /^_ga/', 'warder-cookie-consent' ); ?>" class="regular-text" required />
+										<p class="description"><?php esc_html_e( 'Enter a specific cookie name or a pattern to match multiple cookies.', 'warder-cookie-consent' ); ?></p>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row"><?php esc_html_e( 'Match Type', 'warder-cookie-consent' ); ?></th>
+									<td>
+										<label>
+											<input type="checkbox" name="is_regex" />
+											<?php esc_html_e( 'Regular Expression', 'warder-cookie-consent' ); ?>
+										</label>
+										<p class="description">
+											<?php esc_html_e( 'Leave unchecked for exact cookie names (e.g. _gid).', 'warder-cookie-consent' ); ?>
+											<br />
+											<?php esc_html_e( 'Tick this and wrap the value in /slashes/ to match multiple cookies with a pattern (e.g. /^_ga/).', 'warder-cookie-consent' ); ?>
+										</p>
+									</td>
+								</tr>
+							</table>
+							<p>
+								<input type="submit" name="warder_add_cookie" value="<?php esc_attr_e( 'Add Cookie', 'warder-cookie-consent' ); ?>" class="button button-primary" />
+								<button type="button" class="button button-secondary cancel-add-cookie"><?php esc_html_e( 'Cancel', 'warder-cookie-consent' ); ?></button>
+							</p>
+							<h5><?php esc_html_e( 'Common Cookie Patterns', 'warder-cookie-consent' ); ?></h5>
+							<ul class="cookie-pattern-examples">
+								<li><strong>Google Analytics:</strong> <code>/^_ga/</code> <?php esc_html_e( '(regex)', 'warder-cookie-consent' ); ?>, <code>_gid</code>, <code>_gat</code></li>
+								<li><strong>Facebook:</strong> <code>/^_fb/</code> <?php esc_html_e( '(regex)', 'warder-cookie-consent' ); ?>, <code>/^fb_/</code> <?php esc_html_e( '(regex)', 'warder-cookie-consent' ); ?>, <code>_fbp</code></li>
+								<li><strong>Google Ads:</strong> <code>_gcl_au</code>, <code>/^_gcl_/</code> <?php esc_html_e( '(regex)', 'warder-cookie-consent' ); ?></li>
+								<li><strong>Matomo:</strong> <code>/^_pk_/</code> <?php esc_html_e( '(regex)', 'warder-cookie-consent' ); ?>, <code>/^mtm_/</code> <?php esc_html_e( '(regex)', 'warder-cookie-consent' ); ?></li>
+							</ul>
+						</form>
+					</div>
+				</div>
 				<?php
 			endforeach;
 		endif;
