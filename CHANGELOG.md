@@ -16,6 +16,10 @@ All notable changes to Warder Cookie Consent are documented here.
 
 No behaviour changes; all existing settings, hooks, and nonces are unaffected.
 
+### Fixed
+- Admin page title changed from "Cookie Consent Settings" to "Warder Cookie Consent"
+- Settings sidebar label changed from "Cookie Consent" to "Warder Consent" to avoid ambiguity when other consent plugins are active
+
 ## [1.5.2] - 2026-05-28
 
 ### Added
