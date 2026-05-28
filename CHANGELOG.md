@@ -2,6 +2,11 @@
 
 All notable changes to Warder Cookie Consent are documented here.
 
+## [2.0.1] - 2026-05-28
+
+### Fixed
+- `necessary` category `enabled` and `readonly` values were silently overwritten as `false` on every admin settings save. The admin form is submitted via AJAX with `form.serialize()`, which drops `disabled` fields — the readonly checkbox for `necessary` is `disabled`, so it was never submitted. `warder_validate_options` now forces `enabled = true` and `readonly = true` for the `necessary` category regardless of form input. The `enabled` checkbox in the admin UI is also now `disabled` for `necessary`, consistent with `readonly`.
+
 ## [2.0.0] - 2026-05-28
 
 ### Changed

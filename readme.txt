@@ -4,7 +4,7 @@ Donate link: https://imagewize.com
 Tags: cookie, consent, gdpr, privacy, compliance
 Requires at least: 5.0
 Tested up to: 7.0
-Stable tag: 2.0.0
+Stable tag: 2.0.1
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -71,6 +71,11 @@ Yes. Settings are versioned via a timestamp that is appended to the script URL, 
 3. Cookie category management interface
 
 == Changelog ==
+
+= 2.0.1 =
+*2026-05-28*
+
+* Fixed: necessary category enabled/readonly values were silently overwritten as false on every admin settings save because the disabled checkboxes were not submitted by form.serialize(). The necessary category is now always forced to enabled=true and readonly=true in validation, regardless of form input.
 
 = 2.0.0 =
 *2026-05-28*
@@ -179,6 +184,9 @@ Yes. Settings are versioned via a timestamp that is appended to the script URL, 
 * Initial release
 
 == Upgrade Notice ==
+
+= 2.0.1 =
+Fixes a bug where the Strictly Necessary category would lose its locked/readonly state after the first admin settings save, allowing users to toggle it off in the frontend modal.
 
 = 2.0.0 =
 Internal refactor only — plugin logic split into `inc/` files for maintainability. Admin page title and Settings sidebar label updated to "Warder Cookie Consent" / "Warder Consent". No settings migration required, no behaviour changes.
