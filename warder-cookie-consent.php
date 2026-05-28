@@ -598,7 +598,11 @@ function warder_render_options_page() {
 											<input type="checkbox" name="is_regex" form="warder-add-cookie-form-<?php echo esc_attr( $category_id ); ?>" />
 											<?php esc_html_e( 'Regular Expression', 'warder-cookie-consent' ); ?>
 										</label>
-										<p class="description"><?php esc_html_e( 'Check if using a pattern like /^_ga/ to match multiple cookies.', 'warder-cookie-consent' ); ?></p>
+										<p class="description">
+											<?php esc_html_e( 'Leave unchecked for exact cookie names (e.g. _gid).', 'warder-cookie-consent' ); ?>
+											<br />
+											<?php esc_html_e( 'Tick this and wrap the value in /slashes/ to match multiple cookies with a pattern (e.g. /^_ga/).', 'warder-cookie-consent' ); ?>
+										</p>
 									</td>
 								</tr>
 							</table>
@@ -610,10 +614,10 @@ function warder_render_options_page() {
 
 							<h5><?php esc_html_e( 'Common Cookie Patterns', 'warder-cookie-consent' ); ?></h5>
 							<ul class="cookie-pattern-examples">
-								<li><strong>Google Analytics:</strong> <code>/^_ga/</code>, <code>_gid</code>, <code>_gat</code></li>
-								<li><strong>Facebook:</strong> <code>/^_fb/</code>, <code>/^fb_/</code>, <code>_fbp</code></li>
-								<li><strong>Google Ads:</strong> <code>_gcl_au</code>, <code>/^_gcl_/</code></li>
-								<li><strong>Matomo:</strong> <code>/^_pk_/</code>, <code>/^mtm_/</code></li>
+								<li><strong>Google Analytics:</strong> <code>/^_ga/</code> <?php esc_html_e( '(regex)', 'warder-cookie-consent' ); ?>, <code>_gid</code>, <code>_gat</code></li>
+								<li><strong>Facebook:</strong> <code>/^_fb/</code> <?php esc_html_e( '(regex)', 'warder-cookie-consent' ); ?>, <code>/^fb_/</code> <?php esc_html_e( '(regex)', 'warder-cookie-consent' ); ?>, <code>_fbp</code></li>
+								<li><strong>Google Ads:</strong> <code>_gcl_au</code>, <code>/^_gcl_/</code> <?php esc_html_e( '(regex)', 'warder-cookie-consent' ); ?></li>
+								<li><strong>Matomo:</strong> <code>/^_pk_/</code> <?php esc_html_e( '(regex)', 'warder-cookie-consent' ); ?>, <code>/^mtm_/</code> <?php esc_html_e( '(regex)', 'warder-cookie-consent' ); ?></li>
 							</ul>
 						</div>
 					</div>
