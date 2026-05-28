@@ -51,13 +51,13 @@ composer require imagewize/warder-cookie-consent
 
 ## Usage
 
-After activation, the cookie consent banner will automatically appear on your website. Configure the settings from the WordPress admin panel at Settings > Cookie Consent.
+After activation, the cookie consent banner will automatically appear on your website. Configure the settings from the WordPress admin panel at Settings > Warder Consent.
 
 ## Configuration
 
 You can customize the plugin through the admin interface:
 
-1. Navigate to Settings > Cookie Consent in your WordPress dashboard
+1. Navigate to Settings > Warder Consent in your WordPress dashboard
 2. Configure the following settings:
    - Language and general behavior
    - Banner title and description
@@ -125,7 +125,7 @@ The plugin automatically handles third-party cookies by:
 1. Preventing scripts from loading until consent is given
 2. Clearing cookies if consent is withdrawn
 
-For detailed implementation guides, see the `dev.md` documentation file.
+For detailed implementation guides, see [`docs/dev.md`](docs/dev.md).
 
 ## Dependencies
 

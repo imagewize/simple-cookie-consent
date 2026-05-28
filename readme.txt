@@ -4,7 +4,7 @@ Donate link: https://imagewize.com
 Tags: cookie, consent, gdpr, privacy, compliance
 Requires at least: 5.0
 Tested up to: 7.0
-Stable tag: 1.5.2
+Stable tag: 2.0.0
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -71,6 +71,12 @@ Yes. Settings are versioned via a timestamp that is appended to the script URL, 
 3. Cookie category management interface
 
 == Changelog ==
+
+= 2.0.0 =
+*2026-05-28*
+
+* Changed: plugin logic split from one monolithic file into five focused files under `inc/` — `defaults.php`, `settings.php`, `ajax.php`, `admin.php`, `frontend.php`. Main plugin file is now 26 lines (header, constants, requires). No behaviour changes.
+* Fixed: admin page title renamed to "Warder Cookie Consent"; Settings sidebar label renamed to "Warder Consent"
 
 = 1.5.2 =
 *2026-05-28*
@@ -173,6 +179,9 @@ Yes. Settings are versioned via a timestamp that is appended to the script URL, 
 * Initial release
 
 == Upgrade Notice ==
+
+= 2.0.0 =
+Internal refactor only — plugin logic split into `inc/` files for maintainability. Admin page title and Settings sidebar label updated to "Warder Cookie Consent" / "Warder Consent". No settings migration required, no behaviour changes.
 
 = 1.5.2 =
 Save All Settings now uses AJAX, so the page no longer jumps back to the top after saving. Add Cookie forms are no longer nested inside the main settings form, so the regex checkbox and the rest of the cookie inputs submit reliably.
