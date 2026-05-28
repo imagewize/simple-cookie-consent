@@ -760,6 +760,11 @@ function warder_admin_notices() {
 		return;
 	}
 
+	// Self-suppress once the user has saved settings at least once.
+	if ( get_option( 'warder_options_last_updated' ) ) {
+		return;
+	}
+
 	if ( function_exists( 'get_plugin_data' ) ) {
 		$plugin_data = get_plugin_data( __FILE__ );
 		$plugin_name = $plugin_data['Name'];
