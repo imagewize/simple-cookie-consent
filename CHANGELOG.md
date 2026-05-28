@@ -2,6 +2,22 @@
 
 All notable changes to Warder Cookie Consent are documented here.
 
+## [1.5.2] - 2026-05-28
+
+### Added
+- AJAX save for the settings page via `wp_ajax_warder_save_settings` (`warder_ajax_save_settings()`). Submit is intercepted in `assets/js/admin.js`, the form serializes through `$.post( ajaxurl, ... )`, and the response is shown in a dismissible `.warder-ajax-notice` injected before the form — no `options.php` redirect, no scroll-to-top
+- Admin JS extracted from the inline `wp_add_inline_script()` heredoc into `assets/js/admin.js`, enqueued via `wp_enqueue_script( 'warder-admin' )` with `wp_localize_script` providing `warderAdmin.ajaxurl`, `warderAdmin.save`, and `warderAdmin.saving`
+- `?warder_notice=saved` redirect-after-POST in `warder_handle_admin_actions()` so add/delete-category and add/delete-cookie actions show a success notice on the resulting page
+
+### Fixed
+- Setup welcome notice in `warder_admin_notices()` now self-suppresses once `warder_options_last_updated` is set, so it stops appearing on every admin page after configuration (WordPress.org guideline 11)
+- Add Cookie form was nested inside `#warder-main-settings-form` and used the HTML5 `form="..."` attribute to target a hidden form elsewhere in the DOM. Browsers handle `display:none` target forms inconsistently, which dropped the `is_regex` checkbox state and caused the AJAX save handler to intercept Add Cookie submissions. Each Add Cookie form is now rendered as a self-contained `<form>` after `</form>` of the main settings form
+- AJAX save notice is now scrolled into view via `$( 'html, body' ).animate( { scrollTop: $notice.offset().top - 50 }, 300 )` so it is visible regardless of the scroll position at submit time
+- Show-add-cookie button scrolls the now-revealed container into view on open
+
+### Changed
+- Dropped the `:not([form])` filters on the change-highlight selector and submit-button lookup in `assets/js/admin.js`, and removed the JS `.after()` reposition of add-cookie containers. These were workarounds for the old nested-form layout and are no longer needed now that PHP renders the containers outside the main form
+
 ## [1.5.1] - 2026-05-28
 
 ### Fixed

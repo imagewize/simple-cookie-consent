@@ -5,6 +5,7 @@
 .gitignore export-ignore
 .distignore export-ignore
 .claude export-ignore
+.vibe export-ignore
 .DS_Store export-ignore
 .vscode export-ignore
 .idea export-ignore
