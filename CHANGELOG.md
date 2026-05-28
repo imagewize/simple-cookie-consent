@@ -6,6 +6,9 @@ All notable changes to Warder Cookie Consent are documented here.
 
 ### Fixed
 - `necessary` category `enabled` and `readonly` values were silently overwritten as `false` on every admin settings save. The admin form is submitted via AJAX with `form.serialize()`, which drops `disabled` fields — the readonly checkbox for `necessary` is `disabled`, so it was never submitted. `warder_validate_options` now forces `enabled = true` and `readonly = true` for the `necessary` category regardless of form input. The `enabled` checkbox in the admin UI is also now `disabled` for `necessary`, consistent with `readonly`.
+- `is_regex` was always saved as `true` for every cookie. The hidden input used `value=""` for false, so PHP's `isset()` returned `true` for the empty string, silently marking non-regex cookies (`_gid`, `_gat`) as regex patterns and corrupting the autoClear list. The hidden input now outputs `'0'` for false; validation uses `!empty()` with a literal `'0'` check so only the string `'1'` is treated as true.
+- Non-necessary categories (e.g. Analytics) were appearing as locked and pre-selected in the frontend preferences modal. `warder_validate_options` was using `isset()` to read `enabled`/`readonly` from DB values rather than enforcing them by policy. PHP now always saves `enabled = false, readonly = false` for non-necessary categories; `src/index.js` derives `enabled`/`readOnly` from the category id rather than trusting DB values; the admin UI replaces the confusing enabled/readonly checkboxes with descriptive lock/unlock icons.
+- AJAX save handler no longer returns a misleading "No changes detected" message. `update_option()` returns `false` when the value is unchanged, but the save did succeed — the response now always says "Settings saved successfully."
 
 ## [2.0.0] - 2026-05-28
 

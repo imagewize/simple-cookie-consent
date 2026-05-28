@@ -76,6 +76,9 @@ Yes. Settings are versioned via a timestamp that is appended to the script URL, 
 *2026-05-28*
 
 * Fixed: necessary category enabled/readonly values were silently overwritten as false on every admin settings save because the disabled checkboxes were not submitted by form.serialize(). The necessary category is now always forced to enabled=true and readonly=true in validation, regardless of form input.
+* Fixed: is_regex was always saved as true for every cookie. The hidden input used value="" for false, so PHP's isset() returned true for the empty string, silently marking non-regex cookies (_gid, _gat) as regex patterns and corrupting the autoClear cookie list. The hidden input now outputs '0' for false; validation uses !empty() with an explicit '0' check so only the string '1' is treated as true.
+* Fixed: non-necessary categories (e.g. Analytics) appeared as locked and pre-selected in the frontend preferences modal. Validation now always saves enabled=false, readonly=false for non-necessary categories; src/index.js derives enabled/readOnly from the category id rather than DB values; admin UI replaces confusing enabled/readonly checkboxes with descriptive lock/unlock icons.
+* Fixed: AJAX save no longer returns a misleading "No changes detected" message when a setting is toggled back to its current DB value — the response is always "Settings saved successfully."
 
 = 2.0.0 =
 *2026-05-28*
@@ -186,7 +189,7 @@ Yes. Settings are versioned via a timestamp that is appended to the script URL, 
 == Upgrade Notice ==
 
 = 2.0.1 =
-Fixes a bug where the Strictly Necessary category would lose its locked/readonly state after the first admin settings save, allowing users to toggle it off in the frontend modal.
+Fixes three data-corruption bugs: (1) Strictly Necessary category losing its locked state after every save; (2) all cookies being silently saved as regex patterns due to a hidden-input value bug; (3) non-necessary categories appearing locked and pre-selected in the frontend consent modal.
 
 = 2.0.0 =
 Internal refactor only — plugin logic split into `inc/` files for maintainability. Admin page title and Settings sidebar label updated to "Warder Cookie Consent" / "Warder Consent". No settings migration required, no behaviour changes.
