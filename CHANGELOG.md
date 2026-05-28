@@ -2,7 +2,7 @@
 
 All notable changes to Warder Cookie Consent are documented here.
 
-## [2.0.2] - 2026-05-28
+## [2.1.0] - 2026-05-28
 
 ### Added
 - `inc/helpers.php` — public helper module loaded from the main plugin file
