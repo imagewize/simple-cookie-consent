@@ -2,6 +2,20 @@
 
 All notable changes to Warder Cookie Consent are documented here.
 
+## [2.0.0] - 2026-05-28
+
+### Changed
+- Split plugin logic out of the monolithic `warder-cookie-consent.php` into five focused files under `inc/`:
+  - `inc/defaults.php` — `warder_get_default_options()`, `warder_get_merged_options()`
+  - `inc/settings.php` — `warder_register_settings()`, `warder_validate_options()`, `warder_update_options_timestamp()`, `warder_plugin_activate()`
+  - `inc/ajax.php` — `warder_ajax_save_settings()`, `warder_handle_admin_actions()`
+  - `inc/admin.php` — `warder_add_options_page()`, `warder_enqueue_admin_scripts()`, `warder_render_options_page()`, `warder_admin_notices()`, `warder_render_category_title_field()`
+  - `inc/frontend.php` — `warder_enqueue_scripts()`, `warder_get_preferences_toggle_css()`, `warder_add_preferences_button()`
+- Main plugin file is now 26 lines: plugin header, `WARDER_VERSION`, `WARDER_PLUGIN_FILE`, and five `require_once` calls
+- Added `WARDER_PLUGIN_FILE` constant (`__FILE__` captured at plugin root) so `plugin_dir_url()`, `get_plugin_data()`, and `register_activation_hook()` resolve correctly from within `inc/` files
+
+No behaviour changes; all existing settings, hooks, and nonces are unaffected.
+
 ## [1.5.2] - 2026-05-28
 
 ### Added
