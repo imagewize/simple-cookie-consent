@@ -262,7 +262,13 @@ function warder_render_options_page() {
 							<td>
 								<label>
 									<input type="checkbox" name="warder_options[cookie_categories][<?php echo esc_attr( $category_id ); ?>][enabled]"
-										<?php checked( $category['enabled'], true ); ?> />
+										<?php checked( $category['enabled'], true ); ?>
+										<?php
+										if ( 'necessary' === $category_id ) {
+											echo 'disabled';
+										}
+										?>
+										/>
 									<?php esc_html_e( 'Enabled by default', 'warder-cookie-consent' ); ?>
 								</label>
 								<p class="description"><?php esc_html_e( 'If checked, this category will be pre-selected when the user sees the banner.', 'warder-cookie-consent' ); ?></p>

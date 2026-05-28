@@ -60,11 +60,15 @@ function warder_validate_options( $input ) {
 
 			$title = isset( $category['title'] ) ? sanitize_text_field( $category['title'] ) : '';
 
+			// The 'necessary' category is always enabled and read-only regardless of form input,
+			// because its checkboxes are disabled in the admin and therefore not submitted.
+			$is_necessary = ( 'necessary' === $sanitized_id );
+
 			$valid['cookie_categories'][ $sanitized_id ] = array(
 				'title'       => $title,
 				'description' => wp_kses_post( $category['description'] ),
-				'enabled'     => isset( $category['enabled'] ) ? true : false,
-				'readonly'    => isset( $category['readonly'] ) ? true : false,
+				'enabled'     => $is_necessary ? true : ( isset( $category['enabled'] ) ? true : false ),
+				'readonly'    => $is_necessary ? true : ( isset( $category['readonly'] ) ? true : false ),
 				'cookies'     => array(),
 			);
 
