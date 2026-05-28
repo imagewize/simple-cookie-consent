@@ -16,6 +16,8 @@
 
 defined( 'ABSPATH' ) || exit;
 
+define( 'WARDER_VERSION', '1.5.1' );
+
 /**
  * Registers plugin settings and adds default options on first activation.
  */
@@ -182,26 +184,47 @@ function warder_enqueue_admin_scripts( $hook ) {
 		return;
 	}
 
-	wp_enqueue_script( 'jquery' );
+	wp_enqueue_script(
+		'warder-admin',
+		plugin_dir_url( __FILE__ ) . 'assets/js/admin.js',
+		array( 'jquery' ),
+		WARDER_VERSION,
+		true
+	);
 
-	$admin_js = '
-jQuery(document).ready(function($) {
-	$(".show-add-cookie-form").on("click", function() {
-		var categoryId = $(this).data("category");
-		$("#warder-add-cookie-container-" + categoryId).show();
-	});
-	$(".cancel-add-cookie").on("click", function(e) {
-		e.preventDefault();
-		$(this).closest(".warder-add-cookie-form-container").hide();
-	});
-	$("#warder-main-settings-form input, #warder-main-settings-form textarea, #warder-main-settings-form select").on("change", function() {
-		$(this).css("background-color", "#ffffdd");
-	});
-});';
-
-	wp_add_inline_script( 'jquery', $admin_js );
+	wp_localize_script(
+		'warder-admin',
+		'warderAdmin',
+		array(
+			'ajaxurl' => admin_url( 'admin-ajax.php' ),
+			'save'    => __( 'Save Settings', 'warder-cookie-consent' ),
+			'saving'  => __( 'Saving…', 'warder-cookie-consent' ),
+		)
+	);
 }
 add_action( 'admin_enqueue_scripts', 'warder_enqueue_admin_scripts' );
+
+/**
+ * Handles AJAX save of plugin settings from the admin settings page.
+ */
+function warder_ajax_save_settings() {
+	check_ajax_referer( 'warder_options_group-options', '_wpnonce' );
+
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Unauthorized.', 'warder-cookie-consent' ) ) );
+	}
+
+	$input = isset( $_POST['warder_options'] ) ? wp_unslash( $_POST['warder_options'] ) : array(); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+	$valid = warder_validate_options( $input );
+
+	if ( update_option( 'warder_options', $valid ) ) {
+		delete_transient( 'warder_options_cache' );
+		wp_send_json_success( array( 'message' => __( 'Settings saved successfully.', 'warder-cookie-consent' ) ) );
+	} else {
+		wp_send_json_success( array( 'message' => __( 'No changes detected.', 'warder-cookie-consent' ) ) );
+	}
+}
+add_action( 'wp_ajax_warder_save_settings', 'warder_ajax_save_settings' );
 
 /**
  * Processes add/delete actions for cookie categories and cookies on the settings page.
@@ -574,7 +597,7 @@ function warder_render_options_page() {
 					</div>
 
 					<!-- Add Cookie Form Container (the actual <form> lives outside the main settings form;
-						 inputs reference it via the HTML5 `form` attribute so they aren't nested). -->
+						inputs reference it via the HTML5 `form` attribute so they aren't nested). -->
 					<div class="warder-add-cookie-form-container" style="margin: 10px 0; display: none;" id="warder-add-cookie-container-<?php echo esc_attr( $category_id ); ?>">
 						<div style="padding: 15px; background: #f5f5f5; border: 1px solid #ddd;">
 							<h4>
