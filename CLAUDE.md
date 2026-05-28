@@ -71,6 +71,17 @@ scc_options = [
 
 Each `cookies` entry supports `name` (exact string or `/regex/` pattern) and `domain`.
 
+## Versioning
+
+The `Version:` header in `warder-cookie-consent.php` is the canonical version (this is what WordPress.org reads). When bumping the version, update all of these together:
+
+- `warder-cookie-consent.php` — `Version:` header
+- `readme.txt` — `Stable tag:` plus new `== Changelog ==` and `== Upgrade Notice ==` entries
+- `CHANGELOG.md` — new version heading
+- `package.json` — `version` field (kept in sync even though this package is not published to npm)
+
+`composer.json` intentionally has **no** `version` field — Packagist derives versions from git tags, so do not add one.
+
 ## Git Commits
 
 Do not mention "Claude" or "Claude Code" in commit messages.
