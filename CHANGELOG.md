@@ -2,6 +2,17 @@
 
 All notable changes to Warder Cookie Consent are documented here.
 
+## [2.0.2] - 2026-05-28
+
+### Added
+- `inc/helpers.php` — public helper module loaded from the main plugin file
+- `warder_has_consent( $category )` — PHP function for theme and plugin authors to check whether the current visitor accepted a given cookie category. Reads the `cc_cookie` payload set by vanilla-cookieconsent v3, JSON-decodes it, and checks `in_array( $category, $data['categories'], true )` (the v3 cookie stores accepted categories as a string array, not a keyed map). The `necessary` category short-circuits to `true`. Wrapped in `function_exists()` for safety; inputs sanitized via `sanitize_key()` and unslashed via `wp_unslash()`. Usage (works for any cookie-using analytics provider — Google Analytics, Matomo, etc. — or custom categories like `marketing`):
+  ```php
+  if ( warder_has_consent( 'analytics' ) ) {
+      // emit your analytics snippet server-side (GA, Matomo, ...)
+  }
+  ```
+
 ## [2.0.1] - 2026-05-28
 
 ### Fixed

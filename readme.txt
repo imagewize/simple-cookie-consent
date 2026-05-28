@@ -4,7 +4,7 @@ Donate link: https://imagewize.com
 Tags: cookie, consent, gdpr, privacy, compliance
 Requires at least: 5.0
 Tested up to: 7.0
-Stable tag: 2.0.1
+Stable tag: 2.0.2
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -71,6 +71,11 @@ Yes. Settings are versioned via a timestamp that is appended to the script URL, 
 3. Cookie category management interface
 
 == Changelog ==
+
+= 2.0.2 =
+*2026-05-28*
+
+* Added: `warder_has_consent( $category )` PHP helper for theme and plugin authors. Use it to gate server-rendered tracking snippets on the visitor's actual consent state — works for any cookie-using provider in the analytics category (Google Analytics, Matomo, ...) or any custom category. Example: `if ( warder_has_consent( 'analytics' ) ) { /* emit your analytics snippet */ }`. The `necessary` category always returns true; all other categories are read from the `cc_cookie` payload set by vanilla-cookieconsent. Lives in `inc/helpers.php`.
 
 = 2.0.1 =
 *2026-05-28*
@@ -187,6 +192,9 @@ Yes. Settings are versioned via a timestamp that is appended to the script URL, 
 * Initial release
 
 == Upgrade Notice ==
+
+= 2.0.2 =
+Adds `warder_has_consent( $category )` PHP helper so themes and plugins can check the visitor's consent state from PHP before emitting tracking snippets server-side.
 
 = 2.0.1 =
 Fixes three data-corruption bugs: (1) Strictly Necessary category losing its locked state after every save; (2) all cookies being silently saved as regex patterns due to a hidden-input value bug; (3) non-necessary categories appearing locked and pre-selected in the frontend consent modal.

@@ -27,30 +27,36 @@ composer require imagewize/warder-cookie-consent
 
 ```
 WordPress DB (warder_options key)
-  → warder_enqueue_scripts() fetches and localizes
-  → window.sccSettings in browser
+  → warder_enqueue_scripts() fetches and localizes (inc/frontend.php)
+  → window.warderSettings in browser
   → createConfigFromSettings() in src/index.js
   → CookieConsent.run(config)
 ```
 
-### PHP Layer (`warder-cookie-consent.php`)
+### PHP Layer
 
-All plugin logic is in this single file (~851 lines):
+The main file `warder-cookie-consent.php` is a thin entry point (~27 lines) that defines `WARDER_VERSION` / `WARDER_PLUGIN_FILE` and requires the six module files in `inc/`:
 
-- **`warder_get_default_options()`** — defines the canonical default settings structure
-- **`warder_get_merged_options()`** — retrieves DB options and deep-merges with defaults; always returns a complete settings object
-- **`warder_validate_options()`** — sanitizes/validates before saving to `warder_options` in `wp_options`
-- **`warder_enqueue_scripts()`** — enqueues `dist/cookieconsent.bundle.js` and localizes it as `window.sccSettings`
-- **`warder_render_options_page()`** — renders the admin UI at Settings > Cookie Consent
-- Settings are versioned via `warder_options_last_updated` timestamp for cache busting
+- **`inc/defaults.php`** — `warder_get_default_options()` defines the canonical default settings; `warder_get_merged_options()` deep-merges DB options with defaults
+- **`inc/settings.php`** — `warder_validate_options()` sanitizes/validates before saving to `warder_options` in `wp_options`; registers the settings; handles activation
+- **`inc/ajax.php`** — AJAX handlers for add/delete category and cookie operations from the admin UI
+- **`inc/admin.php`** — `warder_render_options_page()` renders the admin UI at Settings > Cookie Consent; enqueues `assets/js/admin.js`
+- **`inc/frontend.php`** — `warder_enqueue_scripts()` enqueues `dist/cookieconsent.bundle.js` and localizes it as `window.warderSettings`; outputs the preferences toggle button and its inline CSS
+- **`inc/helpers.php`** — Public helpers for theme/plugin authors. `warder_has_consent( $category )` reads the `cc_cookie` (vanilla-cookieconsent v3 payload — `categories` is a string array) and returns whether the visitor accepted that category
+
+Necessary category is enforced as `enabled: true, readonly: true` at three layers: defaults, validation, and frontend config-building.
 
 ### JS Layer (`src/index.js` → `dist/cookieconsent.bundle.js`)
 
 - Imports vanilla-cookieconsent and its CSS (bundled via webpack style-loader)
-- `createConfigFromSettings()` maps the flat `window.sccSettings` structure to vanilla-cookieconsent's nested config format
-- Handles regex pattern conversion for cookie matching rules
+- `createConfigFromSettings()` maps the flat `window.warderSettings` structure to vanilla-cookieconsent's nested config format
+- Handles regex pattern conversion for cookie matching rules (patterns like `/^_ga/` are converted to `RegExp`; invalid patterns fall back to literal string match)
 - Two default categories: `necessary` (always on) and `analytics` (optional)
 - Supports six languages: en, fr, de, es, it, nl
+
+### Admin JS (`assets/js/admin.js`)
+
+Handles the admin UI interactions (add/delete categories and cookies) via AJAX against the handlers in `inc/ajax.php`.
 
 ### Cookie Blocking
 
