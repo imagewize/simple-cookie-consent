@@ -155,10 +155,12 @@ function createConfigFromSettings(defaultConfig, wpSettings) {
             
             // Map WordPress categories to the config
             Object.entries(settings.cookie_categories).forEach(([categoryId, category]) => {
-                // Create category if it doesn't exist, or update existing
+                // Create category if it doesn't exist, or update existing.
+                // Necessary is always on and locked; all other categories are always
+                // off by default and optional — users must actively opt in (GDPR).
                 config.categories[categoryId] = config.categories[categoryId] || {};
-                config.categories[categoryId].enabled = category.enabled || false;
-                config.categories[categoryId].readOnly = category.readonly || false;
+                config.categories[categoryId].enabled = (categoryId === 'necessary');
+                config.categories[categoryId].readOnly = (categoryId === 'necessary');
                 
                 // Set up cookie auto-clearing
                 if (category.cookies && category.cookies.length > 0) {
