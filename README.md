@@ -125,7 +125,7 @@ The plugin automatically handles third-party cookies by:
 1. Preventing scripts from loading until consent is given
 2. Clearing cookies if consent is withdrawn
 
-For detailed implementation guides, see the `dev.md` file in the repository root.
+For detailed implementation guides, see [`docs/dev.md`](docs/dev.md).
 
 ## Dependencies
 
