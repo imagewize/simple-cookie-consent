@@ -613,6 +613,7 @@ function warder_render_options_page() {
 								<li><strong>Google Analytics:</strong> <code>/^_ga/</code>, <code>_gid</code>, <code>_gat</code></li>
 								<li><strong>Facebook:</strong> <code>/^_fb/</code>, <code>/^fb_/</code>, <code>_fbp</code></li>
 								<li><strong>Google Ads:</strong> <code>_gcl_au</code>, <code>/^_gcl_/</code></li>
+								<li><strong>Matomo:</strong> <code>/^_pk_/</code>, <code>/^mtm_/</code></li>
 							</ul>
 						</div>
 					</div>
