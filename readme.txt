@@ -4,7 +4,7 @@ Donate link: https://imagewize.com
 Tags: cookie, consent, gdpr, privacy, compliance
 Requires at least: 5.0
 Tested up to: 7.0
-Stable tag: 1.4.1
+Stable tag: 1.4.2
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -71,6 +71,13 @@ Yes. Settings are versioned via a timestamp that is appended to the script URL, 
 3. Cookie category management interface
 
 == Changelog ==
+
+= 1.4.2 =
+*2026-05-28*
+
+* Fixed: `register_setting()` updated to array format with explicit `sanitize_callback` key as required by WordPress.org guidelines
+* Fixed: `privacy_policy_url` now sanitized with `esc_url_raw()` instead of `sanitize_text_field()` for proper URL sanitization
+* Changed: `.distignore` updated to include `src/`, `webpack.config.js`, and `package.json` in the WordPress.org build so the human-readable source is available to reviewers (guideline §4)
 
 = 1.4.1 =
 *2026-05-27*
@@ -146,6 +153,9 @@ Yes. Settings are versioned via a timestamp that is appended to the script URL, 
 * Initial release
 
 == Upgrade Notice ==
+
+= 1.4.2 =
+WordPress.org compliance fixes: register_setting() uses array format with sanitize_callback, privacy_policy_url uses esc_url_raw(), and src/ ships in the build for human-readable source access.
 
 = 1.4.1 =
 Replaces the 10up/wpcs-action CI workflow with local PHPCS, adding strict i18n (text domain) and output escaping checks on pull requests.

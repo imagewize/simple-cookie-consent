@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Warder Cookie Consent
  * Description: GDPR-compliant cookie consent banner with category management and floating preferences toggle.
- * Version: 1.4.1
+ * Version: 1.4.2
  * Author: Jasper Frumau
  * Author URI: https://imagewize.com
  * Requires at least: 5.0
@@ -20,7 +20,14 @@ defined( 'ABSPATH' ) || exit;
  * Registers plugin settings and adds default options on first activation.
  */
 function warder_register_settings() {
-	register_setting( 'warder_options_group', 'warder_options', 'warder_validate_options' );
+	register_setting(
+		'warder_options_group',
+		'warder_options',
+		array(
+			'type'              => 'array',
+			'sanitize_callback' => 'warder_validate_options',
+		)
+	);
 
 	if ( false === get_option( 'warder_options' ) ) {
 		add_option( 'warder_options', warder_get_default_options() );
@@ -106,7 +113,7 @@ function warder_validate_options( $input ) {
 	$valid['secondary_btn_text']          = sanitize_text_field( $input['secondary_btn_text'] );
 	$valid['secondary_btn_role']          = in_array( $input['secondary_btn_role'], array( 'accept_necessary', 'settings' ), true )
 		? $input['secondary_btn_role'] : 'accept_necessary';
-	$valid['privacy_policy_url']          = sanitize_text_field( $input['privacy_policy_url'] );
+	$valid['privacy_policy_url']          = esc_url_raw( $input['privacy_policy_url'] );
 	$valid['show_preferences_toggle']     = isset( $input['show_preferences_toggle'] ) ? true : false;
 	$valid['preferences_toggle_position'] = in_array( $input['preferences_toggle_position'], array( 'bottom-right', 'bottom-left', 'top-right', 'top-left' ), true )
 		? $input['preferences_toggle_position'] : 'bottom-right';
