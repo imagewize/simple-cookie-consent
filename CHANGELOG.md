@@ -6,6 +6,7 @@ All notable changes to Warder Cookie Consent are documented here.
 
 ### Fixed
 - Add Cookie form now appears directly below the "Add Cookie to this Category" button instead of at the bottom of the page (below Save All Settings and Add New Category). Moved the `warder-add-cookie-form-container` divs from the end of `warder_render_options_page()` into each category section, immediately after the show-add-cookie-form button
+- Add Cookie submission was silently being dropped because moving the form into the category section nested it inside the main `<form action="options.php">` — browsers discard nested `<form>` tags, so the click submitted the outer settings form instead. The actual `<form id="warder-add-cookie-form-<id>">` element now lives outside the main settings form; the visible cookie name / regex / submit inputs reference it via the HTML5 `form="..."` attribute
 
 ## [1.5.0] - 2026-05-28
 
