@@ -10,12 +10,9 @@
 phpcs.xml
 composer.json
 composer.lock
-package.json
 package-lock.json
-webpack.config.js
 
-# Source files (bundled output is in dist/)
-src/*
+# Third-party dependency directories (src/ and webpack.config.js ship so reviewers can read the source)
 node_modules/*
 vendor/*
 
