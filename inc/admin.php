@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
  */
 function warder_add_options_page() {
 	add_options_page(
-		'Cookie Consent Settings',
+		'Warder Cookie Consent',
 		'Cookie Consent',
 		'manage_options',
 		'warder-cookie-consent',
