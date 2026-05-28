@@ -4,7 +4,7 @@ Donate link: https://imagewize.com
 Tags: cookie, consent, gdpr, privacy, compliance
 Requires at least: 5.0
 Tested up to: 7.0
-Stable tag: 1.4.2
+Stable tag: 1.5.0
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -71,6 +71,11 @@ Yes. Settings are versioned via a timestamp that is appended to the script URL, 
 3. Cookie category management interface
 
 == Changelog ==
+
+= 1.5.0 =
+*2026-05-28*
+
+* Added: Matomo cookie patterns (`/^_pk_/` and `/^mtm_/`) to the default analytics category, so new installs manage Matomo cookies out of the box alongside Google Analytics. Existing sites can add the same patterns under Settings > Cookie Consent
 
 = 1.4.2 =
 *2026-05-28*
@@ -153,6 +158,9 @@ Yes. Settings are versioned via a timestamp that is appended to the script URL, 
 * Initial release
 
 == Upgrade Notice ==
+
+= 1.5.0 =
+Adds Matomo cookie patterns to the default analytics category so new installs manage Matomo cookies out of the box.
 
 = 1.4.2 =
 WordPress.org compliance fixes: register_setting() uses array format with sanitize_callback, privacy_policy_url uses esc_url_raw(), and src/ ships in the build for human-readable source access.

@@ -2,6 +2,11 @@
 
 All notable changes to Warder Cookie Consent are documented here.
 
+## [1.5.0] - 2026-05-28
+
+### Added
+- Matomo cookie patterns to the default analytics category in `warder_get_default_options()`: `/^_pk_/` (matches `_pk_id.*`, `_pk_ses.*`, `_pk_ref.*`, `_pk_cvar.*`, `_pk_hsr.*`) and `/^mtm_/` (Matomo Tag Manager consent cookies) — new installs now manage Matomo cookies out of the box alongside the existing Google Analytics patterns. Existing installs can add the same patterns via Settings → Cookie Consent
+
 ## [1.4.2] - 2026-05-28
 
 ### Fixed
