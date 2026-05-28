@@ -88,7 +88,9 @@ This means you can easily configure which cookies to block and when to allow the
 
 The default configuration includes:
 - **Necessary cookies**: Always enabled, required for basic website functionality
-- **Analytics cookies**: Optional tracking and analytics cookies
+- **Analytics cookies**: Optional tracking and analytics cookies, pre-populated with patterns for Google Analytics (`/^_ga/`, `_gid`, `_gat`) and Matomo (`/^_pk_/`, `/^mtm_/`)
+
+> Plausible Analytics is cookieless by design, so it needs no patterns here — there are no cookies to clear.
 
 ## Usage Examples
 
@@ -103,6 +105,19 @@ Add your Google Analytics script with the `data-category` attribute:
 ```
 
 The script won't execute until the visitor accepts analytics cookies.
+
+### Blocking Matomo Until Consent
+
+Gate the Matomo tracking snippet the same way:
+
+```html
+<script type="text/plain" data-category="analytics">
+  var _paq = window._paq = window._paq || [];
+  // Your Matomo tracking code here
+</script>
+```
+
+The matching `/^_pk_/` and `/^mtm_/` patterns in the analytics category clear Matomo's cookies if consent is later withdrawn.
 
 ### Managing Third-party Cookies
 
