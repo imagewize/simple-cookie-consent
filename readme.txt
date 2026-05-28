@@ -4,7 +4,7 @@ Donate link: https://imagewize.com
 Tags: cookie, consent, gdpr, privacy, compliance
 Requires at least: 5.0
 Tested up to: 7.0
-Stable tag: 1.5.1
+Stable tag: 1.5.2
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -71,6 +71,15 @@ Yes. Settings are versioned via a timestamp that is appended to the script URL, 
 3. Cookie category management interface
 
 == Changelog ==
+
+= 1.5.2 =
+*2026-05-28*
+
+* Added: AJAX save for the Cookie Consent settings page — Save All Settings no longer reloads the page or scrolls back to the top; the success notice appears next to the form and the page scrolls it into view
+* Fixed: setup welcome notice now self-suppresses once the plugin has been configured, instead of appearing on every admin page
+* Fixed: Add Cookie forms are now rendered after the main settings form rather than nested inside it, so submitting an Add Cookie form no longer accidentally triggers the main settings save and no longer loses the regex checkbox state
+* Fixed: success notice after adding/deleting categories or cookies (`?warder_notice=saved` after the redirect)
+* Changed: removed leftover `:not([form])` selectors and JS DOM repositioning that were workarounds for the old nested-form layout
 
 = 1.5.1 =
 *2026-05-28*
@@ -164,6 +173,9 @@ Yes. Settings are versioned via a timestamp that is appended to the script URL, 
 * Initial release
 
 == Upgrade Notice ==
+
+= 1.5.2 =
+Save All Settings now uses AJAX, so the page no longer jumps back to the top after saving. Add Cookie forms are no longer nested inside the main settings form, so the regex checkbox and the rest of the cookie inputs submit reliably.
 
 = 1.5.1 =
 Fixes Add Cookie form positioning so it appears directly below the category button, and fixes a regression where submitting that form silently failed (nested form was being discarded by the browser).
