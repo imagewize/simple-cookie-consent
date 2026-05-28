@@ -2,6 +2,11 @@
 
 All notable changes to Warder Cookie Consent are documented here.
 
+## [1.5.1] - 2026-05-28
+
+### Fixed
+- Add Cookie form now appears directly below the "Add Cookie to this Category" button instead of at the bottom of the page (below Save All Settings and Add New Category). Moved the `warder-add-cookie-form-container` divs from the end of `warder_render_options_page()` into each category section, immediately after the show-add-cookie-form button
+
 ## [1.5.0] - 2026-05-28
 
 ### Added

@@ -4,7 +4,7 @@ Donate link: https://imagewize.com
 Tags: cookie, consent, gdpr, privacy, compliance
 Requires at least: 5.0
 Tested up to: 7.0
-Stable tag: 1.5.0
+Stable tag: 1.5.1
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -71,6 +71,11 @@ Yes. Settings are versioned via a timestamp that is appended to the script URL, 
 3. Cookie category management interface
 
 == Changelog ==
+
+= 1.5.1 =
+*2026-05-28*
+
+* Fixed: Add Cookie form now appears directly below the "Add Cookie to this Category" button instead of at the bottom of the page (below Save All Settings and Add New Category)
 
 = 1.5.0 =
 *2026-05-28*
@@ -158,6 +163,9 @@ Yes. Settings are versioned via a timestamp that is appended to the script URL, 
 * Initial release
 
 == Upgrade Notice ==
+
+= 1.5.1 =
+Fixes Add Cookie form positioning — now appears directly below the category button instead of at the bottom of the settings page.
 
 = 1.5.0 =
 Adds Matomo cookie patterns to the default analytics category so new installs manage Matomo cookies out of the box.
