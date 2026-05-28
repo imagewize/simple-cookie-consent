@@ -16,6 +16,9 @@ jQuery( document ).ready( function( $ ) {
 	} );
 
 	$( '#warder-main-settings-form' ).on( 'submit', function( e ) {
+		if ( e.originalEvent && e.originalEvent.submitter && e.originalEvent.submitter.name === 'warder_add_cookie' ) {
+			return;
+		}
 		e.preventDefault();
 
 		var form      = $( this );
