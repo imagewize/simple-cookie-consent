@@ -2,6 +2,15 @@
 
 All notable changes to Warder Cookie Consent are documented here.
 
+## [1.4.2] - 2026-05-28
+
+### Fixed
+- `register_setting()` updated to array format with explicit `sanitize_callback` key — satisfies WordPress.org guideline requiring formal sanitize_callback declaration
+- `privacy_policy_url` now sanitized with `esc_url_raw()` instead of `sanitize_text_field()` — correct sanitizer for URL values
+
+### Changed
+- `.distignore` updated to ship `src/`, `webpack.config.js`, and `package.json` in the WordPress.org build — satisfies the human-readable source code requirement (guideline §4); `node_modules/` and `vendor/` remain excluded
+
 ## [1.4.1] - 2026-05-27
 
 ### Changed
