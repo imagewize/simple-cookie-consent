@@ -20,12 +20,9 @@ function warder_ajax_save_settings() {
 	$input = isset( $_POST['warder_options'] ) ? wp_unslash( $_POST['warder_options'] ) : array(); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 	$valid = warder_validate_options( $input );
 
-	if ( update_option( 'warder_options', $valid ) ) {
-		delete_transient( 'warder_options_cache' );
-		wp_send_json_success( array( 'message' => __( 'Settings saved successfully.', 'warder-cookie-consent' ) ) );
-	} else {
-		wp_send_json_success( array( 'message' => __( 'No changes detected.', 'warder-cookie-consent' ) ) );
-	}
+	update_option( 'warder_options', $valid );
+	delete_transient( 'warder_options_cache' );
+	wp_send_json_success( array( 'message' => __( 'Settings saved successfully.', 'warder-cookie-consent' ) ) );
 }
 add_action( 'wp_ajax_warder_save_settings', 'warder_ajax_save_settings' );
 

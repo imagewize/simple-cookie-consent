@@ -312,7 +312,7 @@ function warder_render_options_page() {
 										<td>
 											<input type="hidden"
 												name="warder_options[cookie_categories][<?php echo esc_attr( $category_id ); ?>][cookies][<?php echo esc_attr( $index ); ?>][is_regex]"
-												value="<?php echo esc_attr( $cookie['is_regex'] ? '1' : '' ); ?>" />
+												value="<?php echo esc_attr( $cookie['is_regex'] ? '1' : '0' ); ?>" />
 											<?php echo $cookie['is_regex'] ? esc_html__( 'Regular Expression', 'warder-cookie-consent' ) : esc_html__( 'Exact Match', 'warder-cookie-consent' ); ?>
 										</td>
 										<td>

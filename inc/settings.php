@@ -77,7 +77,7 @@ function warder_validate_options( $input ) {
 					if ( ! empty( $cookie['name'] ) ) {
 						$valid['cookie_categories'][ $sanitized_id ]['cookies'][] = array(
 							'name'     => sanitize_text_field( $cookie['name'] ),
-							'is_regex' => isset( $cookie['is_regex'] ) ? true : false,
+							'is_regex' => ! empty( $cookie['is_regex'] ) && '0' !== (string) $cookie['is_regex'],
 						);
 					}
 				}
