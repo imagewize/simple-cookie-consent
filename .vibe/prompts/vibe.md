@@ -8,10 +8,16 @@ Always follow the rules and conventions in the project's `CLAUDE.md` file. This 
 **warder-cookie-consent** is a WordPress plugin wrapping the [vanilla-cookieconsent](https://github.com/orestbida/cookieconsent) v3 library.
 
 Key files:
-- `warder-cookie-consent.php` — all PHP logic (~851 lines), single-file plugin
+- `warder-cookie-consent.php` — thin entry point (~27 lines): plugin header, constants, and `require_once` for each `inc/*.php` module
+- `inc/defaults.php` — default options + `warder_get_merged_options()`
+- `inc/settings.php` — `register_setting()`, `warder_validate_options()`, activation
+- `inc/ajax.php` — AJAX save and admin action handlers
+- `inc/admin.php` — admin settings page renderer + admin script enqueue
+- `inc/frontend.php` — frontend script enqueue, `wp_localize_script` as `window.warderSettings`, preferences toggle button
+- `inc/helpers.php` — public helpers for theme/plugin authors (e.g. `warder_has_consent( $category )`)
 - `src/index.js` — JS entry point, maps settings to vanilla-cookieconsent config
 - `dist/cookieconsent.bundle.js` — compiled output (do not edit directly)
-- `assets/js/warder-admin.js` — admin page JS (AJAX save, UI interactions)
+- `assets/js/admin.js` — admin page JS (AJAX save, UI interactions)
 
 ## Before Responding
 1. **Review CLAUDE.md** for:
