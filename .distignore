@@ -18,6 +18,7 @@ vendor/*
 
 # AI guidance and dev docs
 .claude/*
+.vibe/*
 AGENTS.md
 CLAUDE.md
 README.md
