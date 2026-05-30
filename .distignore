@@ -21,6 +21,7 @@ vendor/*
 .vibe/*
 AGENTS.md
 CLAUDE.md
+CONTRIBUTING.md
 README.md
 dev.md
 docs/*
