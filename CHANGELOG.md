@@ -2,6 +2,15 @@
 
 All notable changes to Warder Cookie Consent are documented here.
 
+## [2.1.1] - 2026-05-30
+
+### Changed
+- Removed `wp_slimstat` (Slimstat Analytics) from the default `warder_blocked_scripts` list — Slimstat is not bundled with WordPress or WooCommerce, so blocking it by default added dead code for the vast majority of sites. Use the `warder_blocked_scripts` filter to add it when needed.
+
+### Documentation
+- Updated README to reflect current necessary-category cookie defaults (WordPress core + WooCommerce session cookies) and analytics defaults (including `sbjs_*`).
+- Added "Common examples" to the Automatic Script Blocking section showing how to extend `warder_blocked_scripts` with Slimstat and MonsterInsights.
+
 ## [2.1.0] - 2026-05-30
 
 ### Added

@@ -143,9 +143,8 @@ function warder_block_script_until_consent( $tag, $handle ) {
 	$blocked = apply_filters(
 		'warder_blocked_scripts',
 		array(
-			'sourcebuster-js'    => 'analytics',
+			'sourcebuster-js'      => 'analytics',
 			'wc-order-attribution' => 'analytics',
-			'wp_slimstat'        => 'analytics',
 		)
 	);
 
