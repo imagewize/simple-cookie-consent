@@ -109,12 +109,9 @@ function warder_render_options_page() {
 					<th scope="row"><?php esc_html_e( 'Language', 'warder-cookie-consent' ); ?></th>
 					<td>
 						<select name="warder_options[current_lang]">
-							<option value="en" <?php selected( $options['current_lang'], 'en' ); ?>><?php esc_html_e( 'English', 'warder-cookie-consent' ); ?></option>
-							<option value="fr" <?php selected( $options['current_lang'], 'fr' ); ?>><?php esc_html_e( 'French', 'warder-cookie-consent' ); ?></option>
-							<option value="de" <?php selected( $options['current_lang'], 'de' ); ?>><?php esc_html_e( 'German', 'warder-cookie-consent' ); ?></option>
-							<option value="es" <?php selected( $options['current_lang'], 'es' ); ?>><?php esc_html_e( 'Spanish', 'warder-cookie-consent' ); ?></option>
-							<option value="it" <?php selected( $options['current_lang'], 'it' ); ?>><?php esc_html_e( 'Italian', 'warder-cookie-consent' ); ?></option>
-							<option value="nl" <?php selected( $options['current_lang'], 'nl' ); ?>><?php esc_html_e( 'Dutch', 'warder-cookie-consent' ); ?></option>
+							<?php foreach ( warder_allowed_languages() as $lang_code => $lang_label ) : ?>
+								<option value="<?php echo esc_attr( $lang_code ); ?>" <?php selected( $options['current_lang'], $lang_code ); ?>><?php echo esc_html( $lang_label ); ?></option>
+							<?php endforeach; ?>
 						</select>
 						<p class="description"><?php esc_html_e( "Default language for the cookie consent banner. For more languages, you'll need to modify the src/index.js file.", 'warder-cookie-consent' ); ?></p>
 					</td>
@@ -147,10 +144,9 @@ function warder_render_options_page() {
 						<p class="description"><?php esc_html_e( 'Displays a cookie icon button that lets users revisit their consent choices at any time.', 'warder-cookie-consent' ); ?></p>
 						<br>
 						<select name="warder_options[preferences_toggle_position]">
-							<option value="bottom-right" <?php selected( $options['preferences_toggle_position'], 'bottom-right' ); ?>><?php esc_html_e( 'Bottom Right', 'warder-cookie-consent' ); ?></option>
-							<option value="bottom-left" <?php selected( $options['preferences_toggle_position'], 'bottom-left' ); ?>><?php esc_html_e( 'Bottom Left', 'warder-cookie-consent' ); ?></option>
-							<option value="top-right" <?php selected( $options['preferences_toggle_position'], 'top-right' ); ?>><?php esc_html_e( 'Top Right', 'warder-cookie-consent' ); ?></option>
-							<option value="top-left" <?php selected( $options['preferences_toggle_position'], 'top-left' ); ?>><?php esc_html_e( 'Top Left', 'warder-cookie-consent' ); ?></option>
+							<?php foreach ( warder_allowed_toggle_positions() as $pos_value => $pos_label ) : ?>
+								<option value="<?php echo esc_attr( $pos_value ); ?>" <?php selected( $options['preferences_toggle_position'], $pos_value ); ?>><?php echo esc_html( $pos_label ); ?></option>
+							<?php endforeach; ?>
 						</select>
 						<p class="description"><?php esc_html_e( 'Corner where the floating button appears.', 'warder-cookie-consent' ); ?></p>
 					</td>
@@ -459,20 +455,3 @@ function warder_admin_notices() {
 	echo '</div>';
 }
 add_action( 'admin_notices', 'warder_admin_notices' );
-
-/**
- * Renders an input field for a cookie category title with the correct CSS class.
- *
- * @param string $category_id The category identifier.
- * @param string $title       The current category title.
- */
-function warder_render_category_title_field( $category_id, $title ) {
-	?>
-	<input type="text"
-			name="warder_options[cookie_categories][<?php echo esc_attr( $category_id ); ?>][title]"
-			value="<?php echo esc_attr( $title ); ?>"
-			class="regular-text warder-category-title-field"
-			data-category-id="<?php echo esc_attr( $category_id ); ?>" />
-	<p class="description"><?php esc_html_e( 'The name displayed to users in the consent preferences panel.', 'warder-cookie-consent' ); ?></p>
-	<?php
-}

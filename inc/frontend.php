@@ -97,8 +97,7 @@ function warder_add_preferences_button() {
 		return;
 	}
 
-	$allowed  = array( 'bottom-right', 'bottom-left', 'top-right', 'top-left' );
-	$position = isset( $options['preferences_toggle_position'] ) && in_array( $options['preferences_toggle_position'], $allowed, true )
+	$position = isset( $options['preferences_toggle_position'] ) && array_key_exists( $options['preferences_toggle_position'], warder_allowed_toggle_positions() )
 		? $options['preferences_toggle_position']
 		: 'bottom-right';
 

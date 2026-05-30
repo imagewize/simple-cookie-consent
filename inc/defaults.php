@@ -83,3 +83,39 @@ function warder_get_merged_options() {
 
 	return wp_parse_args( $options, $default_options );
 }
+
+/**
+ * Returns the supported banner languages as a code => label map.
+ *
+ * Single source of truth for both validation (the keys) and the admin
+ * language <select> (the labels). Adding a language here exposes it everywhere.
+ *
+ * @return array<string,string>
+ */
+function warder_allowed_languages() {
+	return array(
+		'en' => __( 'English', 'warder-cookie-consent' ),
+		'fr' => __( 'French', 'warder-cookie-consent' ),
+		'de' => __( 'German', 'warder-cookie-consent' ),
+		'es' => __( 'Spanish', 'warder-cookie-consent' ),
+		'it' => __( 'Italian', 'warder-cookie-consent' ),
+		'nl' => __( 'Dutch', 'warder-cookie-consent' ),
+	);
+}
+
+/**
+ * Returns the allowed preferences-toggle positions as a value => label map.
+ *
+ * Single source of truth for validation (the keys), the frontend position
+ * guard, and the admin position <select> (the labels).
+ *
+ * @return array<string,string>
+ */
+function warder_allowed_toggle_positions() {
+	return array(
+		'bottom-right' => __( 'Bottom Right', 'warder-cookie-consent' ),
+		'bottom-left'  => __( 'Bottom Left', 'warder-cookie-consent' ),
+		'top-right'    => __( 'Top Right', 'warder-cookie-consent' ),
+		'top-left'     => __( 'Top Left', 'warder-cookie-consent' ),
+	);
+}

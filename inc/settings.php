@@ -69,7 +69,7 @@ function warder_validate_options( $input ) {
 	$valid = array();
 
 	$valid['enabled']                     = isset( $input['enabled'] ) ? true : false;
-	$valid['current_lang']                = isset( $input['current_lang'] ) && in_array( $input['current_lang'], array( 'en', 'fr', 'de', 'es', 'it', 'nl' ), true )
+	$valid['current_lang']                = isset( $input['current_lang'] ) && array_key_exists( $input['current_lang'], warder_allowed_languages() )
 		? $input['current_lang'] : 'en';
 	$valid['autoclear_cookies']           = isset( $input['autoclear_cookies'] ) ? true : false;
 	$valid['page_scripts']                = isset( $input['page_scripts'] ) ? true : false;
@@ -83,7 +83,7 @@ function warder_validate_options( $input ) {
 		? $input['secondary_btn_role'] : 'accept_necessary';
 	$valid['privacy_policy_url']          = isset( $input['privacy_policy_url'] ) ? esc_url_raw( $input['privacy_policy_url'] ) : '';
 	$valid['show_preferences_toggle']     = isset( $input['show_preferences_toggle'] ) ? true : false;
-	$valid['preferences_toggle_position'] = isset( $input['preferences_toggle_position'] ) && in_array( $input['preferences_toggle_position'], array( 'bottom-right', 'bottom-left', 'top-right', 'top-left' ), true )
+	$valid['preferences_toggle_position'] = isset( $input['preferences_toggle_position'] ) && array_key_exists( $input['preferences_toggle_position'], warder_allowed_toggle_positions() )
 		? $input['preferences_toggle_position'] : 'bottom-right';
 
 	if ( isset( $input['cookie_categories'] ) && is_array( $input['cookie_categories'] ) ) {
