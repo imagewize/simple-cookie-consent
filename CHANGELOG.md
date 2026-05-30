@@ -2,6 +2,15 @@
 
 All notable changes to Warder Cookie Consent are documented here.
 
+## [2.1.0] - 2026-05-30
+
+### Added
+- `warder_block_script_until_consent()` — a `script_loader_tag` filter that rewrites known analytics/marketing script tags to `type="text/plain" data-category="<category>"` before consent is given. vanilla-cookieconsent holds these scripts and re-executes them once the user accepts the matching category. Built-in handles: `sourcebuster-js`, `wc-order-attribution`, `wp_slimstat`. Site owners can extend or replace the list via the `warder_blocked_scripts` filter.
+- Expanded the `necessary` category cookie defaults to cover the full WordPress and WooCommerce session surface: `cc_cookie` (consent record), `wordpress_logged_in_*`, `wordpress_sec_*`, `wordpress_test_cookie`, `wp-settings-*`, `wp_woocommerce_session_*`, `woocommerce_cart_hash`, `woocommerce_items_in_cart`, `woocommerce_recently_viewed`, `PHPSESSID`.
+
+### Changed
+- `sbjs_*` (SourceBuster.js attribution cookies) moved from the `necessary` category to `analytics`, where they belong — they are set by an optional tracking script, not by WordPress core.
+
 ## [2.0.2] - 2026-05-30
 
 ### Security

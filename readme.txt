@@ -4,7 +4,7 @@ Donate link: https://imagewize.com
 Tags: cookie, consent, gdpr, privacy, compliance
 Requires at least: 5.0
 Tested up to: 7.0
-Stable tag: 2.0.2
+Stable tag: 2.1.0
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -65,6 +65,13 @@ https://github.com/imagewize/warder-cookie-consent
 `src/index.js` imports the [vanilla-cookieconsent v3](https://github.com/orestbida/cookieconsent) library. To build from source: run `npm install`, then `npx webpack` (or `npx webpack --watch` during development).
 
 == Changelog ==
+
+= 2.1.0 =
+*2026-05-30*
+
+* Added: `warder_block_script_until_consent()` — rewrites known analytics/marketing script tags to `type="text/plain" data-category="<category>"` so they are held by vanilla-cookieconsent until the user accepts the matching category. Covers `sourcebuster-js` (SourceBuster.js), `wc-order-attribution` (WooCommerce order attribution), and `wp_slimstat` (Slimstat Analytics) out of the box. Extend or replace the list with the `warder_blocked_scripts` filter.
+* Added: expanded `necessary` category cookie defaults to cover the full WordPress and WooCommerce session surface: `cc_cookie`, `wordpress_logged_in_*`, `wordpress_sec_*`, `wordpress_test_cookie`, `wp-settings-*`, `wp_woocommerce_session_*`, `woocommerce_cart_hash`, `woocommerce_items_in_cart`, `woocommerce_recently_viewed`, `PHPSESSID`. Existing installs are unaffected (defaults only apply to new installs or when the necessary category has no cookies configured).
+* Changed: `sbjs_*` (SourceBuster.js attribution cookies) moved from the `necessary` category to `analytics` in the default configuration — they are set by an optional tracking script, not by WordPress core.
 
 = 2.0.2 =
 *2026-05-30*
@@ -193,6 +200,9 @@ https://github.com/imagewize/warder-cookie-consent
 * Initial release
 
 == Upgrade Notice ==
+
+= 2.1.0 =
+Adds automatic script blocking for SourceBuster.js, WooCommerce order attribution, and Slimstat before consent is given. Necessary cookie defaults now include the full WordPress and WooCommerce session cookie set. The `sbjs_*` pattern moves to analytics — if you manually placed it under necessary, you can remove the duplicate.
 
 = 2.0.2 =
 Security and code-quality hardening: stronger input sanitization on settings save, nonce verification before delete actions, isset-guarded validation, and clearer source-code documentation. Recommended for all users.

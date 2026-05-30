@@ -34,9 +34,50 @@ function warder_get_default_options() {
 				'enabled'     => true,
 				'readonly'    => true,
 				'cookies'     => array(
+					// Consent record — must always be kept.
 					array(
-						'name'     => '/^sbjs_/',
+						'name'     => 'cc_cookie',
+						'is_regex' => false,
+					),
+					// WordPress login & security.
+					array(
+						'name'     => '/^wordpress_logged_in_/',
 						'is_regex' => true,
+					),
+					array(
+						'name'     => '/^wordpress_sec_/',
+						'is_regex' => true,
+					),
+					array(
+						'name'     => 'wordpress_test_cookie',
+						'is_regex' => false,
+					),
+					// WordPress admin bar / customizer.
+					array(
+						'name'     => '/^wp-settings-/',
+						'is_regex' => true,
+					),
+					// WooCommerce session & cart.
+					array(
+						'name'     => '/^wp_woocommerce_session_/',
+						'is_regex' => true,
+					),
+					array(
+						'name'     => 'woocommerce_cart_hash',
+						'is_regex' => false,
+					),
+					array(
+						'name'     => 'woocommerce_items_in_cart',
+						'is_regex' => false,
+					),
+					array(
+						'name'     => 'woocommerce_recently_viewed',
+						'is_regex' => false,
+					),
+					// PHP session.
+					array(
+						'name'     => 'PHPSESSID',
+						'is_regex' => false,
 					),
 				),
 			),
@@ -64,6 +105,10 @@ function warder_get_default_options() {
 					),
 					array(
 						'name'     => '/^mtm_/',
+						'is_regex' => true,
+					),
+					array(
+						'name'     => '/^sbjs_/',
 						'is_regex' => true,
 					),
 				),
