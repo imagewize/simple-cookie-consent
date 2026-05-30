@@ -17,7 +17,9 @@ function warder_ajax_save_settings() {
 		wp_send_json_error( array( 'message' => __( 'Unauthorized.', 'warder-cookie-consent' ) ) );
 	}
 
-	$input = isset( $_POST['warder_options'] ) ? wp_unslash( $_POST['warder_options'] ) : array(); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+	$input = isset( $_POST['warder_options'] ) && is_array( $_POST['warder_options'] )
+		? warder_sanitize_options_input( wp_unslash( $_POST['warder_options'] ) )
+		: array();
 	$valid = warder_validate_options( $input );
 
 	update_option( 'warder_options', $valid );
