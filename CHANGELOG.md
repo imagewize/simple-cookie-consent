@@ -2,6 +2,12 @@
 
 All notable changes to Warder Cookie Consent are documented here.
 
+## [2.1.2] - 2026-05-30
+
+### Documentation
+- Added `CONTRIBUTING.md` at the repository root covering build-from-source, development setup, dependencies, and how to submit changes.
+- Trimmed the developer-facing "Build from Source", "Development", and "Dependencies" sections out of the README and replaced them with a "Contributing" pointer to `CONTRIBUTING.md` and `docs/dev.md`. Renumbered the Composer install method accordingly.
+
 ## [2.1.1] - 2026-05-30
 
 ### Changed

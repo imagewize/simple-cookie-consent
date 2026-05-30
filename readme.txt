@@ -4,7 +4,7 @@ Donate link: https://imagewize.com
 Tags: cookie, consent, gdpr, privacy, compliance
 Requires at least: 5.0
 Tested up to: 7.0
-Stable tag: 2.1.1
+Stable tag: 2.1.2
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -65,6 +65,12 @@ https://github.com/imagewize/warder-cookie-consent
 `src/index.js` imports the [vanilla-cookieconsent v3](https://github.com/orestbida/cookieconsent) library. To build from source: run `npm install`, then `npx webpack` (or `npx webpack --watch` during development).
 
 == Changelog ==
+
+= 2.1.2 =
+*2026-05-30*
+
+* Docs: added `CONTRIBUTING.md` at the repository root with build-from-source, development setup, dependencies, and contribution guidelines.
+* Docs: moved the developer-facing build/development/dependencies sections out of the README into `CONTRIBUTING.md`, leaving a short "Contributing" pointer; renumbered the Composer install method.
 
 = 2.1.1 =
 *2026-05-30*
@@ -206,6 +212,9 @@ https://github.com/imagewize/warder-cookie-consent
 * Initial release
 
 == Upgrade Notice ==
+
+= 2.1.2 =
+Documentation-only release: adds a `CONTRIBUTING.md` and slims the README to user-facing docs. No functional changes.
 
 = 2.1.1 =
 Removes Slimstat from the default automatic script-blocking list (use the `warder_blocked_scripts` filter to add it back if needed). README updated to document WooCommerce cookie defaults and script-blocking examples.
