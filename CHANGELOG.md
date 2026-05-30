@@ -13,8 +13,13 @@ All notable changes to Warder Cookie Consent are documented here.
 - Removed the `wp_strip_all_tags()` wrapper around the static preferences-toggle CSS in `warder_enqueue_scripts()`. The CSS is hardcoded with no user input, and `wp_strip_all_tags()` is an HTML helper, not a CSS escaper.
 - `phpcs.xml` now lints the entire `inc/` directory (previously only `warder-cookie-consent.php` was scanned).
 
+### Refactored
+- Added two whitelist helpers in `inc/defaults.php` — `warder_allowed_languages()` and `warder_allowed_toggle_positions()`, each returning a `value => label` map. They are now the single source of truth for both validation and the admin `<select>` rendering: `warder_validate_options()` (`inc/settings.php`), the frontend position guard (`inc/frontend.php`), and the two admin dropdowns (`inc/admin.php`) all read from them. Previously the language and toggle-position lists were hand-copied across three files and had to be kept in sync manually.
+- Removed the unused `warder_render_category_title_field()` function from `inc/admin.php`. It was never called — the category title input is rendered inline in `warder_render_options_page()` — and its markup had drifted out of sync with the live field.
+
 ### Documentation
 - Clarified the "Source Code" section in `readme.txt` (placed before the changelog, the conventional spot for developer notes) to state that the uncompressed source ships both inside the deployed plugin (`src/index.js`, `webpack.config.js`) and in the public GitHub repository.
+- Updated `CLAUDE.md` to reflect the current `inc/` module layout (it still described the plugin as a single ~851-line file), and corrected the documented JS settings global (`window.warderSettings`) and the cookie entry shape (`name` / `is_regex`).
 
 ## [2.0.1] - 2026-05-28
 

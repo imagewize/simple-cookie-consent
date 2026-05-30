@@ -73,6 +73,8 @@ https://github.com/imagewize/warder-cookie-consent
 * Security: category and cookie delete handlers now verify the nonce before any request data is used to change state, and call `wp_die()` on a failed check.
 * Hardening: `warder_validate_options()` now guards every field with `isset()` (no PHP warnings on partial submissions under `WP_DEBUG`) and constrains `current_lang` to the supported language whitelist.
 * Fixed: removed the inappropriate `wp_strip_all_tags()` wrapper around the static preferences-toggle CSS (it is an HTML helper, not a CSS escaper).
+* Refactored: the supported languages and preferences-toggle positions now come from two shared helpers (`warder_allowed_languages()`, `warder_allowed_toggle_positions()`) used by both validation and the admin dropdowns, instead of being hand-copied across three files. No change to available options or behaviour.
+* Refactored: removed an unused internal function (`warder_render_category_title_field()`) that was dead code.
 * Docs: clarified the "Source Code" section to state that uncompressed source ships in the plugin (`src/index.js`, `webpack.config.js`) and in the public GitHub repository.
 * Tooling: `phpcs.xml` now lints the `inc/` directory (previously only the main file was scanned).
 
