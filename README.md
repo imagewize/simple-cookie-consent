@@ -87,8 +87,8 @@ This means you can easily configure which cookies to block and when to allow the
 ### Cookie Categories
 
 The default configuration includes:
-- **Necessary cookies**: Always enabled, required for basic website functionality
-- **Analytics cookies**: Optional tracking and analytics cookies, pre-populated with patterns for Google Analytics (`/^_ga/`, `_gid`, `_gat`) and Matomo (`/^_pk_/`, `/^mtm_/`)
+- **Necessary cookies**: Always enabled, required for basic website functionality. Pre-populated with WordPress core cookies (`wordpress_*`, `wp-settings-*`, `wordpress_logged_in_*`, `wordpress_sec_*`) and WooCommerce session & cart cookies (`wp_woocommerce_session_*`, `woocommerce_cart_hash`, `woocommerce_items_in_cart`, `woocommerce_recently_viewed`).
+- **Analytics cookies**: Optional tracking and analytics cookies, pre-populated with patterns for Google Analytics (`/^_ga/`, `_gid`, `_gat`), Matomo (`/^_pk_/`, `/^mtm_/`), and SourceBuster (`/^sbjs_/`).
 
 > Plausible Analytics is cookieless by design, so it needs no patterns here — there are no cookies to clear.
 
@@ -118,6 +118,34 @@ Gate the Matomo tracking snippet the same way:
 ```
 
 The matching `/^_pk_/` and `/^mtm_/` patterns in the analytics category clear Matomo's cookies if consent is later withdrawn.
+
+### Automatic Script Blocking
+
+The plugin automatically blocks a set of known WordPress script handles before analytics consent is given — no `data-category` attributes needed on those scripts. The built-in list covers:
+
+| Script handle | Script |
+|---|---|
+| `sourcebuster-js` | WooCommerce SourceBuster (sets `sbjs_*` cookies) |
+| `wc-order-attribution` | WooCommerce order attribution |
+
+To add more scripts, use the `warder_blocked_scripts` filter:
+
+```php
+add_filter( 'warder_blocked_scripts', function( $scripts ) {
+    $scripts['my-tracking-script'] = 'analytics';
+    return $scripts;
+} );
+```
+
+#### Common examples
+
+```php
+// Slimstat Analytics
+$scripts['wp_slimstat'] = 'analytics';
+
+// MonsterInsights
+$scripts['monsterinsights-frontend'] = 'analytics';
+```
 
 ### Managing Third-party Cookies
 
