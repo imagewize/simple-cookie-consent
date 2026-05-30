@@ -29,20 +29,7 @@ A lightweight plugin that implements GDPR-compliant cookie consent functionality
 3. Upload the extracted folder to your `/wp-content/plugins/` directory
 4. Activate the plugin through the WordPress admin panel
 
-### Method 3: Build from Source
-
-1. Clone this repository
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Build the plugin:
-   ```bash
-   npx webpack
-   ```
-4. Upload the plugin folder to your WordPress plugins directory
-
-### Method 4: Using Composer
+### Method 3: Using Composer
 
 You can also install the plugin using Composer:
 ```bash
@@ -155,27 +142,11 @@ The plugin automatically handles third-party cookies by:
 
 For detailed implementation guides, see [`docs/dev.md`](docs/dev.md).
 
-## Dependencies
+## Contributing
 
-- [CookieConsent v3](https://github.com/orestbida/cookieconsent) - Core cookie consent functionality
-- [webpack](https://webpack.js.org/) - For bundling assets
-- [style-loader](https://webpack.js.org/loaders/style-loader/) - For loading CSS
-- [css-loader](https://webpack.js.org/loaders/css-loader/) - For processing CSS
-
-## Development
-
-To set up the development environment:
-
-```bash
-# Install dependencies
-npm install
-
-# Build for production
-npx webpack
-
-# Watch for changes
-npx webpack --watch
-```
+Want to build from source, set up a development environment, or submit changes? See
+[`CONTRIBUTING.md`](CONTRIBUTING.md). For a deeper technical reference, see
+[`docs/dev.md`](docs/dev.md).
 
 ## License
 
