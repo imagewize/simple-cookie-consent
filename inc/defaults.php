@@ -33,12 +33,7 @@ function warder_get_default_options() {
 				'description' => 'These cookies are essential for the proper functioning of the website and cannot be disabled.',
 				'enabled'     => true,
 				'readonly'    => true,
-				'cookies'     => array(
-					array(
-						'name'     => '/^sbjs_/',
-						'is_regex' => true,
-					),
-				),
+				'cookies'     => array(),
 			),
 			'analytics' => array(
 				'title'       => 'Performance and Analytics',
@@ -64,6 +59,10 @@ function warder_get_default_options() {
 					),
 					array(
 						'name'     => '/^mtm_/',
+						'is_regex' => true,
+					),
+					array(
+						'name'     => '/^sbjs_/',
 						'is_regex' => true,
 					),
 				),

@@ -112,3 +112,60 @@ function warder_add_preferences_button() {
 	echo '</button>';
 }
 add_action( 'wp_footer', 'warder_add_preferences_button' );
+
+/**
+ * Blocks known analytics/marketing scripts until the matching consent category
+ * is accepted by rewriting their type to "text/plain" and adding data-category.
+ *
+ * vanilla-cookieconsent holds type="text/plain" scripts and re-executes them
+ * (as type="text/javascript") once the user accepts the named category. This
+ * prevents scripts like WooCommerce's SourceBuster (which sets sbjs_* cookies)
+ * and Slimstat from firing before consent.
+ *
+ * Site owners can extend or override the list via the warder_blocked_scripts filter.
+ *
+ * @param string $tag    The full <script> HTML tag.
+ * @param string $handle The registered script handle.
+ * @return string
+ */
+function warder_block_script_until_consent( $tag, $handle ) {
+	$options = warder_get_merged_options();
+	if ( empty( $options['enabled'] ) ) {
+		return $tag;
+	}
+
+	/**
+	 * Map of WordPress script handles to the consent category that must be
+	 * accepted before the script is allowed to run.
+	 *
+	 * @param array<string,string> $scripts handle => category slug.
+	 */
+	$blocked = apply_filters(
+		'warder_blocked_scripts',
+		array(
+			'sourcebuster-js'    => 'analytics',
+			'wc-order-attribution' => 'analytics',
+			'wp_slimstat'        => 'analytics',
+		)
+	);
+
+	if ( ! isset( $blocked[ $handle ] ) ) {
+		return $tag;
+	}
+
+	$category = esc_attr( $blocked[ $handle ] );
+
+	// Replace an explicit type="text/javascript" if present, otherwise inject.
+	if ( preg_match( '/\btype=["\']text\/javascript["\']/i', $tag ) ) {
+		$tag = preg_replace(
+			'/\btype=["\']text\/javascript["\']/i',
+			'type="text/plain" data-category="' . $category . '"',
+			$tag
+		);
+	} else {
+		$tag = str_replace( '<script ', '<script type="text/plain" data-category="' . $category . '" ', $tag );
+	}
+
+	return $tag;
+}
+add_filter( 'script_loader_tag', 'warder_block_script_until_consent', 10, 2 );
