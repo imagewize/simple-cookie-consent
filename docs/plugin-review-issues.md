@@ -63,7 +63,8 @@ and every other scalar leaf through `sanitize_text_field()`. A blanket
 `sanitize_text_field()` over the whole array was deliberately **not** used, because
 it would strip legitimate links from category descriptions and break nested arrays.
 
-`warder_validate_options()` was additionally hardened: every field access is now
+`warder_validate_options()` was additionally hardened: every field access —
+including nested per-category fields like each category's `description` — is now
 `isset()`-guarded (no PHP warnings on partial submissions under `WP_DEBUG`), and
 `current_lang` is constrained to the supported language whitelist. The sanitizer is
 registered as a `customSanitizingFunction` in `phpcs.xml`.
@@ -93,6 +94,41 @@ comment documents that the CSS is static. Dynamic values elsewhere in this file
 
 ---
 
+## Post-Review Verification (Branch: issues-30-05-26 vs main)
+
+**Date:** 2025-06-04  
+**Status:** All review issues confirmed resolved. No new `phpcs:ignore` suppressions added.
+
+### Changes Applied in v2.0.2
+
+| Issue | File | Change | Status |
+|-------|------|--------|--------|
+| Input Sanitization | `inc/ajax.php:20-22` | Removed `// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized`; replaced with `warder_sanitize_options_input()` call | ✅ Fixed |
+| Nonce Verification | `inc/ajax.php:81-91` | Delete category handler: nonce verified **before** using `$category_id` to mutate state; calls `wp_die()` on failure | ✅ Fixed |
+| Nonce Verification | `inc/ajax.php:99-109` | Delete cookie handler: nonce verified **before** using `$category_id` or `$cookie_index` to mutate state; calls `wp_die()` on failure | ✅ Fixed |
+| Output Handling | `inc/frontend.php:44` | Removed `wp_strip_all_tags()` wrapper around static CSS; added comment explaining rationale | ✅ Fixed |
+| Input Sanitization | `inc/settings.php:42-67` | Added `warder_sanitize_options_input()` recursive sanitizer function | ✅ Fixed |
+| Input Validation | `inc/settings.php:71-120` | Hardened `warder_validate_options()`: all fields (incl. nested category `description`) `isset()`-guarded, `current_lang` whitelisted | ✅ Fixed |
+| Tooling | `phpcs.xml` | Added `inc/` directory to linting; registered `warder_sanitize_options_input` as custom sanitizer | ✅ Fixed |
+| Documentation | `readme.txt` | Added "Source Code" section before changelog | ✅ Fixed |
+
+### Remaining `phpcs:ignore` Suppressions (Legitimate)
+
+The following suppressions exist in the codebase but are **not** related to the review findings and are considered acceptable:
+
+| File | Line | Sniff | Justification |
+|------|------|-------|---------------|
+| `inc/admin.php` | 63 | `WordPress.Security.NonceVerification.Recommended` | `$_GET['settings-updated']` — WordPress core settings API already verifies nonce before redirect |
+| `inc/admin.php` | 69 | `WordPress.Security.NonceVerification.Recommended` | `$_GET['warder_notice']` — internal redirect parameter, sanitized with `sanitize_key()` |
+| `inc/admin.php` | 435 | `WordPress.Security.NonceVerification.Recommended` | `$_GET['page']` — page slug check in `admin_url()` context |
+| `inc/frontend.php` | 42 | `WordPress.WP.EnqueuedResourceParameters.MissingVersion` | Dynamic style handle registered with `$version` variable |
+
+**No new `phpcs:ignore` suppressions were introduced** in the remediation commits. Two were removed: the `InputNotSanitized` ignore on the raw `$_POST['warder_options']` array, and the `UnusedFunctionParameter` ignore on `warder_update_options_timestamp()` (the callback now declares no parameters instead of accepting two it never used).
+
+**`phpcs --standard=phpcs.xml` passes clean** across all plugin files (verified 2025-06-04).
+
+---
+
 ## Verification Checklist
 
 - [x] Source documented in readme and shipped in the plugin; repo confirmed public
@@ -101,6 +137,7 @@ comment documents that the CSS is static. Dynamic values elsewhere in this file
 - [x] `warder_validate_options()` `isset()`-guarded and whitelisted
 - [x] Inappropriate `wp_strip_all_tags()` on CSS removed
 - [x] `phpcs --standard=phpcs.xml` passes clean across all files
+- [x] No new `phpcs:ignore` suppressions added for review-related issues
 - [ ] Run the [Plugin Check](https://wordpress.org/plugins/plugin-check/) tool on a clean install
 - [ ] Smoke-test admin save / add / delete flows with `WP_DEBUG=true`
 

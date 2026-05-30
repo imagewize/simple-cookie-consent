@@ -100,7 +100,7 @@ function warder_validate_options( $input ) {
 
 			$valid['cookie_categories'][ $sanitized_id ] = array(
 				'title'       => $title,
-				'description' => wp_kses_post( $category['description'] ),
+				'description' => isset( $category['description'] ) ? wp_kses_post( $category['description'] ) : '',
 				'enabled'     => $is_necessary,
 				'readonly'    => $is_necessary,
 				'cookies'     => array(),
@@ -122,14 +122,14 @@ function warder_validate_options( $input ) {
 	return $valid;
 }
 
-add_action( 'update_option_warder_options', 'warder_update_options_timestamp', 10, 2 );
+add_action( 'update_option_warder_options', 'warder_update_options_timestamp' );
 /**
  * Updates the options timestamp whenever the plugin settings are saved.
  *
- * @param mixed $old_value Previous option value (unused).
- * @param mixed $new_value New option value (unused).
+ * The update_option_{$option} hook passes the old and new values, but neither is
+ * needed here, so the callback declares no parameters (PHP ignores extra args).
  */
-function warder_update_options_timestamp( $old_value, $new_value ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
+function warder_update_options_timestamp() {
 	update_option( 'warder_options_last_updated', time() );
 }
 
