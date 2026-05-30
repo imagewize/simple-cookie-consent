@@ -28,21 +28,24 @@ composer require imagewize/warder-cookie-consent
 ```
 WordPress DB (warder_options key)
   → warder_enqueue_scripts() fetches and localizes
-  → window.sccSettings in browser
+  → window.warderSettings in browser
   → createConfigFromSettings() in src/index.js
   → CookieConsent.run(config)
 ```
 
-### PHP Layer (`warder-cookie-consent.php`)
+### PHP Layer (`inc/`)
 
-All plugin logic is in this single file (~851 lines):
+`warder-cookie-consent.php` is a ~26-line bootstrap: it defines `WARDER_VERSION` /
+`WARDER_PLUGIN_FILE` and `require_once`s the modules under `inc/`. Each module owns one
+concern:
 
-- **`warder_get_default_options()`** — defines the canonical default settings structure
-- **`warder_get_merged_options()`** — retrieves DB options and deep-merges with defaults; always returns a complete settings object
-- **`warder_validate_options()`** — sanitizes/validates before saving to `warder_options` in `wp_options`
-- **`warder_enqueue_scripts()`** — enqueues `dist/cookieconsent.bundle.js` and localizes it as `window.sccSettings`
-- **`warder_render_options_page()`** — renders the admin UI at Settings > Cookie Consent
-- Settings are versioned via `warder_options_last_updated` timestamp for cache busting
+- **`inc/defaults.php`** — `warder_get_default_options()` (canonical default settings) and `warder_get_merged_options()` (DB options deep-merged with defaults; always returns a complete object)
+- **`inc/settings.php`** — `register_setting()` registration, `warder_sanitize_options_input()` / `warder_validate_options()` (sanitize + whitelist before saving to `warder_options`), the `warder_options_last_updated` timestamp updater, and the activation hook
+- **`inc/ajax.php`** — `warder_ajax_save_settings()` (AJAX save) and `warder_handle_admin_actions()` (add/delete category and cookie actions)
+- **`inc/admin.php`** — admin menu registration, admin script enqueueing, `warder_render_options_page()` (the Settings > Cookie Consent UI), and admin notices
+- **`inc/frontend.php`** — `warder_enqueue_scripts()` (enqueues `dist/cookieconsent.bundle.js`, localizes it as `window.warderSettings`) and the floating preferences toggle button
+
+Settings are versioned via the `warder_options_last_updated` timestamp for cache busting.
 
 ### JS Layer (`src/index.js` → `dist/cookieconsent.bundle.js`)
 
@@ -75,13 +78,13 @@ warder_options = [
   'privacy_policy_url'         => string,
   'cookie_categories'          => [
     'necessary' => [ title, description, enabled, readonly, cookies[] ],
-    'analytics' => [ title, description, enabled, cookies[] ],
+    'analytics' => [ title, description, enabled, readonly, cookies[] ],
     ...  // user-defined categories
   ],
 ]
 ```
 
-Each `cookies` entry supports `name` (exact string or `/regex/` pattern) and `domain`.
+Each `cookies` entry has `name` (exact string or `/regex/` pattern) and `is_regex` (bool flag indicating whether `name` should be treated as a regular expression).
 
 ## Versioning
 

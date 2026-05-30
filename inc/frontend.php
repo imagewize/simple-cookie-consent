@@ -41,7 +41,10 @@ function warder_enqueue_scripts() {
 	if ( ! empty( $options['show_preferences_toggle'] ) ) {
 		wp_register_style( 'warder-preferences-toggle', false, array(), $version ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
 		wp_enqueue_style( 'warder-preferences-toggle' );
-		wp_add_inline_style( 'warder-preferences-toggle', wp_strip_all_tags( warder_get_preferences_toggle_css() ) );
+		// warder_get_preferences_toggle_css() returns static, hardcoded CSS with no
+		// user input, so it is output as-is. wp_strip_all_tags() is intentionally
+		// not used here: it is an HTML helper and the wrong tool for CSS content.
+		wp_add_inline_style( 'warder-preferences-toggle', warder_get_preferences_toggle_css() );
 	}
 }
 add_action( 'wp_enqueue_scripts', 'warder_enqueue_scripts' );
@@ -94,8 +97,7 @@ function warder_add_preferences_button() {
 		return;
 	}
 
-	$allowed  = array( 'bottom-right', 'bottom-left', 'top-right', 'top-left' );
-	$position = isset( $options['preferences_toggle_position'] ) && in_array( $options['preferences_toggle_position'], $allowed, true )
+	$position = isset( $options['preferences_toggle_position'] ) && array_key_exists( $options['preferences_toggle_position'], warder_allowed_toggle_positions() )
 		? $options['preferences_toggle_position']
 		: 'bottom-right';
 

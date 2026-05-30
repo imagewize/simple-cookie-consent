@@ -4,7 +4,7 @@ Donate link: https://imagewize.com
 Tags: cookie, consent, gdpr, privacy, compliance
 Requires at least: 5.0
 Tested up to: 7.0
-Stable tag: 2.0.1
+Stable tag: 2.0.2
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -32,20 +32,6 @@ Warder Cookie Consent provides an easy way to add GDPR-compliant cookie consent 
 2. Activate the plugin through the WordPress admin panel
 3. Configure settings at **Settings > Cookie Consent**
 
-== Source Code & Build Process ==
-
-The bundled file `dist/cookieconsent.bundle.js` is compiled from source using webpack. The full source code is publicly available at:
-
-https://github.com/imagewize/warder-cookie-consent
-
-The entry point is `src/index.js`, which imports the [vanilla-cookieconsent v3](https://github.com/orestbida/cookieconsent) library. To build from source:
-
-1. Install Node.js dependencies: `npm install`
-2. Build the bundle: `npx webpack`
-3. Watch for changes during development: `npx webpack --watch`
-
-The webpack configuration is in `webpack.config.js`. Third-party library source: https://github.com/orestbida/cookieconsent
-
 == Frequently Asked Questions ==
 
 = How do I add custom cookie categories? =
@@ -70,7 +56,27 @@ Yes. Settings are versioned via a timestamp that is appended to the script URL, 
 2. Cookie consent banner frontend view
 3. Cookie category management interface
 
+== Source Code ==
+
+This plugin ships no obfuscated or minified-only code. The only compiled asset is `dist/cookieconsent.bundle.js`, bundled from human-readable source with webpack. The uncompressed source (`src/index.js` and `webpack.config.js`) is included in the plugin download, and the full development repository is public:
+
+https://github.com/imagewize/warder-cookie-consent
+
+`src/index.js` imports the [vanilla-cookieconsent v3](https://github.com/orestbida/cookieconsent) library. To build from source: run `npm install`, then `npx webpack` (or `npx webpack --watch` during development).
+
 == Changelog ==
+
+= 2.0.2 =
+*2026-05-30*
+
+* Security: settings save handler now sanitizes the full `$_POST['warder_options']` array through a dedicated recursive sanitizer (`warder_sanitize_options_input`) before validation, instead of relying on a `phpcs:ignore` suppression. Description fields keep safe post HTML (`wp_kses_post`); all other fields are treated as plain text.
+* Security: category and cookie delete handlers now verify the nonce before any request data is used to change state, and call `wp_die()` on a failed check.
+* Hardening: `warder_validate_options()` now guards every field with `isset()` (no PHP warnings on partial submissions under `WP_DEBUG`) and constrains `current_lang` to the supported language whitelist.
+* Fixed: removed the inappropriate `wp_strip_all_tags()` wrapper around the static preferences-toggle CSS (it is an HTML helper, not a CSS escaper).
+* Refactored: the supported languages and preferences-toggle positions now come from two shared helpers (`warder_allowed_languages()`, `warder_allowed_toggle_positions()`) used by both validation and the admin dropdowns, instead of being hand-copied across three files. No change to available options or behaviour.
+* Refactored: removed an unused internal function (`warder_render_category_title_field()`) that was dead code.
+* Docs: clarified the "Source Code" section to state that uncompressed source ships in the plugin (`src/index.js`, `webpack.config.js`) and in the public GitHub repository.
+* Tooling: `phpcs.xml` now lints the `inc/` directory (previously only the main file was scanned).
 
 = 2.0.1 =
 *2026-05-28*
@@ -187,6 +193,9 @@ Yes. Settings are versioned via a timestamp that is appended to the script URL, 
 * Initial release
 
 == Upgrade Notice ==
+
+= 2.0.2 =
+Security and code-quality hardening: stronger input sanitization on settings save, nonce verification before delete actions, isset-guarded validation, and clearer source-code documentation. Recommended for all users.
 
 = 2.0.1 =
 Fixes three data-corruption bugs: (1) Strictly Necessary category losing its locked state after every save; (2) all cookies being silently saved as regex patterns due to a hidden-input value bug; (3) non-necessary categories appearing locked and pre-selected in the frontend consent modal.

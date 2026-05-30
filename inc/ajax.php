@@ -17,7 +17,9 @@ function warder_ajax_save_settings() {
 		wp_send_json_error( array( 'message' => __( 'Unauthorized.', 'warder-cookie-consent' ) ) );
 	}
 
-	$input = isset( $_POST['warder_options'] ) ? wp_unslash( $_POST['warder_options'] ) : array(); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+	$input = isset( $_POST['warder_options'] ) && is_array( $_POST['warder_options'] )
+		? warder_sanitize_options_input( wp_unslash( $_POST['warder_options'] ) )
+		: array();
 	$valid = warder_validate_options( $input );
 
 	update_option( 'warder_options', $valid );
@@ -74,24 +76,34 @@ function warder_handle_admin_actions( $options ) {
 		}
 	}
 
-	// Delete a cookie category.
+	// Delete a cookie category. The nonce is verified before the request data is
+	// used to mutate any state; a failed check stops execution immediately.
 	if ( isset( $_GET['action'] ) && 'delete_category' === sanitize_key( wp_unslash( $_GET['action'] ) ) ) {
 		$category_id = isset( $_GET['category'] ) ? sanitize_key( wp_unslash( $_GET['category'] ) ) : '';
 		$nonce       = isset( $_GET['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ) : '';
 
-		if ( wp_verify_nonce( $nonce, 'delete_category_' . $category_id ) && 'necessary' !== $category_id && isset( $options['cookie_categories'][ $category_id ] ) ) {
+		if ( ! wp_verify_nonce( $nonce, 'delete_category_' . $category_id ) ) {
+			wp_die( esc_html__( 'Security check failed.', 'warder-cookie-consent' ) );
+		}
+
+		if ( 'necessary' !== $category_id && isset( $options['cookie_categories'][ $category_id ] ) ) {
 			unset( $options['cookie_categories'][ $category_id ] );
 			$changed = true;
 		}
 	}
 
-	// Delete a single cookie from a category.
+	// Delete a single cookie from a category. The nonce is verified before the
+	// request data is used to mutate any state.
 	if ( isset( $_GET['action'] ) && 'delete_cookie' === sanitize_key( wp_unslash( $_GET['action'] ) ) ) {
 		$category_id  = isset( $_GET['category'] ) ? sanitize_key( wp_unslash( $_GET['category'] ) ) : '';
 		$cookie_index = isset( $_GET['cookie_index'] ) ? absint( wp_unslash( $_GET['cookie_index'] ) ) : -1;
 		$nonce        = isset( $_GET['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ) : '';
 
-		if ( $cookie_index >= 0 && wp_verify_nonce( $nonce, 'delete_cookie_' . $category_id . '_' . $cookie_index ) && isset( $options['cookie_categories'][ $category_id ]['cookies'][ $cookie_index ] ) ) {
+		if ( ! wp_verify_nonce( $nonce, 'delete_cookie_' . $category_id . '_' . $cookie_index ) ) {
+			wp_die( esc_html__( 'Security check failed.', 'warder-cookie-consent' ) );
+		}
+
+		if ( $cookie_index >= 0 && isset( $options['cookie_categories'][ $category_id ]['cookies'][ $cookie_index ] ) ) {
 			array_splice( $options['cookie_categories'][ $category_id ]['cookies'], $cookie_index, 1 );
 			$changed = true;
 		}

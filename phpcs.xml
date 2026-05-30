@@ -2,8 +2,16 @@
 <ruleset name="Warder Cookie Consent">
     <description>WordPress Coding Standards for Warder Cookie Consent</description>
     <file>warder-cookie-consent.php</file>
+    <file>inc/</file>
     <arg name="extensions" value="php"/>
     <rule ref="WordPress"/>
+    <rule ref="WordPress.Security.ValidatedSanitizedInput">
+        <properties>
+            <property name="customSanitizingFunctions" type="array">
+                <element value="warder_sanitize_options_input"/>
+            </property>
+        </properties>
+    </rule>
     <rule ref="WordPress.WP.I18n">
         <properties>
             <property name="text_domain" type="array">
