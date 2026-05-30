@@ -117,7 +117,7 @@ add_action( 'wp_footer', 'warder_add_preferences_button' );
  * Blocks known analytics/marketing scripts until the matching consent category
  * is accepted by rewriting their type to "text/plain" and adding data-category.
  *
- * vanilla-cookieconsent holds type="text/plain" scripts and re-executes them
+ * Vanilla-cookieconsent holds type="text/plain" scripts and re-executes them
  * (as type="text/javascript") once the user accepts the named category. This
  * prevents scripts like WooCommerce's SourceBuster (which sets sbjs_* cookies)
  * and Slimstat from firing before consent.
