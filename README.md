@@ -87,7 +87,7 @@ This means you can easily configure which cookies to block and when to allow the
 ### Cookie Categories
 
 The default configuration includes:
-- **Necessary cookies**: Always enabled, required for basic website functionality. Pre-populated with WordPress core cookies (`wordpress_*`, `wp-settings-*`, `wordpress_logged_in_*`, `wordpress_sec_*`) and WooCommerce session & cart cookies (`wp_woocommerce_session_*`, `woocommerce_cart_hash`, `woocommerce_items_in_cart`, `woocommerce_recently_viewed`).
+- **Necessary cookies**: Always enabled, required for basic website functionality. Pre-populated with WordPress core cookies (`wordpress_logged_in_*`, `wordpress_sec_*`, `wordpress_test_cookie`, `wp-settings-*`) and WooCommerce session & cart cookies (`wp_woocommerce_session_*`, `woocommerce_cart_hash`, `woocommerce_items_in_cart`, `woocommerce_recently_viewed`).
 - **Analytics cookies**: Optional tracking and analytics cookies, pre-populated with patterns for Google Analytics (`/^_ga/`, `_gid`, `_gat`), Matomo (`/^_pk_/`, `/^mtm_/`), and SourceBuster (`/^sbjs_/`).
 
 > Plausible Analytics is cookieless by design, so it needs no patterns here — there are no cookies to clear.
